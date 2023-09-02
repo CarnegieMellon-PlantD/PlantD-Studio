@@ -1,0 +1,17 @@
+{
+  "stagesTable": {
+    "title": "Stages",
+    "tooltip": "The stages describe the level of load to send over time. The first one specifies the starting load measured in records per second (RPS); subsequent rows specify a new RPS and the amount of time desired to transition to that RPS linearly.",
+    "atLeastTwoStagesMsg": "At least two stages are required",
+    "targetCol": "Target (Requests / Second)",
+    "targetGEZeroMsg": "Target must be >= 0",
+    "durationCol": "Transition Time",
+    "durationGEZeroMsg": "Time must be >= 0",
+    "durationUnitRequiredMsg": "Unit is required",
+    "durationUnitValues": {
+      "s": "Second(s)",
+      "m": "Minute(s)",
+      "h": "Hour(s)"
+    }
+  }
+}

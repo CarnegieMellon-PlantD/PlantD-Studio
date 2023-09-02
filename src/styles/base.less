@@ -1,0 +1,25 @@
+@import url('@/styles/font-montserrat');
+@import url('@/styles/font-righteous');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  @apply m-0 overflow-hidden;
+}
+
+* {
+  // Leverage style priority to work with Antd
+  @apply font-sans !important;
+
+  // Customize scrollbars
+  ::-webkit-scrollbar {
+    @apply w-2 h-2 p-2 bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full transition-colors bg-gray-600/40 hover:bg-gray-600/60 dark:bg-gray-400/40 dark:hover:bg-gray-400/60;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "invalidPathParamsMsg": "Error: Invalid path parameters in URL {{url}}",
+  "getErrorMsg": "Failed to get {{kind}}: {{error}}",
+  "createSuccessMsg": "Created {{kind}} successfully",
+  "createErrorMsg": "Failed to create {{kind}}: {{error}}",
+  "updateSuccessMsg": "Updated {{kind}} successfully",
+  "updateErrorMsg": "Failed to update {{kind}}: {{error}}",
+  "createTitle": "Create New",
+  "cloneTitle": "Clone: {{target}}",
+  "editTitle": "Edit: {{target}}",
+  "addBtn": "Add",
+  "nameLabel": "Name",
+  "nameRequiredMsg": "Name is required",
+  "nameRfc1123Msg": "Name must be alphanumeric, and may contain \"-\" and \".\" in the middle",
+  "namespaceLabel": "Namespace",
+  "namespaceRequiredMsg": "Namespace is required"
+}

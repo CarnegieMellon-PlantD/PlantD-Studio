@@ -1,0 +1,19 @@
+{
+  "pipelineRefLabel": "Pipeline",
+  "loadPatternsLabel": "LoadPatterns",
+  "atLeastOneLoadPatternMsg": "At least one Load Pattern is required",
+  "loadPattern": {
+    "endpointNameLabel": "Endpoint Name",
+    "endpointNameRequiredMsg": "Endpoint name is required",
+    "loadPatternRefLabel": "LoadPattern"
+  },
+  "namespaceRequiredMsg": "Namespace is required",
+  "nameRequiredMsg": "Name is required",
+  "hasScheduledTimeLabel": "Scheduling Mode",
+  "hasScheduledTimeValues": {
+    "false": "Immediate",
+    "true": "Scheduled"
+  },
+  "scheduledTimeLabel": "Scheduled Time",
+  "scheduledTimeRequiredMsg": "Scheduled time is required"
+}

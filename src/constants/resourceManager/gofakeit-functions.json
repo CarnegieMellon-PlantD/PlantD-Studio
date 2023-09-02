@@ -1,0 +1,3501 @@
+{
+  "achaccount": {
+    "display": "ACH Account Number",
+    "category": "payment",
+    "description": "Random 12 digit ach account number",
+    "example": "491527954328",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "achrouting": {
+    "display": "ACH Routing Number",
+    "category": "payment",
+    "description": "Random 9 digit ach routing number",
+    "example": "513715684",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "address": {
+    "display": "Address",
+    "category": "address",
+    "description": "Random set of address info",
+    "example": "{\n\t\t\taddress: \"364 East Rapidsborough, Rutherfordstad, New Jersey 36906\",\n\t\t\tstreet: \"364 East Rapidsborough\",\n\t\t\tcity: \"Rutherfordstad\",\n\t\t\tstate: \"New Jersey\",\n\t\t\tzip: \"36906\",\n\t\t\tcountry: \"South Africa\",\n\t\t\tlatitude: \"23.058758\",\n\t\t\tlongitude: \"89.022594\"\n\t\t}",
+    "output": "map[string]interface",
+    "content_type": "application/json",
+    "params": null
+  },
+  "adjective": {
+    "display": "Adjective",
+    "category": "word",
+    "description": "Random adjective",
+    "example": "genuine",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adjectivedemonstrative": {
+    "display": "Demonstrative Adjective",
+    "category": "word",
+    "description": "Random demonstrative adjective",
+    "example": "this",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adjectivedescriptive": {
+    "display": "Descriptive Adjective",
+    "category": "word",
+    "description": "Random descriptive adjective",
+    "example": "brave",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adjectiveindefinite": {
+    "display": "Indefinite Adjective",
+    "category": "word",
+    "description": "Random indefinite adjective",
+    "example": "few",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adjectiveinterrogative": {
+    "display": "Interrogative Adjective",
+    "category": "word",
+    "description": "Random interrogative adjective",
+    "example": "what",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adjectivepossessive": {
+    "display": "Possessive Adjective",
+    "category": "word",
+    "description": "Random possessive adjective",
+    "example": "my",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adjectiveproper": {
+    "display": "Proper Adjective",
+    "category": "word",
+    "description": "Random proper adjective",
+    "example": "Afghan",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adjectivequantitative": {
+    "display": "Quantitative Adjective",
+    "category": "word",
+    "description": "Random quantitative adjective",
+    "example": "a little",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adverb": {
+    "display": "Adverb",
+    "category": "word",
+    "description": "Random adverb",
+    "example": "smoothly",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adverbdegree": {
+    "display": "Adverb Degree",
+    "category": "word",
+    "description": "Random degree adverb",
+    "example": "intensely",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adverbfrequencydefinite": {
+    "display": "Adverb Frequency Definite",
+    "category": "word",
+    "description": "Random frequency definite adverb",
+    "example": "hourly",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adverbfrequencyindefinite": {
+    "display": "Adverb Frequency Indefinite",
+    "category": "word",
+    "description": "Random frequency indefinite adverb",
+    "example": "occasionally",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adverbmanner": {
+    "display": "Adverb Manner",
+    "category": "word",
+    "description": "Random manner adverb",
+    "example": "stupidly",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adverbplace": {
+    "display": "Adverb Place",
+    "category": "word",
+    "description": "Random place adverb",
+    "example": "east",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adverbtimedefinite": {
+    "display": "Adverb Time Definite",
+    "category": "word",
+    "description": "Random time definite adverb",
+    "example": "now",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "adverbtimeindefinite": {
+    "display": "Adverb Time Indefinite",
+    "category": "word",
+    "description": "Random time indefinite adverb",
+    "example": "already",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "animal": {
+    "display": "Animal",
+    "category": "animal",
+    "description": "Random animal",
+    "example": "elk",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "animaltype": {
+    "display": "Animal Type",
+    "category": "animal",
+    "description": "Random animal type",
+    "example": "amphibians",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "appauthor": {
+    "display": "App Author",
+    "category": "app",
+    "description": "Random app author",
+    "example": "Qado Energy, Inc.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "appname": {
+    "display": "App Name",
+    "category": "app",
+    "description": "Random app name",
+    "example": "Parkrespond",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "appversion": {
+    "display": "App Version",
+    "category": "app",
+    "description": "Random app version",
+    "example": "1.12.14",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "beeralcohol": {
+    "display": "Beer Alcohol",
+    "category": "beer",
+    "description": "Random alcohol percentage",
+    "example": "2.7%",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "beerblg": {
+    "display": "Beer BLG",
+    "category": "beer",
+    "description": "Random beer blg",
+    "example": "6.4°Blg",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "beerhop": {
+    "display": "Beer Hop",
+    "category": "beer",
+    "description": "Random beer hop type",
+    "example": "Glacier",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "beeribu": {
+    "display": "Beer IBU",
+    "category": "beer",
+    "description": "Random beer ibu",
+    "example": "29 IBU",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "beermalt": {
+    "display": "Beer Malt",
+    "category": "beer",
+    "description": "Random beer malt",
+    "example": "Munich",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "beername": {
+    "display": "Beer Name",
+    "category": "beer",
+    "description": "Random beer name",
+    "example": "Duvel",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "beerstyle": {
+    "display": "Beer Style",
+    "category": "beer",
+    "description": "Random beer style",
+    "example": "European Amber Lager",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "beeryeast": {
+    "display": "Beer Yeast",
+    "category": "beer",
+    "description": "Random beer yeast value",
+    "example": "1388 - Belgian Strong Ale",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "bird": {
+    "display": "Bird",
+    "category": "animal",
+    "description": "Random bird type",
+    "example": "goose",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "bitcoinaddress": {
+    "display": "Bitcoin Address",
+    "category": "payment",
+    "description": "Random 26-35 characters representing a bitcoin address",
+    "example": "1lWLbxojXq6BqWX7X60VkcDIvYA",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "bitcoinprivatekey": {
+    "display": "Bitcoin Private Key",
+    "category": "payment",
+    "description": "Random 51 characters representing a bitcoin private key",
+    "example": "5vrbXTADWJ6sQBSYd6lLkG97jljNc0X9VPBvbVqsIH9lWOLcoqg",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "blurb": {
+    "display": "Blurb",
+    "category": "company",
+    "description": "Random company blurb",
+    "example": "word",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "book": {
+    "display": "Book",
+    "category": "book",
+    "description": "Random Book data set",
+    "example": "{title: \"Hamlet\", author: \"Mark Twain\", genre: \"Adventure\"}",
+    "output": "map[string]string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "bookauthor": {
+    "display": "Author",
+    "category": "book",
+    "description": "Random Book author",
+    "example": "Mark Twain",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "bookgenre": {
+    "display": "Genre",
+    "category": "book",
+    "description": "Random Book genre",
+    "example": "Adventure",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "booktitle": {
+    "display": "Title",
+    "category": "book",
+    "description": "Random Book title",
+    "example": "Hamlet",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "bool": {
+    "display": "Boolean",
+    "category": "misc",
+    "description": "Random boolean",
+    "example": "true",
+    "output": "bool",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "breakfast": {
+    "display": "Breakfast",
+    "category": "food",
+    "description": "Random breakfast",
+    "example": "Blueberry banana happy face pancakes",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "bs": {
+    "display": "BS",
+    "category": "company",
+    "description": "Random bs company word",
+    "example": "front-end",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "buzzword": {
+    "display": "Buzzword",
+    "category": "company",
+    "description": "Random company buzzwords",
+    "example": "disintermediate",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "car": {
+    "display": "Car",
+    "category": "car",
+    "description": "Random car set of data",
+    "example": "{type: \"Passenger car mini\", fuel: \"Gasoline\", transmission: \"Automatic\", brand: \"Fiat\", model: \"Freestyle Fwd\", year: \"1972\"}",
+    "output": "map[string]interface",
+    "content_type": "application/json",
+    "params": null
+  },
+  "carfueltype": {
+    "display": "Car Fuel Type",
+    "category": "car",
+    "description": "Random car fuel type",
+    "example": "CNG",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "carmaker": {
+    "display": "Car Maker",
+    "category": "car",
+    "description": "Random car maker",
+    "example": "Nissan",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "carmodel": {
+    "display": "Car Model",
+    "category": "car",
+    "description": "Random car model",
+    "example": "Aveo",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "cartransmissiontype": {
+    "display": "Car Transmission Type",
+    "category": "car",
+    "description": "Random car transmission type",
+    "example": "Manual",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "cartype": {
+    "display": "Car Type",
+    "category": "car",
+    "description": "Random car type",
+    "example": "Passenger car mini",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "cat": {
+    "display": "Cat",
+    "category": "animal",
+    "description": "Random cat type",
+    "example": "Chausie",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "celebrityactor": {
+    "display": "Celebrity Actor",
+    "category": "celebrity",
+    "description": "Random celebrity actor",
+    "example": "Brad Pitt",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "celebritybusiness": {
+    "display": "Celebrity Business",
+    "category": "celebrity",
+    "description": "Random celebrity business person",
+    "example": "Elon Musk",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "celebritysport": {
+    "display": "Celebrity Sport",
+    "category": "celebrity",
+    "description": "Random celebrity sport person",
+    "example": "Michael Phelps",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "chromeuseragent": {
+    "display": "Chrome User Agent",
+    "category": "internet",
+    "description": "Random chrome user agent",
+    "example": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/5312 (KHTML, like Gecko) Chrome/39.0.836.0 Mobile Safari/5312",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "city": {
+    "display": "City",
+    "category": "address",
+    "description": "Random city",
+    "example": "Marcelside",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "color": {
+    "display": "Color",
+    "category": "color",
+    "description": "Random color",
+    "example": "MediumOrchid",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "company": {
+    "display": "Company",
+    "category": "company",
+    "description": "Random company name",
+    "example": "Moen, Pagac and Wuckert",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "companysuffix": {
+    "display": "Company Suffix",
+    "category": "company",
+    "description": "Random company name suffix",
+    "example": "Inc",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "connective": {
+    "display": "Connective",
+    "category": "word",
+    "description": "Random connective word",
+    "example": "such as",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "connectivecasual": {
+    "display": "Connective Casual",
+    "category": "word",
+    "description": "Random connective casual word",
+    "example": "an outcome of",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "connectivecomparitive": {
+    "display": "Connective Comparitive",
+    "category": "word",
+    "description": "Random connective comparative word",
+    "example": "in addition",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "connectivecomplaint": {
+    "display": "Connective Complaint",
+    "category": "word",
+    "description": "Random connective complaint word",
+    "example": "besides",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "connectiveexamplify": {
+    "display": "Connective Examplify",
+    "category": "word",
+    "description": "Random connective examplify word",
+    "example": "then",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "connectivelisting": {
+    "display": "Connective Listing",
+    "category": "word",
+    "description": "Random connective listing word",
+    "example": "firstly",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "connectivetime": {
+    "display": "Connective Time",
+    "category": "word",
+    "description": "Random connective time word",
+    "example": "finally",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "country": {
+    "display": "Country",
+    "category": "address",
+    "description": "Random country",
+    "example": "United States of America",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "countryabr": {
+    "display": "Country Abbreviation",
+    "category": "address",
+    "description": "Random 2 digit country abbreviation",
+    "example": "US",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "creditcard": {
+    "display": "Credit Card",
+    "category": "payment",
+    "description": "Random credit card data set",
+    "example": "{type: \"Visa\", number: \"4136459948995369\", exp: \"01/21\", cvv: \"513\"}",
+    "output": "map[string]interface",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "creditcardcvv": {
+    "display": "Credit Card CVV",
+    "category": "payment",
+    "description": "Random credit card number",
+    "example": "513",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "creditcardexp": {
+    "display": "Credit Card Exp",
+    "category": "payment",
+    "description": "Random credit card expiraction date",
+    "example": "01/21",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "creditcardnumber": {
+    "display": "Credit Card Number",
+    "category": "payment",
+    "description": "Random credit card number",
+    "example": "4136459948995369",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "types",
+        "display": "Types",
+        "type": "[]string",
+        "optional": false,
+        "default": "all",
+        "options": [
+          "visa",
+          "mastercard",
+          "american-express",
+          "diners-club",
+          "discover",
+          "jcb",
+          "unionpay",
+          "maestro",
+          "elo",
+          "hiper",
+          "hipercard"
+        ],
+        "description": "A select number of types you want to use when generating a credit card number"
+      },
+      {
+        "field": "bins",
+        "display": "Bins",
+        "type": "[]string",
+        "optional": true,
+        "default": "",
+        "options": null,
+        "description": "Optional list of prepended bin numbers to pick from"
+      },
+      {
+        "field": "gaps",
+        "display": "Gaps",
+        "type": "bool",
+        "optional": false,
+        "default": "false",
+        "options": null,
+        "description": "Whether or not to have gaps in number"
+      }
+    ]
+  },
+  "creditcardtype": {
+    "display": "Credit Card Type",
+    "category": "payment",
+    "description": "Random credit card type",
+    "example": "Visa",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "csv": {
+    "display": "CSV",
+    "category": "file",
+    "description": "Generates array of rows in csv format",
+    "example": "\n\t\t\tid,first_name,last_name,password\n\t\t\t1,Markus,Moen,Dc0VYXjkWABx\n\t\t\t2,Osborne,Hilll,XPJ9OVNbs5lm\n\t\t",
+    "output": "[]byte",
+    "content_type": "text/csv",
+    "params": [
+      {
+        "field": "rowcount",
+        "display": "Row Count",
+        "type": "int",
+        "optional": false,
+        "default": "100",
+        "options": null,
+        "description": "Number of rows"
+      },
+      {
+        "field": "fields",
+        "display": "Fields",
+        "type": "[]Field",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Fields containing key name and function"
+      },
+      {
+        "field": "delimiter",
+        "display": "Delimiter",
+        "type": "string",
+        "optional": false,
+        "default": ",",
+        "options": null,
+        "description": "Separator in between row values"
+      }
+    ]
+  },
+  "currency": {
+    "display": "Currency",
+    "category": "payment",
+    "description": "Random currency data set",
+    "example": "{short: \"USD\", long: \"United States Dollar\"}",
+    "output": "map[string]string",
+    "content_type": "application/json",
+    "params": null
+  },
+  "currencylong": {
+    "display": "Currency Long",
+    "category": "payment",
+    "description": "Random currency",
+    "example": "United States Dollar",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "currencyshort": {
+    "display": "Currency Short",
+    "category": "payment",
+    "description": "Random currency abbreviated",
+    "example": "USD",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "cusip": {
+    "display": "CUSIP",
+    "category": "finance",
+    "description": "Random CUSIP",
+    "example": "38259P508",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "date": {
+    "display": "Date",
+    "category": "time",
+    "description": "Random date",
+    "example": "2006-01-02T15:04:05Z07:00",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "format",
+        "display": "Format",
+        "type": "string",
+        "optional": false,
+        "default": "RFC3339",
+        "options": [
+          "ANSIC",
+          "UnixDate",
+          "RubyDate",
+          "RFC822",
+          "RFC822Z",
+          "RFC850",
+          "RFC1123",
+          "RFC1123Z",
+          "RFC3339",
+          "RFC3339Nano"
+        ],
+        "description": "Date time string format output. You may also use golang time format or java time format"
+      }
+    ]
+  },
+  "daterange": {
+    "display": "DateRange",
+    "category": "time",
+    "description": "Random date between two ranges",
+    "example": "2006-01-02T15:04:05Z07:00",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "startdate",
+        "display": "Start Date",
+        "type": "string",
+        "optional": false,
+        "default": "1970-01-01",
+        "options": null,
+        "description": "Start date time string"
+      },
+      {
+        "field": "enddate",
+        "display": "End Date",
+        "type": "string",
+        "optional": false,
+        "default": "2023-06-25",
+        "options": null,
+        "description": "End date time string"
+      },
+      {
+        "field": "format",
+        "display": "Format",
+        "type": "string",
+        "optional": false,
+        "default": "yyyy-MM-dd",
+        "options": null,
+        "description": "Date time string format"
+      }
+    ]
+  },
+  "day": {
+    "display": "Day",
+    "category": "time",
+    "description": "Random day",
+    "example": "12",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "dessert": {
+    "display": "Dessert",
+    "category": "food",
+    "description": "Random dessert",
+    "example": "French napoleons",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "dice": {
+    "display": "Dice",
+    "category": "game",
+    "description": "Random dice outputs",
+    "example": "footinterpret63",
+    "output": "[]uint",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "numdice",
+        "display": "Number of Dice",
+        "type": "uint",
+        "optional": false,
+        "default": "1",
+        "options": null,
+        "description": "Number of dice to roll"
+      },
+      {
+        "field": "sides",
+        "display": "Number of Sides",
+        "type": "[]uint",
+        "optional": false,
+        "default": "[6]",
+        "options": null,
+        "description": "Number of sides on each dice"
+      }
+    ]
+  },
+  "digit": {
+    "display": "Digit",
+    "category": "string",
+    "description": "Generate a single ASCII digit",
+    "example": "0",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "digitn": {
+    "display": "DigitN",
+    "category": "string",
+    "description": "Generate a random string of length N consists of ASCII digits",
+    "example": "0136459948",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "count",
+        "display": "Count",
+        "type": "uint",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Number of digits to generate"
+      }
+    ]
+  },
+  "dinner": {
+    "display": "Dinner",
+    "category": "food",
+    "description": "Random dinner",
+    "example": "Wild addicting dip",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "dog": {
+    "display": "Dog",
+    "category": "animal",
+    "description": "Random dog type",
+    "example": "Norwich Terrier",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "domainname": {
+    "display": "Domain Name",
+    "category": "internet",
+    "description": "Random domain name",
+    "example": "centraltarget.biz",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "domainsuffix": {
+    "display": "Domain Suffix",
+    "category": "internet",
+    "description": "Random domain suffix",
+    "example": "org",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "drink": {
+    "display": "Drink",
+    "category": "food",
+    "description": "Random drink",
+    "example": "Soda",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "email": {
+    "display": "Email",
+    "category": "person",
+    "description": "Random email",
+    "example": "markusmoen@pagac.net",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "emoji": {
+    "display": "Emoji",
+    "category": "emoji",
+    "description": "Random emoji",
+    "example": "🤣",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "emojialias": {
+    "display": "Emoji Alias",
+    "category": "emoji",
+    "description": "Random emoji alias",
+    "example": "smile",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "emojicategory": {
+    "display": "Emoji Category",
+    "category": "emoji",
+    "description": "Random emoji category",
+    "example": "Smileys \u0026 Emotion",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "emojidescription": {
+    "display": "Emoji Description",
+    "category": "emoji",
+    "description": "Random emoji description",
+    "example": "face vomiting",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "emojitag": {
+    "display": "Emoji Tag",
+    "category": "emoji",
+    "description": "Random emoji tag",
+    "example": "happy",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "error": {
+    "display": "Error",
+    "category": "error",
+    "description": "Random error message",
+    "example": "syntax error",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "errordatabase": {
+    "display": "Database error",
+    "category": "error",
+    "description": "Random database error message",
+    "example": "sql error",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "errorgrpc": {
+    "display": "gRPC error",
+    "category": "error",
+    "description": "Random gRPC error message",
+    "example": "client protocol error",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "errorhttp": {
+    "display": "HTTP error",
+    "category": "error",
+    "description": "Random HTTP error message",
+    "example": "invalid method",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "errorhttpclient": {
+    "display": "HTTP client error",
+    "category": "error",
+    "description": "Random HTTP client error message",
+    "example": "request timeout",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "errorhttpserver": {
+    "display": "HTTP server error",
+    "category": "error",
+    "description": "Random HTTP server error message",
+    "example": "internal server error",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "errorobject": {
+    "display": "Error object word",
+    "category": "error",
+    "description": "Random error object word",
+    "example": "protocol",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "errorruntime": {
+    "display": "Runtime error",
+    "category": "error",
+    "description": "Random runtime error message",
+    "example": "address out of bounds",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "errorvalidation": {
+    "display": "Validation error",
+    "category": "error",
+    "description": "Random validation error message",
+    "example": "missing required field",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "farmanimal": {
+    "display": "Farm Animal",
+    "category": "animal",
+    "description": "Random farm animal",
+    "example": "Chicken",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "fileextension": {
+    "display": "File Extension",
+    "category": "file",
+    "description": "Random file extension",
+    "example": "nes",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "filemimetype": {
+    "display": "File Mime Type",
+    "category": "file",
+    "description": "Random file mime type",
+    "example": "application/json",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "firefoxuseragent": {
+    "display": "Firefox User Agent",
+    "category": "internet",
+    "description": "Random browser user agent",
+    "example": "Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10_8_3 rv:7.0) Gecko/1900-07-01 Firefox/37.0",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "firstname": {
+    "display": "First Name",
+    "category": "person",
+    "description": "Random first name",
+    "example": "Markus",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "flipacoin": {
+    "display": "Flip A Coin",
+    "category": "misc",
+    "description": "Random Heads or Tails outcome",
+    "example": "Tails",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "float32": {
+    "display": "Float32",
+    "category": "number",
+    "description": "Random float32 value",
+    "example": "3.1128167e+37",
+    "output": "float32",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "float32range": {
+    "display": "Float32 Range",
+    "category": "number",
+    "description": "Random float32 between given range",
+    "example": "914774.6",
+    "output": "float32",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "min",
+        "display": "Min",
+        "type": "float",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Minimum float32 value"
+      },
+      {
+        "field": "max",
+        "display": "Max",
+        "type": "float",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Maximum float32 value"
+      }
+    ]
+  },
+  "float64": {
+    "display": "Float64",
+    "category": "number",
+    "description": "Random float64 value",
+    "example": "1.644484108270445e+307",
+    "output": "float64",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "float64range": {
+    "display": "Float64 Range",
+    "category": "number",
+    "description": "Random float64 between given range",
+    "example": "914774.5585333086",
+    "output": "float64",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "min",
+        "display": "Min",
+        "type": "float",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Minimum float64 value"
+      },
+      {
+        "field": "max",
+        "display": "Max",
+        "type": "float",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Maximum float64 value"
+      }
+    ]
+  },
+  "fruit": {
+    "display": "Fruit",
+    "category": "food",
+    "description": "Random fruit",
+    "example": "Peach",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "gamertag": {
+    "display": "Gamertag",
+    "category": "game",
+    "description": "Random gamertag",
+    "example": "footinterpret63",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "gender": {
+    "display": "Gender",
+    "category": "person",
+    "description": "Random gender",
+    "example": "male",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "generate": {
+    "display": "Generate",
+    "category": "generate",
+    "description": "Random string generated from string value based upon available data sets",
+    "example": "{firstname} {lastname} {email} - Markus Moen markusmoen@pagac.net",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "str",
+        "display": "String",
+        "type": "string",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "String value to generate from"
+      }
+    ]
+  },
+  "hackerabbreviation": {
+    "display": "Hacker Abbreviation",
+    "category": "hacker",
+    "description": "Random hacker abbreviation",
+    "example": "ADP",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hackeradjective": {
+    "display": "Hacker Adjective",
+    "category": "hacker",
+    "description": "Random hacker adjective",
+    "example": "wireless",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hackeringverb": {
+    "display": "Hackering Verb",
+    "category": "hacker",
+    "description": "Random hackering verb",
+    "example": "connecting",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hackernoun": {
+    "display": "Hacker Noun",
+    "category": "hacker",
+    "description": "Random hacker noun",
+    "example": "driver",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hackerphrase": {
+    "display": "Hacker Phrase",
+    "category": "hacker",
+    "description": "Random hacker phrase",
+    "example": "If we calculate the program, we can get to the AI pixel through the redundant XSS matrix!",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hackerverb": {
+    "display": "Hacker Verb",
+    "category": "hacker",
+    "description": "Random hacker verb",
+    "example": "synthesize",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hexcolor": {
+    "display": "Hex Color",
+    "category": "color",
+    "description": "Random hex color",
+    "example": "#a99fb4",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hexuint128": {
+    "display": "HexUint128",
+    "category": "number",
+    "description": "Random uint128 hex value",
+    "example": "0x875469578e51b5e56c95b64681d147a1",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hexuint16": {
+    "display": "HexUint16",
+    "category": "number",
+    "description": "Random uint16 hex value",
+    "example": "0x8754",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hexuint256": {
+    "display": "HexUint256",
+    "category": "number",
+    "description": "Random uint256 hex value",
+    "example": "0x875469578e51b5e56c95b64681d147a12cde48a4f417231b0c486abbc263e48d",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hexuint32": {
+    "display": "HexUint32",
+    "category": "number",
+    "description": "Random uint32 hex value",
+    "example": "0x87546957",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hexuint64": {
+    "display": "HexUint64",
+    "category": "number",
+    "description": "Random uint64 hex value",
+    "example": "0x875469578e51b5e5",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hexuint8": {
+    "display": "HexUint8",
+    "category": "number",
+    "description": "Random uint8 hex value",
+    "example": "0x87",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hipsterparagraph": {
+    "display": "Hipster Paragraph",
+    "category": "hipster",
+    "description": "Random hipster paragraph",
+    "example": "Microdosing roof chia echo pickled meditation cold-pressed raw denim fingerstache normcore sriracha pork belly. Wolf try-hard pop-up blog tilde hashtag health butcher waistcoat paleo portland vinegar. Microdosing sartorial blue bottle slow-carb freegan five dollar toast you probably haven't heard of them asymmetrical chia farm-to-table narwhal banjo. Gluten-free blog authentic literally synth vinyl meh ethical health fixie banh mi Yuccie. Try-hard drinking squid seitan cray VHS echo chillwave hammock kombucha food truck sustainable.\u003cbr /\u003ePug bushwick hella tote bag cliche direct trade waistcoat yr waistcoat knausgaard pour-over master. Pitchfork jean shorts franzen flexitarian distillery hella meggings austin knausgaard crucifix wolf heirloom. Crucifix food truck you probably haven't heard of them trust fund fixie gentrify pitchfork stumptown mlkshk umami chambray blue bottle. 3 wolf moon swag +1 biodiesel knausgaard semiotics taxidermy meh artisan hoodie +1 blue bottle. Fashion axe forage mixtape Thundercats pork belly whatever 90's beard selfies chambray cred mlkshk.\u003cbr /\u003eShabby chic typewriter VHS readymade lo-fi bitters PBR\u0026B gentrify lomo raw denim freegan put a bird on it. Raw denim cliche dreamcatcher pug fixie park trust fund migas fingerstache sriracha +1 mustache. Tilde shoreditch kickstarter franzen dreamcatcher green juice mustache neutra polaroid stumptown organic schlitz. Flexitarian ramps chicharrones kogi lo-fi mustache tilde forage street church-key williamsburg taxidermy. Chia mustache plaid mumblecore squid slow-carb disrupt Thundercats goth shoreditch master direct trade.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "paragraphcount",
+        "display": "Paragraph Count",
+        "type": "int",
+        "optional": false,
+        "default": "2",
+        "options": null,
+        "description": "Number of paragraphs"
+      },
+      {
+        "field": "sentencecount",
+        "display": "Sentence Count",
+        "type": "int",
+        "optional": false,
+        "default": "2",
+        "options": null,
+        "description": "Number of sentences in a paragraph"
+      },
+      {
+        "field": "wordcount",
+        "display": "Word Count",
+        "type": "int",
+        "optional": false,
+        "default": "5",
+        "options": null,
+        "description": "Number of words in a sentence"
+      },
+      {
+        "field": "paragraphseparator",
+        "display": "Paragraph Separator",
+        "type": "string",
+        "optional": false,
+        "default": "\u003cbr /\u003e",
+        "options": null,
+        "description": "String value to add between paragraphs"
+      }
+    ]
+  },
+  "hipstersentence": {
+    "display": "Hipster Sentence",
+    "category": "hipster",
+    "description": "Random hipster sentence",
+    "example": "Microdosing roof chia echo pickled.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "wordcount",
+        "display": "Word Count",
+        "type": "int",
+        "optional": false,
+        "default": "5",
+        "options": null,
+        "description": "Number of words in a sentence"
+      }
+    ]
+  },
+  "hipsterword": {
+    "display": "Hipster Word",
+    "category": "hipster",
+    "description": "Random hipster word",
+    "example": "microdosing",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hobby": {
+    "display": "Hobby",
+    "category": "person",
+    "description": "Random hobby activity",
+    "example": "Swimming",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "hour": {
+    "display": "Hour",
+    "category": "time",
+    "description": "Random hour",
+    "example": "8",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "httpmethod": {
+    "display": "HTTP Method",
+    "category": "internet",
+    "description": "Random http method",
+    "example": "HEAD",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "httpstatuscode": {
+    "display": "HTTP Status Code",
+    "category": "internet",
+    "description": "Random http status code",
+    "example": "200",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "httpstatuscodesimple": {
+    "display": "HTTP Status Code Simple",
+    "category": "internet",
+    "description": "Random http status code within more general usage codes",
+    "example": "404",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "httpversion": {
+    "display": "HTTP Version",
+    "category": "internet",
+    "description": "Random http version",
+    "example": "HTTP/1.1",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "imagejpeg": {
+    "display": "Image JPEG",
+    "category": "image",
+    "description": "Random jpeg image",
+    "example": "file.jpeg - bytes",
+    "output": "[]byte",
+    "content_type": "image/jpeg",
+    "params": [
+      {
+        "field": "width",
+        "display": "Width",
+        "type": "int",
+        "optional": false,
+        "default": "500",
+        "options": null,
+        "description": "Image width in px"
+      },
+      {
+        "field": "height",
+        "display": "Height",
+        "type": "int",
+        "optional": false,
+        "default": "500",
+        "options": null,
+        "description": "Image height in px"
+      }
+    ]
+  },
+  "imagepng": {
+    "display": "Image PNG",
+    "category": "image",
+    "description": "Random png image",
+    "example": "file.png - bytes",
+    "output": "[]byte",
+    "content_type": "image/png",
+    "params": [
+      {
+        "field": "width",
+        "display": "Width",
+        "type": "int",
+        "optional": false,
+        "default": "500",
+        "options": null,
+        "description": "Image width in px"
+      },
+      {
+        "field": "height",
+        "display": "Height",
+        "type": "int",
+        "optional": false,
+        "default": "500",
+        "options": null,
+        "description": "Image height in px"
+      }
+    ]
+  },
+  "imageurl": {
+    "display": "Image URL",
+    "category": "image",
+    "description": "Random image url",
+    "example": "https://picsum.photos/500/500",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "width",
+        "display": "Width",
+        "type": "int",
+        "optional": false,
+        "default": "500",
+        "options": null,
+        "description": "Image width in px"
+      },
+      {
+        "field": "height",
+        "display": "Height",
+        "type": "int",
+        "optional": false,
+        "default": "500",
+        "options": null,
+        "description": "Image height in px"
+      }
+    ]
+  },
+  "inputname": {
+    "display": "Input Name",
+    "category": "html",
+    "description": "Random HTML input field name",
+    "example": "first_name",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "int16": {
+    "display": "Int16",
+    "category": "number",
+    "description": "Random int16 value",
+    "example": "2200",
+    "output": "int16",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "int32": {
+    "display": "Int32",
+    "category": "number",
+    "description": "Random int32 value",
+    "example": "-1072427943",
+    "output": "int32",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "int64": {
+    "display": "Int64",
+    "category": "number",
+    "description": "Random int64 value",
+    "example": "-8379641344161477543",
+    "output": "int64",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "int8": {
+    "display": "Int8",
+    "category": "number",
+    "description": "Random int8 value",
+    "example": "24",
+    "output": "int8",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "intrange": {
+    "display": "IntRange",
+    "category": "number",
+    "description": "Random int value between min and max",
+    "example": "-8379477543",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "min",
+        "display": "Min",
+        "type": "int",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Minimum int value"
+      },
+      {
+        "field": "max",
+        "display": "Max",
+        "type": "int",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Maximum int value"
+      }
+    ]
+  },
+  "ipv4address": {
+    "display": "IPv4 Address",
+    "category": "internet",
+    "description": "Random ip address v4",
+    "example": "222.83.191.222",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "ipv6address": {
+    "display": "IPv6 Address",
+    "category": "internet",
+    "description": "Random ip address v6",
+    "example": "2001:cafe:8898:ee17:bc35:9064:5866:d019",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "isin": {
+    "display": "ISIN",
+    "category": "finance",
+    "description": "Random ISIN",
+    "example": "",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "job": {
+    "display": "Job",
+    "category": "company",
+    "description": "Random job data set",
+    "example": "{company: \"Moen, Pagac and Wuckert\", title: \"Director\", descriptor: \"Central\", level: \"Assurance\"}",
+    "output": "map[string]string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "jobdescriptor": {
+    "display": "Job Descriptor",
+    "category": "company",
+    "description": "Random job descriptor",
+    "example": "Central",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "joblevel": {
+    "display": "Job Level",
+    "category": "company",
+    "description": "Random job level",
+    "example": "Assurance",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "jobtitle": {
+    "display": "Job Title",
+    "category": "company",
+    "description": "Random job title",
+    "example": "Director",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "json": {
+    "display": "JSON",
+    "category": "file",
+    "description": "Generates an object or an array of objects in json format",
+    "example": "[\n\t\t\t{ \"id\": 1, \"first_name\": \"Markus\", \"last_name\": \"Moen\" },\n\t\t\t{ \"id\": 2, \"first_name\": \"Alayna\", \"last_name\": \"Wuckert\" },\n\t\t\t{ \"id\": 3, \"first_name\": \"Lura\", \"last_name\": \"Lockman\" }\n\t\t]",
+    "output": "[]byte",
+    "content_type": "application/json",
+    "params": [
+      {
+        "field": "type",
+        "display": "Type",
+        "type": "string",
+        "optional": false,
+        "default": "object",
+        "options": ["object", "array"],
+        "description": "Type of JSON, object or array"
+      },
+      {
+        "field": "rowcount",
+        "display": "Row Count",
+        "type": "int",
+        "optional": false,
+        "default": "100",
+        "options": null,
+        "description": "Number of rows in JSON array"
+      },
+      {
+        "field": "fields",
+        "display": "Fields",
+        "type": "[]Field",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Fields containing key name and function to run in json format"
+      },
+      {
+        "field": "indent",
+        "display": "Indent",
+        "type": "bool",
+        "optional": false,
+        "default": "false",
+        "options": null,
+        "description": "Whether or not to add indents and newlines"
+      }
+    ]
+  },
+  "language": {
+    "display": "Language",
+    "category": "language",
+    "description": "Random language",
+    "example": "Kazakh",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "languageabbreviation": {
+    "display": "Language Abbreviation",
+    "category": "language",
+    "description": "Random abbreviated language",
+    "example": "kk",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "languagebcp": {
+    "display": "Language BCP",
+    "category": "language",
+    "description": "Random language BCP (Best Current Practices)",
+    "example": "en-US",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "lastname": {
+    "display": "Last Name",
+    "category": "person",
+    "description": "Random last name",
+    "example": "Daniel",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "latitude": {
+    "display": "Latitude",
+    "category": "address",
+    "description": "Random latitude",
+    "example": "-73.534056",
+    "output": "float",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "latituderange": {
+    "display": "Latitude Range",
+    "category": "address",
+    "description": "Random latitude between given range",
+    "example": "22.921026",
+    "output": "float",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "min",
+        "display": "Min",
+        "type": "float",
+        "optional": false,
+        "default": "0",
+        "options": null,
+        "description": "Minimum range"
+      },
+      {
+        "field": "max",
+        "display": "Max",
+        "type": "float",
+        "optional": false,
+        "default": "90",
+        "options": null,
+        "description": "Maximum range"
+      }
+    ]
+  },
+  "letter": {
+    "display": "Letter",
+    "category": "string",
+    "description": "Generate a single random lower case ASCII letter",
+    "example": "g",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "lettern": {
+    "display": "LetterN",
+    "category": "string",
+    "description": "Generate a random ASCII string with length N",
+    "example": "gbRMaRxHki",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "count",
+        "display": "Count",
+        "type": "uint",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Number of digits to generate"
+      }
+    ]
+  },
+  "lexify": {
+    "display": "Lexify",
+    "category": "string",
+    "description": "Replace ? with random generated letters",
+    "example": "?????@??????.com =\u003e billy@mister.com",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "str",
+        "display": "String",
+        "type": "string",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "String value to replace ?'s"
+      }
+    ]
+  },
+  "loglevel": {
+    "display": "Log Level",
+    "category": "internet",
+    "description": "Random log level",
+    "example": "error",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "longitude": {
+    "display": "Longitude",
+    "category": "address",
+    "description": "Random longitude",
+    "example": "-147.068112",
+    "output": "float",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "longituderange": {
+    "display": "Longitude Range",
+    "category": "address",
+    "description": "Random longitude between given range",
+    "example": "-8.170450",
+    "output": "float",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "min",
+        "display": "Min",
+        "type": "float",
+        "optional": false,
+        "default": "0",
+        "options": null,
+        "description": "Minimum range"
+      },
+      {
+        "field": "max",
+        "display": "Max",
+        "type": "float",
+        "optional": false,
+        "default": "180",
+        "options": null,
+        "description": "Maximum range"
+      }
+    ]
+  },
+  "loremipsumparagraph": {
+    "display": "Lorem Ipsum Paragraph",
+    "category": "word",
+    "description": "Random lorem ipsum paragraph",
+    "example": "Quia quae repellat consequatur quidem nisi quo qui voluptatum accusantium quisquam amet. Quas et ut non dolorem ipsam aut enim assumenda mollitia harum ut. Dicta similique veniam nulla voluptas at excepturi non ad maxime at non. Eaque hic repellat praesentium voluptatem qui consequuntur dolor iusto autem velit aut. Fugit tempore exercitationem harum consequatur voluptatum modi minima aut eaque et et.\u003cbr /\u003eAut ea voluptatem dignissimos expedita odit tempore quod aut beatae ipsam iste. Minus voluptatibus dolorem maiores eius sed nihil vel enim odio voluptatem accusamus. Natus quibusdam temporibus tenetur cumque sint necessitatibus dolorem ex ducimus iusto ex. Voluptatem neque dicta explicabo officiis et ducimus sit ut ut praesentium pariatur. Illum molestias nisi at dolore ut voluptatem accusantium et fugiat et ut.\u003cbr /\u003eExplicabo incidunt reprehenderit non quia dignissimos recusandae vitae soluta quia et quia. Aut veniam voluptas consequatur placeat sapiente non eveniet voluptatibus magni velit eum. Nobis vel repellendus sed est qui autem laudantium quidem quam ullam consequatur. Aut iusto ut commodi similique quae voluptatem atque qui fugiat eum aut. Quis distinctio consequatur voluptatem vel aliquid aut laborum facere officiis iure tempora.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "paragraphcount",
+        "display": "Paragraph Count",
+        "type": "int",
+        "optional": false,
+        "default": "2",
+        "options": null,
+        "description": "Number of paragraphs"
+      },
+      {
+        "field": "sentencecount",
+        "display": "Sentence Count",
+        "type": "int",
+        "optional": false,
+        "default": "2",
+        "options": null,
+        "description": "Number of sentences in a paragraph"
+      },
+      {
+        "field": "wordcount",
+        "display": "Word Count",
+        "type": "int",
+        "optional": false,
+        "default": "5",
+        "options": null,
+        "description": "Number of words in a sentence"
+      },
+      {
+        "field": "paragraphseparator",
+        "display": "Paragraph Separator",
+        "type": "string",
+        "optional": false,
+        "default": "\u003cbr /\u003e",
+        "options": null,
+        "description": "String value to add between paragraphs"
+      }
+    ]
+  },
+  "loremipsumsentence": {
+    "display": "Lorem Ipsum Sentence",
+    "category": "word",
+    "description": "Random lorem ipsum sentence",
+    "example": "Quia quae repellat consequatur quidem.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "wordcount",
+        "display": "Word Count",
+        "type": "int",
+        "optional": false,
+        "default": "5",
+        "options": null,
+        "description": "Number of words in a sentence"
+      }
+    ]
+  },
+  "loremipsumword": {
+    "display": "Lorem Ipsum Word",
+    "category": "word",
+    "description": "Random lorem ipsum word",
+    "example": "quia",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "lunch": {
+    "display": "Lunch",
+    "category": "food",
+    "description": "Random lunch",
+    "example": "No bake hersheys bar pie",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "map": {
+    "display": "Map",
+    "category": "generate",
+    "description": "Random map of generated data",
+    "example": "map[consult:respond context:9285735]",
+    "output": "map[string]interface{}",
+    "content_type": "application/json",
+    "params": null
+  },
+  "middlename": {
+    "display": "Middle Name",
+    "category": "person",
+    "description": "Random middle name",
+    "example": "Belinda",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftanimal": {
+    "display": "Minecraft animal",
+    "category": "minecraft",
+    "description": "Random Minecraft animal",
+    "example": "chicken",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftarmorpart": {
+    "display": "Minecraft armor part",
+    "category": "minecraft",
+    "description": "Random Minecraft armor part",
+    "example": "helmet",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftarmortier": {
+    "display": "Minecraft armor tier",
+    "category": "minecraft",
+    "description": "Random Minecraft armor tier",
+    "example": "iron",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftbiome": {
+    "display": "Minecraft biome",
+    "category": "minecraft",
+    "description": "Random Minecraft biome",
+    "example": "forest",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftdye": {
+    "display": "Minecraft dye",
+    "category": "minecraft",
+    "description": "Random Minecraft dye",
+    "example": "white",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftfood": {
+    "display": "Minecraft food",
+    "category": "minecraft",
+    "description": "Random Minecraft food",
+    "example": "apple",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftmobboss": {
+    "display": "Minecraft mob boss",
+    "category": "minecraft",
+    "description": "Random Minecraft mob boss",
+    "example": "ender dragon",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftmobhostile": {
+    "display": "Minecraft mob hostile",
+    "category": "minecraft",
+    "description": "Random Minecraft mob hostile",
+    "example": "spider",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftmobneutral": {
+    "display": "Minecraft mob neutral",
+    "category": "minecraft",
+    "description": "Random Minecraft mob neutral",
+    "example": "bee",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftmobpassive": {
+    "display": "Minecraft mob passive",
+    "category": "minecraft",
+    "description": "Random Minecraft mob passive",
+    "example": "cow",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftore": {
+    "display": "Minecraft ore",
+    "category": "minecraft",
+    "description": "Random Minecraft ore",
+    "example": "coal",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecrafttool": {
+    "display": "Minecraft tool",
+    "category": "minecraft",
+    "description": "Random Minecraft tool",
+    "example": "shovel",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftvillagerjob": {
+    "display": "Minecraft villager job",
+    "category": "minecraft",
+    "description": "Random Minecraft villager job",
+    "example": "farmer",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftvillagerlevel": {
+    "display": "Minecraft villager level",
+    "category": "minecraft",
+    "description": "Random Minecraft villager level",
+    "example": "master",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftvillagerstation": {
+    "display": "Minecraft villager station",
+    "category": "minecraft",
+    "description": "Random Minecraft villager station",
+    "example": "furnace",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftweapon": {
+    "display": "Minecraft weapon",
+    "category": "minecraft",
+    "description": "Random Minecraft weapon",
+    "example": "bow",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftweather": {
+    "display": "Minecraft weather",
+    "category": "minecraft",
+    "description": "Random Minecraft weather",
+    "example": "rain",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minecraftwood": {
+    "display": "Minecraft wood",
+    "category": "minecraft",
+    "description": "Random Minecraft wood",
+    "example": "oak",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "minute": {
+    "display": "Minute",
+    "category": "time",
+    "description": "Random minute",
+    "example": "34",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "month": {
+    "display": "Month",
+    "category": "time",
+    "description": "Random month",
+    "example": "1",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "monthstring": {
+    "display": "Month String",
+    "category": "time",
+    "description": "Random month in string output",
+    "example": "September",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "movie": {
+    "display": "Movie",
+    "category": "movie",
+    "description": "Random Movie data set",
+    "example": "{name: \"The Matrix\", genre: \"Action\"}",
+    "output": "map[string]string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "moviegenre": {
+    "display": "Genre",
+    "category": "movie",
+    "description": "Random movie genre",
+    "example": "Action",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "moviename": {
+    "display": "Movie Name",
+    "category": "movie",
+    "description": "Random movie name",
+    "example": "The Matrix",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "name": {
+    "display": "Name",
+    "category": "person",
+    "description": "Random name",
+    "example": "Markus Moen",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nameprefix": {
+    "display": "Name Prefix",
+    "category": "person",
+    "description": "Random name prefix",
+    "example": "Mr.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "namesuffix": {
+    "display": "Name Suffix",
+    "category": "person",
+    "description": "Random name suffix",
+    "example": "Jr.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nanosecond": {
+    "display": "Nanosecond",
+    "category": "time",
+    "description": "Random nanosecond",
+    "example": "196446360",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nicecolors": {
+    "display": "Nice Colors",
+    "category": "color",
+    "description": "Random set of nice colors",
+    "example": "[#5c323e #a82743 #e15e32 #c0d23e #e5f04c]",
+    "output": "[]string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "noun": {
+    "display": "Noun",
+    "category": "word",
+    "description": "Random noun",
+    "example": "aunt",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nounabstract": {
+    "display": "Noun Abstract",
+    "category": "word",
+    "description": "Random abstract noun",
+    "example": "confusion",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nouncollectiveanimal": {
+    "display": "Noun Collective Animal",
+    "category": "word",
+    "description": "Random collective noun animal",
+    "example": "party",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nouncollectivepeople": {
+    "display": "Noun Collective People",
+    "category": "word",
+    "description": "Random collective noun person",
+    "example": "body",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nouncollectivething": {
+    "display": "Noun Collective Thing",
+    "category": "word",
+    "description": "Random collective noun thing",
+    "example": "hand",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nouncommon": {
+    "display": "Noun Common",
+    "category": "word",
+    "description": "Random common noun",
+    "example": "part",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nounconcrete": {
+    "display": "Noun Concrete",
+    "category": "word",
+    "description": "Random concrete noun",
+    "example": "snowman",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nouncountable": {
+    "display": "Noun Countable",
+    "category": "word",
+    "description": "Random countable noun",
+    "example": "neck",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "nounproper": {
+    "display": "Noun Proper",
+    "category": "word",
+    "description": "Random proper noun",
+    "example": "John",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "noununcountable": {
+    "display": "Noun Uncountable",
+    "category": "word",
+    "description": "Random uncountable noun",
+    "example": "seafood",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "number": {
+    "display": "Number",
+    "category": "number",
+    "description": "Random number between given range",
+    "example": "14866",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "min",
+        "display": "Min",
+        "type": "int",
+        "optional": false,
+        "default": "-2147483648",
+        "options": null,
+        "description": "Minimum integer value"
+      },
+      {
+        "field": "max",
+        "display": "Max",
+        "type": "int",
+        "optional": false,
+        "default": "2147483647",
+        "options": null,
+        "description": "Maximum integer value"
+      }
+    ]
+  },
+  "numerify": {
+    "display": "Numerify",
+    "category": "string",
+    "description": "Replace # with random numerical values",
+    "example": "(###)###-#### =\u003e (555)867-5309",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "str",
+        "display": "String",
+        "type": "string",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "String value to replace #'s"
+      }
+    ]
+  },
+  "operauseragent": {
+    "display": "Opera User Agent",
+    "category": "internet",
+    "description": "Random browser user agent",
+    "example": "Opera/8.39 (Macintosh; U; PPC Mac OS X 10_8_7; en-US) Presto/2.9.335 Version/10.00",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "paragraph": {
+    "display": "Paragraph",
+    "category": "word",
+    "description": "Random paragraph",
+    "example": "Interpret context record river mind press self should compare property outcome divide. Combine approach sustain consult discover explanation direct address church husband seek army. Begin own act welfare replace press suspect stay link place manchester specialist. Arrive price satisfy sign force application hair train provide basis right pay. Close mark teacher strengthen information attempt head touch aim iron tv take. Handle wait begin look speech trust cancer visit capacity disease chancellor clean. Race aim function gain couple push faith enjoy admit ring attitude develop. Edge game prevent cast mill favour father star live search aim guess. West heart item adopt compete equipment miss output report communicate model cabinet. Seek worker variety step argue air improve give succeed relief artist suffer. Hide finish insist knowledge thatcher make research chance structure proportion husband implement. Town crown restaurant cost material compete lady climb football region discussion order. Place lee market ice like display mind stress compete weather station raise. Democracy college major recall struggle use cut intention accept period generation strike. Benefit defend recommend conclude justify result depend succeed address owner fill interpret.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "paragraphcount",
+        "display": "Paragraph Count",
+        "type": "int",
+        "optional": false,
+        "default": "2",
+        "options": null,
+        "description": "Number of paragraphs"
+      },
+      {
+        "field": "sentencecount",
+        "display": "Sentence Count",
+        "type": "int",
+        "optional": false,
+        "default": "2",
+        "options": null,
+        "description": "Number of sentences in a paragraph"
+      },
+      {
+        "field": "wordcount",
+        "display": "Word Count",
+        "type": "int",
+        "optional": false,
+        "default": "5",
+        "options": null,
+        "description": "Number of words in a sentence"
+      },
+      {
+        "field": "paragraphseparator",
+        "display": "Paragraph Separator",
+        "type": "string",
+        "optional": false,
+        "default": "\u003cbr /\u003e",
+        "options": null,
+        "description": "String value to add between paragraphs"
+      }
+    ]
+  },
+  "password": {
+    "display": "Password",
+    "category": "auth",
+    "description": "Generates a random password",
+    "example": "EEP+wwpk 4lU-eHNXlJZ4n K9%v\u0026TZ9e",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "lower",
+        "display": "Lower",
+        "type": "bool",
+        "optional": false,
+        "default": "true",
+        "options": null,
+        "description": "Whether or not to add lower case characters"
+      },
+      {
+        "field": "upper",
+        "display": "Upper",
+        "type": "bool",
+        "optional": false,
+        "default": "true",
+        "options": null,
+        "description": "Whether or not to add upper case characters"
+      },
+      {
+        "field": "numeric",
+        "display": "Numeric",
+        "type": "bool",
+        "optional": false,
+        "default": "true",
+        "options": null,
+        "description": "Whether or not to add numeric characters"
+      },
+      {
+        "field": "special",
+        "display": "Special",
+        "type": "bool",
+        "optional": false,
+        "default": "true",
+        "options": null,
+        "description": "Whether or not to add special characters"
+      },
+      {
+        "field": "space",
+        "display": "Space",
+        "type": "bool",
+        "optional": false,
+        "default": "false",
+        "options": null,
+        "description": "Whether or not to add spaces"
+      },
+      {
+        "field": "length",
+        "display": "Length",
+        "type": "int",
+        "optional": false,
+        "default": "12",
+        "options": null,
+        "description": "Number of characters in password"
+      }
+    ]
+  },
+  "person": {
+    "display": "Person",
+    "category": "person",
+    "description": "Random set of person info",
+    "example": "{\n\t\t\tfirst_name: \"Markus\",\n\t\t\tlast_name: \"Moen\",\n\t\t\tgender: \"male\",\n\t\t\tssn: \"420776036\",\n\t\t\timage: \"https://picsum.photos/300/300/people\",\n\t\t\thobby: \"Swimming\",\n\t\t\tjob: {\n\t\t\t\tcompany: \"Lockman and Sons\",\n\t\t\t\ttitle: \"Developer\",\n\t\t\t\tdescriptor: \"Global\",\n\t\t\t\tlevel: \"Brand\"\n\t\t\t}, \n\t\t\taddress: {\n\t\t\t\taddress: \"5369 Streamville, Rossieview, Hawaii 42591\",\n\t\t\t\tstreet: \"5369 Streamville\",\n\t\t\t\tcity: \"Rossieview\",\n\t\t\t\tstate: \"Hawaii\",\n\t\t\t\tzip: \"42591\",\n\t\t\t\tcountry: \"Burkina Faso\",\n\t\t\t\tlatitude: \"-6.662594491850811\",\n\t\t\t\tlongitude: \"23.921575244414612\"\n\t\t\t},\n\t\t\tcontact: {\n\t\t\t\tphone: \"6136459948\",\n\t\t\t\temail: \"carolecarroll@bosco.com\"\n\t\t\t},\n\t\t\tcredit_card: {\n\t\t\t\ttype: \"Visa\",\n\t\t\t\tnumber: \"6536459948995369\",\n\t\t\t\texp: \"03/27\",\n\t\t\t\tcvv: \"353\"\n\t\t\t}\n\t\t}",
+    "output": "map[string]interface",
+    "content_type": "application/json",
+    "params": null
+  },
+  "petname": {
+    "display": "Pet Name",
+    "category": "animal",
+    "description": "Random pet name",
+    "example": "Ozzy Pawsborne",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "phone": {
+    "display": "Phone",
+    "category": "person",
+    "description": "Random phone number",
+    "example": "6136459948",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "phoneformatted": {
+    "display": "Phone Formatted",
+    "category": "person",
+    "description": "Random formatted phone number",
+    "example": "136-459-9489",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "phrase": {
+    "display": "Phrase",
+    "category": "word",
+    "description": "Random phrase",
+    "example": "time will tell",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "phraseadverb": {
+    "display": "Adverb Phrase",
+    "category": "word",
+    "description": "Random adverb phrase",
+    "example": "fully gladly",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "phrasenoun": {
+    "display": "Noun Phrase",
+    "category": "word",
+    "description": "Random noun phrase",
+    "example": "a tribe",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "phrasepreposition": {
+    "display": "Preposition Phrase",
+    "category": "word",
+    "description": "Random preposition phrase",
+    "example": "out the black thing",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "phraseverb": {
+    "display": "Verb Phrase",
+    "category": "word",
+    "description": "Random verb phrase",
+    "example": "a tribe",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "preposition": {
+    "display": "Preposition",
+    "category": "word",
+    "description": "Random preposition",
+    "example": "other than",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "prepositioncompound": {
+    "display": "Preposition Compound",
+    "category": "word",
+    "description": "Random compound preposition",
+    "example": "according to",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "prepositiondouble": {
+    "display": "Preposition Double",
+    "category": "word",
+    "description": "Random double preposition",
+    "example": "before",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "prepositionsimple": {
+    "display": "Preposition Simple",
+    "category": "word",
+    "description": "Random simple preposition",
+    "example": "out",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "price": {
+    "display": "Price",
+    "category": "payment",
+    "description": "Random monitary price",
+    "example": "92.26",
+    "output": "float64",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "min",
+        "display": "Min",
+        "type": "float",
+        "optional": false,
+        "default": "0",
+        "options": null,
+        "description": "Minimum price value"
+      },
+      {
+        "field": "max",
+        "display": "Max",
+        "type": "float",
+        "optional": false,
+        "default": "1000",
+        "options": null,
+        "description": "Maximum price value"
+      }
+    ]
+  },
+  "programminglanguage": {
+    "display": "Programming Language",
+    "category": "language",
+    "description": "Random programming language",
+    "example": "Go",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "pronoun": {
+    "display": "Pronoun",
+    "category": "word",
+    "description": "Generates a random pronoun",
+    "example": "me",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "pronoundemonstrative": {
+    "display": "Pronoun Demonstrative",
+    "category": "word",
+    "description": "Generates a random demonstrative pronoun",
+    "example": "this",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "pronounindefinite": {
+    "display": "Pronoun Indefinite",
+    "category": "word",
+    "description": "Generates a random indefinite pronoun",
+    "example": "few",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "pronouninterrogative": {
+    "display": "Pronoun Interrogative",
+    "category": "word",
+    "description": "Generates a random interrogative pronoun",
+    "example": "what",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "pronounobject": {
+    "display": "Pronoun Object",
+    "category": "word",
+    "description": "Generates a random object pronoun",
+    "example": "it",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "pronounpersonal": {
+    "display": "Pronoun Personal",
+    "category": "word",
+    "description": "Generates a random personal pronoun",
+    "example": "it",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "pronounpossessive": {
+    "display": "Pronoun Possessive",
+    "category": "word",
+    "description": "Generates a random possessive pronoun",
+    "example": "mine",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "pronounreflective": {
+    "display": "Pronoun Reflective",
+    "category": "word",
+    "description": "Generates a random reflective pronoun",
+    "example": "myself",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "pronounrelative": {
+    "display": "Pronoun Relative",
+    "category": "word",
+    "description": "Generates a random relative pronoun",
+    "example": "as",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "question": {
+    "display": "Question",
+    "category": "word",
+    "description": "Random question",
+    "example": "Roof chia echo?",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "quote": {
+    "display": "Qoute",
+    "category": "word",
+    "description": "Random quote",
+    "example": "\"Roof chia echo.\" - Lura Lockman",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "randomstring": {
+    "display": "Random String",
+    "category": "string",
+    "description": "Randomly grab one string from array",
+    "example": "hello,world,whats,up =\u003e world",
+    "output": "[]string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "strs",
+        "display": "Strings",
+        "type": "[]string",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Delimited separated strings"
+      }
+    ]
+  },
+  "regex": {
+    "display": "Regex",
+    "category": "generate",
+    "description": "Random string generated from regex RE2 syntax string",
+    "example": "[abcdef]{5} - affec",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "str",
+        "display": "String",
+        "type": "string",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Regex RE2 syntax string"
+      }
+    ]
+  },
+  "rgbcolor": {
+    "display": "RGB Color",
+    "category": "color",
+    "description": "Random rgb color",
+    "example": "[152 23 53]",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "safariuseragent": {
+    "display": "Safari User Agent",
+    "category": "internet",
+    "description": "Random safari user agent",
+    "example": "Mozilla/5.0 (iPad; CPU OS 8_3_2 like Mac OS X; en-US) AppleWebKit/531.15.6 (KHTML, like Gecko) Version/4.0.5 Mobile/8B120 Safari/6531.15.6",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "safecolor": {
+    "display": "Safe Color",
+    "category": "color",
+    "description": "Random safe color",
+    "example": "black",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "second": {
+    "display": "Second",
+    "category": "time",
+    "description": "Random second",
+    "example": "43",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "sentence": {
+    "display": "Sentence",
+    "category": "word",
+    "description": "Random sentence",
+    "example": "Interpret context record river mind.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "wordcount",
+        "display": "Word Count",
+        "type": "int",
+        "optional": false,
+        "default": "5",
+        "options": null,
+        "description": "Number of words in a sentence"
+      }
+    ]
+  },
+  "sentencesimple": {
+    "display": "Simple Sentence",
+    "category": "word",
+    "description": "Random simple sentence",
+    "example": "A tribe fly the lemony kitchen.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "shuffleints": {
+    "display": "Shuffle Ints",
+    "category": "number",
+    "description": "Shuffle an array of ints",
+    "example": "1,2,3,4 =\u003e 3,1,4,2",
+    "output": "[]int",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "ints",
+        "display": "Integers",
+        "type": "[]int",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Delimited separated integers"
+      }
+    ]
+  },
+  "shufflestrings": {
+    "display": "Shuffle Strings",
+    "category": "string",
+    "description": "Shuffle an array of strings",
+    "example": "hello,world,whats,up =\u003e whats,world,hello,up",
+    "output": "[]string",
+    "content_type": "application/json",
+    "params": [
+      {
+        "field": "strs",
+        "display": "Strings",
+        "type": "[]string",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Delimited separated strings"
+      }
+    ]
+  },
+  "slogan": {
+    "display": "Slogan",
+    "category": "comapny",
+    "description": "Random company slogan",
+    "example": "Universal seamless Focus, interactive.",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "snack": {
+    "display": "Snack",
+    "category": "food",
+    "description": "Random snack",
+    "example": "Hoisin marinated wing pieces",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "sql": {
+    "display": "SQL",
+    "category": "database",
+    "description": "Generates an object or an array of objects in json format",
+    "example": "INSERT INTO people \n\t\t\t\t(id, first_name, price, age, created_at) \n\t\t\tVALUES \n\t\t\t\t(1, 'Markus', 804.92, 21, '1937-01-30 07:58:01'),\n\t\t\t\t(2, 'Santino', 235.13, 40, '1964-07-07 22:25:40');",
+    "output": "string",
+    "content_type": "application/sql",
+    "params": [
+      {
+        "field": "table",
+        "display": "Table",
+        "type": "string",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Name of the table to insert into"
+      },
+      {
+        "field": "count",
+        "display": "Count",
+        "type": "int",
+        "optional": false,
+        "default": "100",
+        "options": null,
+        "description": "Number of inserts to generate"
+      },
+      {
+        "field": "fields",
+        "display": "Fields",
+        "type": "[]Field",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Fields containing key name and function to run in json format"
+      }
+    ]
+  },
+  "ssn": {
+    "display": "SSN",
+    "category": "person",
+    "description": "Random social security number",
+    "example": "296446360",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "state": {
+    "display": "State",
+    "category": "address",
+    "description": "Random state",
+    "example": "Illinois",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "stateabr": {
+    "display": "State Abbreviation",
+    "category": "address",
+    "description": "Random 2 digit state abbreviation",
+    "example": "IL",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "street": {
+    "display": "Street",
+    "category": "address",
+    "description": "Random full street",
+    "example": "364 East Rapidsborough",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "streetname": {
+    "display": "Street Name",
+    "category": "address",
+    "description": "Random street name",
+    "example": "View",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "streetnumber": {
+    "display": "Street Number",
+    "category": "address",
+    "description": "Random street number",
+    "example": "13645",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "streetprefix": {
+    "display": "Street Prefix",
+    "category": "address",
+    "description": "Random street prefix",
+    "example": "Lake",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "streetsuffix": {
+    "display": "Street Suffix",
+    "category": "address",
+    "description": "Random street suffix",
+    "example": "land",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "svg": {
+    "display": "Image SVG",
+    "category": "html",
+    "description": "Random svg and ",
+    "example": "\u003csvg width=\"369\" height=\"289\"\u003e\u003crect fill=\"#4f2958\" /\u003e\u003cpolygon points=\"382,87 418,212 415,110\" fill=\"#fffbb7\" /\u003e\u003c/svg\u003e",
+    "output": "string",
+    "content_type": "image/svg+xml",
+    "params": [
+      {
+        "field": "width",
+        "display": "Width",
+        "type": "int",
+        "optional": false,
+        "default": "500",
+        "options": null,
+        "description": "Width in px"
+      },
+      {
+        "field": "height",
+        "display": "Height",
+        "type": "int",
+        "optional": false,
+        "default": "500",
+        "options": null,
+        "description": "Height in px"
+      },
+      {
+        "field": "type",
+        "display": "Type",
+        "type": "string",
+        "optional": true,
+        "default": "",
+        "options": ["rect", "circle", "ellipse", "line", "polyline", "polygon"],
+        "description": "Sub child element type"
+      },
+      {
+        "field": "colors",
+        "display": "Colors",
+        "type": "[]string",
+        "optional": true,
+        "default": "",
+        "options": null,
+        "description": "Hex or RGB array of colors to use"
+      }
+    ]
+  },
+  "teams": {
+    "display": "Teams",
+    "category": "person",
+    "description": "Randomly split people into teams",
+    "example": "{\"Team 1\": [\"Sharon\",\"Jeff\"], \"Team 2\": [\"Billy\",\"Connor\"]}",
+    "output": "map[string][]string",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "people",
+        "display": "Strings",
+        "type": "[]string",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Array of people"
+      },
+      {
+        "field": "teams",
+        "display": "Strings",
+        "type": "[]string",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Array of teams"
+      }
+    ]
+  },
+  "timezone": {
+    "display": "Timezone",
+    "category": "time",
+    "description": "Random timezone",
+    "example": "Kaliningrad Standard Time",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "timezoneabv": {
+    "display": "Timezone Abbreviation",
+    "category": "time",
+    "description": "Random abbreviated timezone",
+    "example": "KST",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "timezonefull": {
+    "display": "Timezone Full",
+    "category": "time",
+    "description": "Random full timezone",
+    "example": "(UTC+03:00) Kaliningrad, Minsk",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "timezoneoffset": {
+    "display": "Timezone Offset",
+    "category": "time",
+    "description": "Random timezone offset",
+    "example": "3",
+    "output": "float32",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "timezoneregion": {
+    "display": "Timezone Region",
+    "category": "time",
+    "description": "Random region timezone",
+    "example": "America/Alaska",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "uint16": {
+    "display": "Uint16",
+    "category": "number",
+    "description": "Random uint16 value",
+    "example": "34968",
+    "output": "uint16",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "uint32": {
+    "display": "Uint32",
+    "category": "number",
+    "description": "Random uint32 value",
+    "example": "1075055705",
+    "output": "uint32",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "uint64": {
+    "display": "Uint64",
+    "category": "number",
+    "description": "Random uint64 value",
+    "example": "843730692693298265",
+    "output": "uint64",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "uint8": {
+    "display": "Uint8",
+    "category": "number",
+    "description": "Random uint8 value",
+    "example": "152",
+    "output": "uint8",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "uintrange": {
+    "display": "UintRange",
+    "category": "number",
+    "description": "Random uint value between given range",
+    "example": "1075055705",
+    "output": "uint",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "min",
+        "display": "Min",
+        "type": "uint",
+        "optional": false,
+        "default": "0",
+        "options": null,
+        "description": "Minimum uint value"
+      },
+      {
+        "field": "max",
+        "display": "Max",
+        "type": "uint",
+        "optional": false,
+        "default": "4294967295",
+        "options": null,
+        "description": "Maximum uint value"
+      }
+    ]
+  },
+  "url": {
+    "display": "URL",
+    "category": "internet",
+    "description": "Random url",
+    "example": "http://www.principalproductize.biz/target",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "useragent": {
+    "display": "User Agent",
+    "category": "internet",
+    "description": "Random browser user agent",
+    "example": "Mozilla/5.0 (Windows NT 5.0) AppleWebKit/5362 (KHTML, like Gecko) Chrome/37.0.834.0 Mobile Safari/5362",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "username": {
+    "display": "Username",
+    "category": "auth",
+    "description": "Generates a random username",
+    "example": "Daniel1364",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "uuid": {
+    "display": "UUID",
+    "category": "misc",
+    "description": "Random uuid",
+    "example": "590c1440-9888-45b0-bd51-a817ee07c3f2",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "vegetable": {
+    "display": "Vegetable",
+    "category": "food",
+    "description": "Random vegetable",
+    "example": "Amaranth Leaves",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "verb": {
+    "display": "Verb",
+    "category": "word",
+    "description": "Random verb",
+    "example": "release",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "verbaction": {
+    "display": "Action Verb",
+    "category": "word",
+    "description": "Random action verb",
+    "example": "close",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "verbhelping": {
+    "display": "Helping Verb",
+    "category": "word",
+    "description": "Random helping verb",
+    "example": "be",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "verbintransitive": {
+    "display": "Intransitive Verb",
+    "category": "word",
+    "description": "Random intransitive verb",
+    "example": "laugh",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "verblinking": {
+    "display": "Linking Verb",
+    "category": "word",
+    "description": "Random linking verb",
+    "example": "was",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "verbtransitive": {
+    "display": "Transitive Verb",
+    "category": "word",
+    "description": "Random transitive verb",
+    "example": "follow",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "vowel": {
+    "display": "Vowel",
+    "category": "string",
+    "description": "Generate a single random lower case vowel",
+    "example": "a",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "weekday": {
+    "display": "Weekday",
+    "category": "time",
+    "description": "Random week day",
+    "example": "Friday",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "weighted": {
+    "display": "Weighted",
+    "category": "misc",
+    "description": "Randomly select a given option based upon an equal amount of weights",
+    "example": "[hello, 2, 6.9],[1, 2, 3] =\u003e 6.9",
+    "output": "any",
+    "content_type": "text/plain",
+    "params": [
+      {
+        "field": "options",
+        "display": "Options",
+        "type": "[]string",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Array of any values"
+      },
+      {
+        "field": "weights",
+        "display": "Weights",
+        "type": "[]float",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Array of weights"
+      }
+    ]
+  },
+  "word": {
+    "display": "Word",
+    "category": "word",
+    "description": "Random word",
+    "example": "man",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "xml": {
+    "display": "XML",
+    "category": "file",
+    "description": "Generates an single or an array of elements in xml format",
+    "example": "\n\t\t\t\u003cxml\u003e\n\t\t\t\t\u003crecord\u003e\n\t\t\t\t\t\u003cfirst_name\u003eMarkus\u003c/first_name\u003e\n\t\t\t\t\t\u003clast_name\u003eMoen\u003c/last_name\u003e\n\t\t\t\t\t\u003cpassword\u003eDc0VYXjkWABx\u003c/password\u003e\n\t\t\t\t\u003c/record\u003e\n\t\t\t\t\u003crecord\u003e\n\t\t\t\t\t\u003cfirst_name\u003eOsborne\u003c/first_name\u003e\n\t\t\t\t\t\u003clast_name\u003eHilll\u003c/last_name\u003e\n\t\t\t\t\t\u003cpassword\u003eXPJ9OVNbs5lm\u003c/password\u003e\n\t\t\t\t\u003c/record\u003e\n\t\t\t\u003c/xml\u003e\n\t\t",
+    "output": "[]byte",
+    "content_type": "application/xml",
+    "params": [
+      {
+        "field": "type",
+        "display": "Type",
+        "type": "string",
+        "optional": false,
+        "default": "single",
+        "options": ["single", "array"],
+        "description": "Type of XML, single or array"
+      },
+      {
+        "field": "rootelement",
+        "display": "Root Element",
+        "type": "string",
+        "optional": false,
+        "default": "xml",
+        "options": null,
+        "description": "Root element wrapper name"
+      },
+      {
+        "field": "recordelement",
+        "display": "Record Element",
+        "type": "string",
+        "optional": false,
+        "default": "record",
+        "options": null,
+        "description": "Record element for each record row"
+      },
+      {
+        "field": "rowcount",
+        "display": "Row Count",
+        "type": "int",
+        "optional": false,
+        "default": "100",
+        "options": null,
+        "description": "Number of rows in JSON array"
+      },
+      {
+        "field": "fields",
+        "display": "Fields",
+        "type": "[]Field",
+        "optional": false,
+        "default": "",
+        "options": null,
+        "description": "Fields containing key name and function to run in json format"
+      },
+      {
+        "field": "indent",
+        "display": "Indent",
+        "type": "bool",
+        "optional": false,
+        "default": "false",
+        "options": null,
+        "description": "Whether or not to add indents and newlines"
+      }
+    ]
+  },
+  "year": {
+    "display": "Year",
+    "category": "time",
+    "description": "Random year",
+    "example": "1900",
+    "output": "int",
+    "content_type": "text/plain",
+    "params": null
+  },
+  "zip": {
+    "display": "Zip",
+    "category": "address",
+    "description": "Random street zip",
+    "example": "13645",
+    "output": "string",
+    "content_type": "text/plain",
+    "params": null
+  }
+}

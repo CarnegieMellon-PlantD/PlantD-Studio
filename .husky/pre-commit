@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx --no-install -- jest --passWithNoTests
+npx --no-install -- tsc --noEmit
+npx --no-install -- lint-staged

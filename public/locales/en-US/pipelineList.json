@@ -1,0 +1,15 @@
+{
+  "pipelineStateCol": "Status",
+  "pipelineStateValues": {
+    "initializing": "Initializing",
+    "available": "Available",
+    "engaged": "Engaged",
+    "default": "Not Provided"
+  },
+  "statusCheckCol": "Health Check",
+  "statusCheckValues": {
+    "ok": "OK",
+    "failed": "Failed",
+    "default": "Not Provided"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "numFilesLabel": "Number of Files",
+  "numFilesGEOneMsg": "Number of files must be >= 1",
+  "fileFormatLabel": "File Format",
+  "fileFormatRequiredMsg": "File format is required",
+  "fileFormatValues": {
+    "csv": "CSV Files",
+    "binary": "Binary Files"
+  },
+  "useCompressionLabel": "Enable Compression",
+  "compressedFileFormatLabel": "Compressed File Format",
+  "compressedFileFormatRequiredMsg": "Compressed file format is required",
+  "compressedFileFormatValues": {
+    "zip": "ZIP Files"
+  },
+  "compressPerSchemaLabel": "Compress Per Schema",
+  "compressPerSchemaTooltip": "Create a compressed file for each Schema rather than for all Schemas in every repeat.",
+  "schemasTable": {
+    "title": "Schemas",
+    "atLeastOneSchemaMsg": "At least one Schema is required",
+    "nameCol": "Name",
+    "nameRequiredMsg": "Name is required",
+    "numRecordsCol": "Records / File",
+    "numFilesPerCompressedFileCol": "Files / Compressed File",
+    "minLabel": "Min",
+    "minGEOneMsg": "Min must be >= 1",
+    "minLEMaxMsg": "Min must be <= max",
+    "maxLabel": "Max",
+    "maxGEOneMsg": "Max must be >= 1",
+    "maxGEMinMsg": "Max must be >= min"
+  }
+}
