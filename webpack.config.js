@@ -39,11 +39,11 @@ const config = {
     historyApiFallback: true, // To support `BrowserRouter`
     proxy: [
       {
-        context: ['/api', '/data'],
+        context: ['/api/', '/data/'],
         target: 'http://127.0.0.1:5000',
         pathRewrite: {
-          '^/api': '/api',
-          '^/data': '/data',
+          '^/api/': '/api/',
+          '^/data/': '/data/',
         },
       },
     ],

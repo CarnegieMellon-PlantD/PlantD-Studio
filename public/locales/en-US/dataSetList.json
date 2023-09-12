@@ -21,5 +21,6 @@
     "default": "Not Provided"
   },
   "sampleDataSetCol": "Sample DataSet",
-  "downloadBtn": "Download"
+  "downloadBtn": "Download",
+  "downloadErrorMsg": "Failed to download the sample DataSet: {{error}}"
 }
