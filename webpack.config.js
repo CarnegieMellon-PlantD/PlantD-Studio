@@ -40,7 +40,7 @@ const config = {
     proxy: [
       {
         context: ['/api', '/data'],
-        target: 'http://127.0.0.1:15000',
+        target: 'http://127.0.0.1:5000',
         pathRewrite: {
           '^/api': '/api',
           '^/data': '/data',
