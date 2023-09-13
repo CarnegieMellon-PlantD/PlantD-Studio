@@ -5,12 +5,11 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { App, Badge, Button, List, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { AxiosError } from 'axios';
 
 import BaseResourceList from '@/components/resourceManager/BaseResourceList';
+import { apiBaseUrl } from '@/constants/base';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeleteDataSetMutation, useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
-import { downloadSampleDataSet } from '@/services/resourceManager/miscApi';
 import {
   allDataSetJobStatuses,
   allDataSetPvcStatuses,
@@ -18,7 +17,6 @@ import {
   DataSetJobStatus,
   DataSetPvcStatus,
 } from '@/types/resourceManager/dataSet';
-import { getAxiosBlobErrMsg } from '@/utils/getErrMsg';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const tagColorList = [
@@ -104,7 +102,6 @@ const ErrorCount: React.FC<{ record: DataSetDTO }> = ({ record }) => {
 
 const DataSetList: React.FC = () => {
   const { t } = useTranslation(['dataSetList', 'resourceList', 'common']);
-  const { message } = App.useApp();
   const { data, isLoading, isFetching, refetch } = useResourceList({
     resourceKindPlural: t('common:dataSetPlural'),
     listHook: useListDataSetsQuery,
@@ -202,11 +199,8 @@ const DataSetList: React.FC = () => {
           size="small"
           disabled={record.status.jobStatus !== 'Success'}
           icon={<FontAwesomeIcon icon={faDownload} />}
-          onClick={() => {
-            downloadSampleDataSet(record.metadata.namespace, record.metadata.name).catch(async (error) => {
-              const msg = await getAxiosBlobErrMsg(error as AxiosError<Blob>);
-              message.error(t('downloadErrorMsg', { error: msg }));
-            });
+          onClick={async () => {
+            window.open(`${apiBaseUrl}/datasets/${record.metadata.namespace}/${record.metadata.name}/sample`, '_blank');
           }}
         >
           {t('downloadBtn')}

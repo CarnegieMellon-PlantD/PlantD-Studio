@@ -9,6 +9,7 @@ import {
   faCircleInfo,
   faCube,
   faDatabase,
+  faFileExport,
   faFlask,
   faGlobe,
   faLanguage,
@@ -108,6 +109,11 @@ const AppLayout: React.FC = () => {
         label: t('tools'),
         children: [
           {
+            key: 'importExport',
+            icon: <FontAwesomeIcon icon={faFileExport} />,
+            label: t('importExport'),
+          },
+          {
             key: 'about',
             icon: <FontAwesomeIcon icon={faCircleInfo} />,
             label: t('about'),
@@ -149,6 +155,11 @@ const AppLayout: React.FC = () => {
         key: 'experiment',
         match: /^\/experiment(\/.*)?$/,
         target: '/experiment',
+      },
+      {
+        key: 'importExport',
+        match: /^\/importExport(\/.*)?$/,
+        target: '/importExport',
       },
       {
         key: 'about',

@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { faAdd, faCloudDownload, faCloudUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { App, Breadcrumb, Button, Card, Spin, Table, Upload } from 'antd';
+import Alert from 'antd/es/alert/Alert';
 import { ColumnsType } from 'antd/es/table';
 import { RcFile, UploadFile } from 'antd/es/upload/interface';
-import axios from 'axios';
 
 import { apiBaseUrl, appName } from '@/constants/base';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
@@ -15,7 +15,8 @@ import { useListExperimentsQuery } from '@/services/resourceManager/experimentAp
 import { useListLoadPatternsQuery } from '@/services/resourceManager/loadPatternApi';
 import { useListPipelinesQuery } from '@/services/resourceManager/pipelineApi';
 import { useListSchemasQuery } from '@/services/resourceManager/schemaApi';
-import { getAxiosErrMsg } from '@/utils/getErrMsg';
+import { useImportResourcesMutation } from '@/services/resourceManager/utilApi';
+import { getErrMsg } from '@/utils/getErrMsg';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 /** Enums of resource kinds */
@@ -42,6 +43,7 @@ const ImportPanel: React.FC = () => {
   const { t } = useTranslation(['importExport']);
   const { message } = App.useApp();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [importResources, { data, isSuccess, isError, error }] = useImportResourcesMutation();
 
   return (
     <>
@@ -53,7 +55,7 @@ const ImportPanel: React.FC = () => {
         }}
         beforeUpload={(file) => {
           if (!file.name.endsWith('zip')) {
-            message.warning(t('invalidFileTypeMsg', { type: file.type }));
+            message.warning(t('invalidFileTypeMsg'));
             return Upload.LIST_IGNORE;
           }
           return false;
@@ -67,23 +69,44 @@ const ImportPanel: React.FC = () => {
         icon={<FontAwesomeIcon icon={faCloudUpload} />}
         disabled={fileList.length === 0}
         onClick={() => {
-          const formData = new FormData();
-          formData.append('file', fileList[0].originFileObj as RcFile);
-          axios({
-            url: `${apiBaseUrl}/import`,
-            method: 'POST',
-            data: formData,
-          })
-            .then(() => {
-              message.success(t('importSuccessMsg'));
-            })
-            .catch((err) => {
-              message.error(t('importErrorMsg', { error: getAxiosErrMsg(err) }));
-            });
+          importResources({ file: fileList[0].originFileObj as RcFile });
         }}
       >
         {t('importBtn')}
       </Button>
+      {isSuccess && data !== undefined && (
+        <>
+          {data.numFailed === 0 && (
+            <Alert
+              className="mt-4"
+              type="success"
+              message={t('importSuccessMsg', { numSucceeded: data.numSucceeded.toString() })}
+              showIcon
+            />
+          )}
+          {data.numFailed > 0 && (
+            <Alert
+              className="mt-4"
+              type="warning"
+              message={t('importWarnMsg', {
+                numSucceeded: data.numSucceeded.toString(),
+                numFailed: data.numFailed.toString(),
+              })}
+              description={
+                <ul>
+                  {data.errors.map((error, errorIdx) => (
+                    <li key={errorIdx}>{error}</li>
+                  ))}
+                </ul>
+              }
+              showIcon
+            />
+          )}
+        </>
+      )}
+      {isError && error !== undefined && (
+        <Alert className="mt-4" type="error" message={t('importErrorMsg', { error: getErrMsg(error) })} showIcon />
+      )}
     </>
   );
 };
@@ -221,7 +244,19 @@ const ExportPanel: React.FC = () => {
         icon={<FontAwesomeIcon icon={faCloudDownload} />}
         disabled={selectedRows.length === 0}
         onClick={() => {
-          // TODO: Implement new API
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = `${apiBaseUrl}/export`;
+          form.style.display = 'none';
+
+          const element = document.createElement('input');
+          element.name = 'info';
+          element.value = JSON.stringify(selectedRows);
+          form.appendChild(element);
+
+          document.body.appendChild(form);
+          form.submit();
+          document.body.removeChild(form);
         }}
       >
         {t('exportBtn')}
