@@ -63,16 +63,28 @@ const ExperimentList: React.FC = () => {
       title: t('dashboardsCol'),
       width: 150,
       render: (text, record) => (
-        <Button
-          type="text"
-          size="small"
-          icon={<FontAwesomeIcon icon={faGauge} />}
-          onClick={() => {
-            navigate(`/dashboard/experimentDetail/${record.metadata.namespace}/${record.metadata.name}`);
-          }}
-        >
-          {t('detailDashboard')}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            type="text"
+            size="small"
+            icon={<FontAwesomeIcon icon={faGauge} />}
+            onClick={() => {
+              navigate(`/dashboard/experimentDetail/${record.metadata.namespace}/${record.metadata.name}`);
+            }}
+          >
+            {t('detailDashboard')}
+          </Button>
+          <Button
+            type="text"
+            size="small"
+            icon={<FontAwesomeIcon icon={faGauge} />}
+            onClick={() => {
+              navigate(`/dashboard/loadGenerator/${record.metadata.namespace}/${record.metadata.name}`);
+            }}
+          >
+            {t('loadGeneratorDashboard')}
+          </Button>
+        </div>
       ),
     },
     {

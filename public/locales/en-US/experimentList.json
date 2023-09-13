@@ -12,5 +12,6 @@
     "default": "Not Provided"
   },
   "dashboardsCol": "Dashboards",
-  "detailDashboard": "Detail"
+  "detailDashboard": "Detail",
+  "loadGeneratorDashboard": "Load Generator"
 }

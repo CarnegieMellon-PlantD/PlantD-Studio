@@ -31,6 +31,7 @@ const PipelineEditor = lazy(() => import('@/pages/resourceManager/PipelineEditor
 const ExperimentList = lazy(() => import('@/pages/resourceManager/ExperimentList'));
 const ExperimentEditor = lazy(() => import('@/pages/resourceManager/ExperimentEditor'));
 const ExperimentDetailDashboard = lazy(() => import('@/pages/dashboard/ExperimentDetailDashboard'));
+const LoadGeneratorDashboard = lazy(() => import('@/pages/dashboard/LoadGeneratorDashboard'));
 const ImportExport = lazy(() => import('@/pages/ImportExport'));
 const About = lazy(() => import('@/pages/About'));
 
@@ -128,6 +129,10 @@ const router = createBrowserRouter([
           {
             path: 'experimentDetail/:namespace/:name',
             element: <ExperimentDetailDashboard />,
+          },
+          {
+            path: 'loadGenerator/:namespace/:name',
+            element: <LoadGeneratorDashboard />,
           },
         ],
       },
