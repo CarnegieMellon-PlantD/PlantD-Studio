@@ -34,7 +34,7 @@ const ExperimentDetailDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `100 * rate(calls{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s]) / rate(calls{job="${params.name}", namespace="${params.namespace}"}[30s])`,
+                query: `100 * rate(calls_total{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s]) / rate(calls_total{job="${params.name}", namespace="${params.namespace}"}[30s])`,
                 start: timeRange[0].unix(),
                 end: timeRange[1].unix(),
                 step: Math.floor((timeRange[1].unix() - timeRange[0].unix()) / 500),
@@ -56,7 +56,7 @@ const ExperimentDetailDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `rate(calls{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[1h]) / rate(calls{job="${params.name}", namespace="${params.namespace}"}[1h])`,
+                query: `rate(calls_total{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[1h]) / rate(calls_total{job="${params.name}", namespace="${params.namespace}"}[1h])`,
                 end: timeRange[1].unix(),
                 labelSelector: ['span_name'],
               },
@@ -75,7 +75,7 @@ const ExperimentDetailDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `rate(calls{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s])`,
+                query: `rate(calls_total{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s])`,
                 start: timeRange[0].unix(),
                 end: timeRange[1].unix(),
                 step: Math.floor((timeRange[1].unix() - timeRange[0].unix()) / 200),
@@ -97,7 +97,7 @@ const ExperimentDetailDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `rate(calls{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[1h])`,
+                query: `rate(calls_total{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[1h])`,
                 end: timeRange[1].unix(),
                 labelSelector: ['span_name'],
               },
@@ -115,7 +115,7 @@ const ExperimentDetailDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `rate(duration_sum{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s]) / rate(duration_count{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s])`,
+                query: `rate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s]) / rate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s])`,
                 start: timeRange[0].unix(),
                 end: timeRange[1].unix(),
                 step: Math.floor((timeRange[1].unix() - timeRange[0].unix()) / 200),
@@ -137,7 +137,7 @@ const ExperimentDetailDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `rate(duration_sum{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[1h]) / rate(duration_count{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[1h])`,
+                query: `rate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[1h]) / rate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[1h])`,
                 end: timeRange[1].unix(),
                 labelSelector: ['span_name'],
               },

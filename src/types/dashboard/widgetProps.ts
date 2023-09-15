@@ -27,7 +27,7 @@ export interface ScatterChartProps extends BaseWidgetProps {
 export interface GaugeChartProps extends BaseWidgetProps {
   dataRequest: BiChannelDataRequest;
   widget: {
-    type?: 'default' | 'percent';
+    type?: 'default' | 'percent' | 'byte';
     precision?: number;
   };
 }

@@ -29,9 +29,9 @@ const LoadGeneratorDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `sum(k6_http_reqs_total{experiment=~"${params.namespace}/${params.name}-.*"})`,
+                query: `sum by(endpoint)(k6_http_reqs_total{experiment="${params.namespace}/${params.name}"})`,
                 end: timeRange[1].unix(),
-                labelSelector: [],
+                labelSelector: ['endpoint'],
               },
             },
             widget: {
@@ -47,9 +47,9 @@ const LoadGeneratorDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `sum(k6_http_reqs_total{experiment=~"${params.namespace}/${params.name}-.*", expected_response="false"})`,
+                query: `sum by(endpoint)(k6_http_reqs_total{experiment="${params.namespace}/${params.name}", expected_response="false"})`,
                 end: timeRange[1].unix(),
-                labelSelector: [],
+                labelSelector: ['endpoint'],
               },
             },
             widget: {
@@ -65,9 +65,9 @@ const LoadGeneratorDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `sum(deriv(k6_http_reqs_total{experiment=~"${params.namespace}/${params.name}-.*"}[1m]))`,
+                query: `sum by(endpoint)(deriv(k6_http_reqs_total{experiment="${params.namespace}/${params.name}"}[1m]))`,
                 end: timeRange[1].unix(),
-                labelSelector: [],
+                labelSelector: ['endpoint'],
               },
             },
             widget: {
@@ -83,13 +83,14 @@ const LoadGeneratorDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `k6_http_req_waiting_p99{experiment=~"${params.namespace}/${params.name}-.*"}`,
+                query: `k6_http_req_waiting_p99{experiment="${params.namespace}/${params.name}"}`,
                 end: timeRange[1].unix(),
-                labelSelector: [],
+                labelSelector: ['endpoint'],
               },
             },
             widget: {
               type: 'default',
+              precision: 5,
             },
           },
         },
@@ -101,13 +102,14 @@ const LoadGeneratorDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `k6_data_received_total{experiment=~"${params.namespace}/${params.name}-.*"}`,
+                query: `k6_data_received_total{experiment="${params.namespace}/${params.name}"}`,
                 end: timeRange[1].unix(),
-                labelSelector: [],
+                labelSelector: ['endpoint'],
               },
             },
             widget: {
-              type: 'default',
+              type: 'byte',
+              precision: 2,
             },
           },
         },
@@ -119,13 +121,14 @@ const LoadGeneratorDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `k6_data_sent_total{experiment=~"${params.namespace}/${params.name}-.*"}`,
+                query: `k6_data_sent_total{experiment="${params.namespace}/${params.name}"}`,
                 end: timeRange[1].unix(),
-                labelSelector: [],
+                labelSelector: ['endpoint'],
               },
             },
             widget: {
-              type: 'default',
+              type: 'byte',
+              precision: 2,
             },
           },
         },
@@ -137,11 +140,11 @@ const LoadGeneratorDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `k6_http_reqs_total{experiment=~"${params.namespace}/${params.name}-.*"}`,
+                query: `sum by(endpoint)(irate(k6_http_reqs_total{experiment="${params.namespace}/${params.name}"}[30s]))`,
                 start: timeRange[0].unix(),
                 end: timeRange[1].unix(),
                 step: Math.floor((timeRange[1].unix() - timeRange[0].unix()) / 1000),
-                labelSelector: ['expected_response'],
+                labelSelector: ['endpoint'],
               },
             },
             widget: {
