@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.1.0...v1.1.1) (2023-09-19)
+
+### Bug Fixes
+
+- **dashboard:** update success rate query ([235096d](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/235096d2d7eaaaffbdf53646f0fcd47b66b59f26))
+- **pipeline-editor:** remove fields in metrics endpoint card ([d763ed6](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/d763ed6d21885f0824c4b5f11e07123d71f3f307))
+
 ## [1.1.0](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.0.0...v1.1.0) (2023-09-15)
 
 ### Features
