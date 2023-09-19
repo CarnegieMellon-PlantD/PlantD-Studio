@@ -105,12 +105,12 @@ const EndpointCard: React.FC<{
         >
           <Radio.Group>
             <Radio value="http">{t('endpoint.protocolValues.http')}</Radio>
-            <Radio value="websocket" disabled>
+            {/* <Radio value="websocket" disabled>
               {t('endpoint.protocolValues.websocket')}
             </Radio>
             <Radio value="grpc" disabled>
               {t('endpoint.protocolValues.grpc')}
-            </Radio>
+            </Radio> */}
           </Radio.Group>
         </Form.Item>
       )}
@@ -126,23 +126,23 @@ const EndpointCard: React.FC<{
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            name={[...name, 'http', 'method']}
-            label={t('endpoint.http.methodLabel')}
-            rules={[{ required: true, message: t('endpoint.http.methodRequiredMsg') }]}
-          >
-            <Select
-              options={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'].map((method) => ({
-                label: method,
-                value: method,
-              }))}
-            />
-          </Form.Item>
-          <Form.Item label={t('endpoint.http.headersLabel')}>
-            <KeyValuePair name={[...name, 'http', 'headers']} />
-          </Form.Item>
           {!isMetricsEndpoint && (
             <>
+              <Form.Item
+                name={[...name, 'http', 'method']}
+                label={t('endpoint.http.methodLabel')}
+                rules={[{ required: true, message: t('endpoint.http.methodRequiredMsg') }]}
+              >
+                <Select
+                  options={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'].map((method) => ({
+                    label: method,
+                    value: method,
+                  }))}
+                />
+              </Form.Item>
+              <Form.Item label={t('endpoint.http.headersLabel')}>
+                <KeyValuePair name={[...name, 'http', 'headers']} />
+              </Form.Item>
               <Form.Item
                 name={[...name, 'http', 'body', 'type']}
                 label={t('endpoint.http.bodyTypeLabel')}

@@ -35,18 +35,23 @@ export const getDefaultEndpoint = (namespace: string): EndpointVO => ({
   port: '',
 });
 
-export const getDefaultPipelineForm = (namespace: string): PipelineVO => ({
-  namespace: namespace,
-  name: '',
-  pipelineEndpoints: [],
-  healthCheckEndpoints: [],
-  metricsEndpoint: getDefaultEndpoint(namespace),
-  extraMetrics: {
-    system: {
-      tags: [],
+export const getDefaultPipelineForm = (namespace: string): PipelineVO => {
+  const metricsEndpoint = getDefaultEndpoint(namespace);
+  metricsEndpoint.type = 'http';
+  metricsEndpoint.http.method = 'GET';
+  return {
+    namespace: namespace,
+    name: '',
+    pipelineEndpoints: [],
+    healthCheckEndpoints: [],
+    metricsEndpoint,
+    extraMetrics: {
+      system: {
+        tags: [],
+      },
     },
-  },
-  inCluster: false,
-  cloudVendor: '',
-  enableCostCalculation: false,
-});
+    inCluster: false,
+    cloudVendor: '',
+    enableCostCalculation: false,
+  };
+};
