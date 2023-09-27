@@ -175,20 +175,18 @@ const App: React.FC = () => {
   }, [i18n.language]);
 
   return (
-    <Provider store={store}>
-      <ConfigProvider locale={locale} theme={{ algorithm }}>
-        <AntdApp>
-          <AppHelmet />
-          <RouterProvider router={router} />
-        </AntdApp>
-      </ConfigProvider>
-    </Provider>
+    <React.StrictMode>
+      <Provider store={store}>
+        <ConfigProvider locale={locale} theme={{ algorithm }}>
+          <AntdApp>
+            <AppHelmet />
+            <RouterProvider router={router} />
+          </AntdApp>
+        </ConfigProvider>
+      </Provider>
+    </React.StrictMode>
   );
 };
 
 const root = ReactDOM.createRoot(document.getElementById('app') as HTMLElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+root.render(<App />);

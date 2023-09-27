@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MenuOutlined } from '@ant-design/icons';
-import { DndContext } from '@dnd-kit/core';
+import { DndContext, UniqueIdentifier } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { faAdd, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Table, TableProps } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 
-type RowKey = string | number;
+type RowKey = UniqueIdentifier;
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   /** Row key provided by Antd */
@@ -95,7 +95,9 @@ const SortableTable = <T extends object>({
                 icon={faTrash}
                 onClick={() => {
                   // Assume the `rowKey` is a key of `T`, let error be thrown if it is not
-                  onDeleteRow(typeof rowKey === 'function' ? rowKey(record) : (record[rowKey as keyof T] as RowKey));
+                  onDeleteRow(
+                    typeof rowKey === 'function' ? (rowKey(record) as RowKey) : (record[rowKey as keyof T] as RowKey)
+                  );
                 }}
               />
             }
@@ -130,7 +132,7 @@ const SortableTable = <T extends object>({
           // Use the row keys as unique identifiers for dnd-kit
           // Assume the `rowKey` is a key of `T`, let error be thrown if it is not
           items={dataSource.map((item) =>
-            typeof rowKey === 'function' ? rowKey(item) : (item[rowKey as keyof T] as RowKey)
+            typeof rowKey === 'function' ? (rowKey(item) as RowKey) : (item[rowKey as keyof T] as RowKey)
           )}
           strategy={verticalListSortingStrategy}
         >
