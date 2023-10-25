@@ -38,6 +38,7 @@ const TypeSelect: React.FC<Omit<SelectProps, 'showSearch' | 'filterOption' | 'op
           originalOption.description.toLowerCase().includes(lowerCasedInputValue)
         );
       }}
+      optionLabelProp="value"
       {...props}
     >
       {Object.entries(categorizedSchemaColumnTypes).map(([typeCategory, types]) => (

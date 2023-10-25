@@ -18,6 +18,7 @@ const FormulaSelect: React.FC<Omit<SelectProps, 'showSearch' | 'filterOption' | 
           originalOption.description.toLowerCase().includes(lowerCasedInputValue)
         );
       }}
+      optionLabelProp="value"
       {...props}
     >
       {schemaColumnFormulas.map((formula) => (
