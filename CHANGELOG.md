@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.1.1...v1.2.0) (2023-10-25)
+
+### Features
+
+- add icon ([0926fb2](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/0926fb28a9b36a19edb00cc16fa816fcaa944185))
+- **home:** add system overview page ([acd9e7f](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/acd9e7f6b356820502b81861a06581c401467a20))
+
+### Bug Fixes
+
+- **schema-editor:** fix display issue in select ([dfb8ded](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/dfb8ded6f887524d4e0e8c1eb0a704061eb4c718))
+
 ### [1.1.1](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.1.0...v1.1.1) (2023-09-19)
 
 ### Bug Fixes
