@@ -25,6 +25,7 @@ import { useBoolean, useDarkMode } from 'usehooks-ts';
 
 import AppLoading from '@/components/AppLoading';
 import { appName } from '@/constants/base';
+import logo from '@/images/logo.svg';
 
 type MenuItem = Exclude<MenuProps['items'], undefined>[number];
 
@@ -180,7 +181,7 @@ const AppLayout: React.FC = () => {
       <Layout.Header className="transition-all px-4 lg:px-8 flex gap-4 justify-between">
         {/* Left part, disable shrink */}
         <div className="flex-none flex items-center gap-2 select-none">
-          {/* <img src={} alt={t('productLogo')} className="w-12 h-12 pointer-events-none" /> */}
+          <img src={logo} alt={t('PlantD Studio')} className="w-12 h-12 pointer-events-none" />
           <span className="font-logo text-xl text-white hidden lg:block">{appName}</span>
         </div>
         {/* Right part */}
