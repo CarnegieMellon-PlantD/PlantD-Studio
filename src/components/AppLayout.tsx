@@ -12,6 +12,7 @@ import {
   faFileExport,
   faFlask,
   faGlobe,
+  faHome,
   faLanguage,
   faMoon,
   faServer,
@@ -67,6 +68,11 @@ const AppLayout: React.FC = () => {
   );
   const sideMenuItems = useMemo<MenuItem[]>(
     () => [
+      {
+        key: 'home',
+        icon: <FontAwesomeIcon icon={faHome} />,
+        label: t('System Overview'),
+      },
       {
         key: 'resources',
         icon: <FontAwesomeIcon icon={faCube} />,
@@ -127,6 +133,11 @@ const AppLayout: React.FC = () => {
   const sideMenuDefaultOpenKeys = useMemo<string[]>(() => ['resources', 'tools'], []);
   const sideMenuItemRules = useMemo<MenuItemRule[]>(
     () => [
+      {
+        key: 'home',
+        match: /^\/$/,
+        target: '/',
+      },
       {
         key: 'namespace',
         match: /^\/namespace(\/.*)?$/,

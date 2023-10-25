@@ -1,15 +1,203 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { faCheckCircle, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { App, Badge, Breadcrumb, Card, Statistic, Table } from 'antd';
+
+import { appName } from '@/constants/base';
+import { useListCostExportersQuery } from '@/services/resourceManager/costExporterApi';
+import { useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
+import { useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
+import { useListLoadPatternsQuery } from '@/services/resourceManager/loadPatternApi';
+import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
+import { useListPipelinesQuery } from '@/services/resourceManager/pipelineApi';
+import { useGetPlantDCoreQuery } from '@/services/resourceManager/plantDCoreApi';
+import { useListSchemasQuery } from '@/services/resourceManager/schemaApi';
+import { getClsName } from '@/utils/getClsName';
+import { getErrMsg } from '@/utils/getErrMsg';
+
+const plantDCoreMetadata = {
+  namespace: 'plantd-operator-system',
+  name: 'plantdcore-core',
+};
+
+const isReady = (status: string | undefined): boolean => {
+  const result = status?.match(/^Running \((\d+)\/(\d+)\)$/);
+  return result !== undefined && result !== null && result[1] === result[2];
+};
 
 const Home: React.FC = () => {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { message } = App.useApp();
+
+  const {
+    data: plantDCore,
+    isError: isGetPlantDCoreError,
+    error: getPlantDCoreError,
+  } = useGetPlantDCoreQuery({
+    metadata: plantDCoreMetadata,
+  });
 
   useEffect(() => {
-    navigate('/namespace');
-  }, []);
+    if (isGetPlantDCoreError) {
+      message.error(`Failed to get PlantDCore: ${getErrMsg(getPlantDCoreError)}`);
+    }
+  }, [isGetPlantDCoreError]);
 
-  return null;
+  const { data: namespaces, isError: isListNamespacesError, error: listNamespacesError } = useListNamespacesQuery();
+
+  useEffect(() => {
+    if (isListNamespacesError) {
+      message.error(`Failed to list Namespaces: ${getErrMsg(listNamespacesError)}`);
+    }
+  }, [isListNamespacesError]);
+
+  const { data: schemas, isError: isListSchemasError, error: listSchemasError } = useListSchemasQuery();
+
+  useEffect(() => {
+    if (isListSchemasError) {
+      message.error(`Failed to list Schemas: ${getErrMsg(listSchemasError)}`);
+    }
+  }, [isListSchemasError]);
+
+  const { data: dataSets, isError: isListDataSetsError, error: listDataSetsError } = useListDataSetsQuery();
+
+  useEffect(() => {
+    if (isListDataSetsError) {
+      message.error(`Failed to list DataSets: ${getErrMsg(listDataSetsError)}`);
+    }
+  }, [isListDataSetsError]);
+
+  const {
+    data: loadPatterns,
+    isError: isListLoadPatternsError,
+    error: listLoadPatternsError,
+  } = useListLoadPatternsQuery();
+
+  useEffect(() => {
+    if (isListLoadPatternsError) {
+      message.error(`Failed to list LoadPatterns: ${getErrMsg(listLoadPatternsError)}`);
+    }
+  }, [isListLoadPatternsError]);
+
+  const { data: pipelines, isError: isListPipelinesError, error: listPipelinesError } = useListPipelinesQuery();
+
+  useEffect(() => {
+    if (isListPipelinesError) {
+      message.error(`Failed to list Pipelines: ${getErrMsg(listPipelinesError)}`);
+    }
+  }, [isListPipelinesError]);
+
+  const { data: experiments, isError: isListExperimentsError, error: listExperimentsError } = useListExperimentsQuery();
+
+  useEffect(() => {
+    if (isListExperimentsError) {
+      message.error(`Failed to list Experiments: ${getErrMsg(listExperimentsError)}`);
+    }
+  }, [isListExperimentsError]);
+
+  const {
+    data: costExporters,
+    isError: isListCostExportersError,
+    error: listCostExportersError,
+  } = useListCostExportersQuery();
+
+  useEffect(() => {
+    if (isListCostExportersError) {
+      message.error(`Failed to list CostExporters: ${getErrMsg(listCostExportersError)}`);
+    }
+  }, [isListCostExportersError]);
+
+  const isAllRunning = useMemo(
+    () =>
+      isReady(plantDCore?.status.kubeProxyStatus) &&
+      isReady(plantDCore?.status.studioStatus) &&
+      isReady(plantDCore?.status.prometheusStatus),
+    [plantDCore]
+  );
+
+  return (
+    <div className="p-6">
+      <Breadcrumb items={[{ title: appName }, { title: t('System Overview') }]} className="mb-6" />
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+        <Card bordered={false} className="col-span-2 lg:col-span-2 xl:col-span-4">
+          <div className="flex items-center gap-6">
+            <FontAwesomeIcon
+              icon={isAllRunning ? faCheckCircle : faCircleExclamation}
+              className={getClsName(isAllRunning ? 'text-green-600' : 'text-orange-600', 'text-8xl')}
+            />
+            <span className="text-xl">
+              {isAllRunning ? 'Everything is up and running' : 'Some modules are not running as expected'}
+            </span>
+          </div>
+        </Card>
+        <Card bordered={false} className="col-span-2">
+          <div className="grid grid-cols-2 gap-1">
+            <span className="text-gray-500">PlantD Proxy:</span>
+            <Badge
+              status={isReady(plantDCore?.status.kubeProxyStatus) ? 'success' : 'warning'}
+              text={plantDCore?.status.kubeProxyStatus ?? '-'}
+            />
+            <span className="text-gray-500">PlantD Studio:</span>
+            <Badge
+              status={isReady(plantDCore?.status.studioStatus) ? 'success' : 'warning'}
+              text={plantDCore?.status.studioStatus ?? '-'}
+            />
+            <span className="text-gray-500">Prometheus:</span>
+            <Badge
+              status={isReady(plantDCore?.status.prometheusStatus) ? 'success' : 'warning'}
+              text={plantDCore?.status.prometheusStatus ?? '-'}
+            />
+          </div>
+        </Card>
+        <Card bordered={false}>
+          <Statistic title="Namespace" value={namespaces?.length ?? '-'} />
+        </Card>
+        <Card bordered={false}>
+          <Statistic title="Schema" value={schemas?.length ?? '-'} />
+        </Card>
+        <Card bordered={false}>
+          <Statistic title="DataSet" value={dataSets?.length ?? '-'} />
+        </Card>
+        <Card bordered={false}>
+          <Statistic title="LoadPattern" value={loadPatterns?.length ?? '-'} />
+        </Card>
+        <Card bordered={false}>
+          <Statistic title="Pipeline" value={pipelines?.length ?? '-'} />
+        </Card>
+        <Card bordered={false}>
+          <Statistic title="Experiment" value={experiments?.length ?? '-'} />
+        </Card>
+        <Card bordered={false}>
+          <Statistic title="CostExporter" value={costExporters?.length ?? '-'} />
+        </Card>
+        <Card title="CostExporter Execution Status" className="col-span-2 lg:col-span-4 xl:col-span-6">
+          <Table
+            dataSource={costExporters}
+            columns={[
+              {
+                key: 'name',
+                title: 'Name',
+                render: (_, record) => record.metadata.name ?? '-',
+              },
+              {
+                key: 'namespace',
+                title: 'Namespace',
+                render: (_, record) => record.metadata.namespace ?? '-',
+              },
+              {
+                key: 'lastExecutionTime',
+                title: 'Last Execution Time',
+                render: (_, record) => record.status.jobCompletionTime ?? '-',
+              },
+            ]}
+          />
+        </Card>
+      </div>
+    </div>
+  );
 };
 
 export default Home;

@@ -32,7 +32,7 @@ const axiosBaseQuery =
 export const baseApi = createApi({
   reducerPath: 'baseApi',
   baseQuery: axiosBaseQuery(),
-  tagTypes: ['Namespace', 'Schema', 'DataSet', 'LoadPattern', 'Pipeline', 'Experiment'],
+  tagTypes: ['Namespace', 'Schema', 'DataSet', 'LoadPattern', 'Pipeline', 'Experiment', 'CostExporter', 'PlantDCore'],
   endpoints: () => ({}),
   refetchOnMountOrArgChange: true,
 });
