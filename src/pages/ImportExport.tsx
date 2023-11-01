@@ -8,7 +8,7 @@ import Alert from 'antd/es/alert/Alert';
 import { ColumnsType } from 'antd/es/table';
 import { RcFile, UploadFile } from 'antd/es/upload/interface';
 
-import { apiBaseUrl, appName } from '@/constants/base';
+import { apiBasePath } from '@/constants/base';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
 import { useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
@@ -40,7 +40,7 @@ const getRowKey = (record: Resource) => `${record.kind}/${record.namespace}/${re
 const allKinds: Kind[] = [Kind.Schema, Kind.DataSet, Kind.LoadPattern, Kind.Pipeline, Kind.Experiment];
 
 const ImportPanel: React.FC = () => {
-  const { t } = useTranslation(['importExport']);
+  const { t } = useTranslation();
   const { message } = App.useApp();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [importResources, { data, isSuccess, isError, error }] = useImportResourcesMutation();
@@ -55,13 +55,13 @@ const ImportPanel: React.FC = () => {
         }}
         beforeUpload={(file) => {
           if (!file.name.endsWith('zip')) {
-            message.warning(t('invalidFileTypeMsg'));
+            message.warning(t('Unsupported file type, please select a ZIP file'));
             return Upload.LIST_IGNORE;
           }
           return false;
         }}
       >
-        <Button icon={<FontAwesomeIcon icon={faAdd} />}>{t('selectFileBtn')}</Button>
+        <Button icon={<FontAwesomeIcon icon={faAdd} />}>{t('Select File...')}</Button>
       </Upload>
       <Button
         className="mt-4"
@@ -72,7 +72,7 @@ const ImportPanel: React.FC = () => {
           importResources({ file: fileList[0].originFileObj as RcFile });
         }}
       >
-        {t('importBtn')}
+        {t('Import')}
       </Button>
       {isSuccess && data !== undefined && (
         <>
@@ -80,7 +80,9 @@ const ImportPanel: React.FC = () => {
             <Alert
               className="mt-4"
               type="success"
-              message={t('importSuccessMsg', { numSucceeded: data.numSucceeded.toString() })}
+              message={t('Imported {numSucceeded} resources successfully', {
+                numSucceeded: data.numSucceeded.toString(),
+              })}
               showIcon
             />
           )}
@@ -88,7 +90,7 @@ const ImportPanel: React.FC = () => {
             <Alert
               className="mt-4"
               type="warning"
-              message={t('importWarnMsg', {
+              message={t('Imported {numSucceeded} resources successfully while {numFailed} errors occurred', {
                 numSucceeded: data.numSucceeded.toString(),
                 numFailed: data.numFailed.toString(),
               })}
@@ -105,34 +107,39 @@ const ImportPanel: React.FC = () => {
         </>
       )}
       {isError && error !== undefined && (
-        <Alert className="mt-4" type="error" message={t('importErrorMsg', { error: getErrMsg(error) })} showIcon />
+        <Alert
+          className="mt-4"
+          type="error"
+          message={t('Failed to import resources {error}', { error: getErrMsg(error) })}
+          showIcon
+        />
       )}
     </>
   );
 };
 
 const ExportPanel: React.FC = () => {
-  const { t } = useTranslation(['importExport', 'common']);
+  const { t } = useTranslation();
   const [selectedRows, setSelectedRows] = useState<Resource[]>([]);
 
   const { data: schemas, isFetching: isSchemaLoading } = useResourceList({
-    resourceKindPlural: t('common:schemaPlural'),
+    resourceKind: t('Schema'),
     listHook: useListSchemasQuery,
   });
   const { data: dataSets, isFetching: isDataSetLoading } = useResourceList({
-    resourceKindPlural: t('common:dataSetPlural'),
+    resourceKind: t('DataSet'),
     listHook: useListDataSetsQuery,
   });
   const { data: loadPatterns, isFetching: isLoadPatternLoading } = useResourceList({
-    resourceKindPlural: t('common:loadPatternPlural'),
+    resourceKind: t('LoadPattern'),
     listHook: useListLoadPatternsQuery,
   });
   const { data: pipelines, isFetching: isPipelineLoading } = useResourceList({
-    resourceKindPlural: t('common:pipelinePlural'),
+    resourceKind: t('Pipeline'),
     listHook: useListPipelinesQuery,
   });
   const { data: experiments, isFetching: isExperimentLoading } = useResourceList({
-    resourceKindPlural: t('common:experimentPlural'),
+    resourceKind: t('Experiment'),
     listHook: useListExperimentsQuery,
   });
 
@@ -176,15 +183,15 @@ const ExportPanel: React.FC = () => {
     (kind: Kind) => {
       switch (kind) {
         case Kind.Schema:
-          return t('common:schema');
+          return t('Schema');
         case Kind.DataSet:
-          return t('common:dataSet');
+          return t('DataSet');
         case Kind.LoadPattern:
-          return t('common:loadPattern');
+          return t('LoadPattern');
         case Kind.Pipeline:
-          return t('common:pipeline');
+          return t('Pipeline');
         case Kind.Experiment:
-          return t('common:experiment');
+          return t('Experiment');
       }
     },
     [t]
@@ -192,7 +199,7 @@ const ExportPanel: React.FC = () => {
 
   const columns: ColumnsType<Resource> = [
     {
-      title: t('kindCol'),
+      title: t('Kind'),
       render: (text, record) => getI18nKind(record.kind),
       filters: allKinds.map((kind) => ({
         text: getI18nKind(kind),
@@ -202,7 +209,7 @@ const ExportPanel: React.FC = () => {
       sorter: (a, b) => allKinds.indexOf(a.kind) - allKinds.indexOf(b.kind),
     },
     {
-      title: t('namespaceCol'),
+      title: t('Namespace'),
       dataIndex: 'namespace',
       filters: [...new Set(data.map(({ namespace }) => namespace))].sort(sortNamespace).map((namespace) => ({
         text: namespace,
@@ -213,7 +220,7 @@ const ExportPanel: React.FC = () => {
       defaultSortOrder: 'ascend',
     },
     {
-      title: t('nameCol'),
+      title: t('Name'),
       dataIndex: 'name',
       sorter: (a, b) => (a.name <= b.name ? -1 : 1),
     },
@@ -246,7 +253,7 @@ const ExportPanel: React.FC = () => {
         onClick={() => {
           const form = document.createElement('form');
           form.method = 'POST';
-          form.action = `${apiBaseUrl}/export`;
+          form.action = `${apiBasePath}/export`;
           form.style.display = 'none';
 
           const element = document.createElement('input');
@@ -259,25 +266,25 @@ const ExportPanel: React.FC = () => {
           document.body.removeChild(form);
         }}
       >
-        {t('exportBtn')}
+        {t('Export')}
       </Button>
     </Spin>
   );
 };
 
 const ImportExport: React.FC = () => {
-  const { t } = useTranslation(['importExport', 'common']);
+  const { t } = useTranslation();
 
   return (
     <div className="p-6">
       <Breadcrumb
-        items={[{ title: appName }, { title: t('common:tools') }, { title: t('common:importExport') }]}
+        items={[{ title: 'PlantD Studio' }, { title: t('Tools') }, { title: t('Import/Export') }]}
         className="mb-6"
       />
-      <Card title={t('importTitle')} bordered={false} className="mb-6">
+      <Card title={t('Import Resources')} bordered={false} className="mb-6">
         <ImportPanel />
       </Card>
-      <Card title={t('exportTitle')} bordered={false}>
+      <Card title={t('Export Resources')} bordered={false}>
         <ExportPanel />
       </Card>
     </div>

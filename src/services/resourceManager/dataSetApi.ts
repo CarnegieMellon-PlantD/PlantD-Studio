@@ -1,4 +1,4 @@
-import { apiBaseUrl } from '@/constants/base';
+import { apiBasePath } from '@/constants/base';
 import { baseApi } from '@/services/baseApi';
 import { DataSetDTO } from '@/types/resourceManager/dataSet';
 
@@ -6,7 +6,7 @@ const dataSetApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     listDataSets: build.query<DataSetDTO[], void>({
       query: () => ({
-        url: `${apiBaseUrl}/datasets`,
+        url: `${apiBasePath}/datasets`,
         method: 'GET',
       }),
       // Unwrap the response object
@@ -15,14 +15,14 @@ const dataSetApi = baseApi.injectEndpoints({
     }),
     getDataSet: build.query<DataSetDTO, Pick<DataSetDTO, 'metadata'>>({
       query: ({ metadata }) => ({
-        url: `${apiBaseUrl}/datasets/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/datasets/${metadata.namespace}/${metadata.name}`,
         method: 'GET',
       }),
       providesTags: ['DataSet'],
     }),
     createDataSet: build.mutation<void, Pick<DataSetDTO, 'metadata' | 'spec'>>({
       query: ({ metadata, spec }) => ({
-        url: `${apiBaseUrl}/datasets/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/datasets/${metadata.namespace}/${metadata.name}`,
         method: 'POST',
         data: {
           spec,
@@ -32,7 +32,7 @@ const dataSetApi = baseApi.injectEndpoints({
     }),
     updateDataSet: build.mutation<void, Pick<DataSetDTO, 'metadata' | 'spec'>>({
       query: ({ metadata, spec }) => ({
-        url: `${apiBaseUrl}/datasets/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/datasets/${metadata.namespace}/${metadata.name}`,
         method: 'PUT',
         data: {
           spec,
@@ -42,7 +42,7 @@ const dataSetApi = baseApi.injectEndpoints({
     }),
     deleteDataSet: build.mutation<void, Pick<DataSetDTO, 'metadata'>>({
       query: ({ metadata }) => ({
-        url: `${apiBaseUrl}/datasets/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/datasets/${metadata.namespace}/${metadata.name}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['DataSet'],

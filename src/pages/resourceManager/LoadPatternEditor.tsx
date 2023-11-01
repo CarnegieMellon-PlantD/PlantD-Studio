@@ -24,10 +24,10 @@ import { getLoadPatternDTO, getLoadPatternVO } from '@/utils/resourceManager/con
 const LoadPatternEditor: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation(['loadPatternEditor', 'resourceEditor', 'common']);
+  const { t } = useTranslation();
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
-    resourceKind: t('common:loadPattern'),
+    resourceKind: t('LoadPattern'),
     getDefaultForm: getDefaultLoadPatternForm,
     lazyGetHook: useLazyGetLoadPatternQuery,
     createHook: useCreateLoadPatternMutation,
@@ -38,20 +38,20 @@ const LoadPatternEditor: React.FC = () => {
 
   const sortableTableColumns: ColumnsType<LoadPatternVO['stages'][number]> = [
     {
-      title: t('stagesTable.targetCol'),
+      title: t('Target RPS (Requests / Second)'),
       render: (text, record, index) => (
         <Form.Item
           className="mb-0"
           name={[index, 'target']}
           normalize={(value) => (value === null ? 0 : value)}
-          rules={[{ type: 'number', min: 0, message: t('stagesTable.targetGEZeroMsg') }]}
+          rules={[{ type: 'number', min: 0, message: t('Target must be >= 0') }]}
         >
           <InputNumber className="w-full" />
         </Form.Item>
       ),
     },
     {
-      title: t('stagesTable.durationCol'),
+      title: t('Transition Time'),
       width: 300,
       render: (text, record, index) =>
         // Hide for the first stage
@@ -61,21 +61,21 @@ const LoadPatternEditor: React.FC = () => {
               className="mb-0 w-full"
               name={[index, 'duration']}
               normalize={(value) => (value === null ? 0 : value)}
-              rules={[{ type: 'number', min: 0, message: t('stagesTable.durationGEZeroMsg') }]}
+              rules={[{ type: 'number', min: 0, message: t('Time must be >= 0') }]}
             >
               <InputNumber className="w-full" />
             </Form.Item>
             <Form.Item
               className="mb-0 w-32 flex-none"
               name={[index, 'durationUnit']}
-              rules={[{ required: true, message: t('stagesTable.durationUnitRequiredMsg') }]}
+              rules={[{ required: true, message: t('Unit is required') }]}
             >
               <Select
                 showSearch
                 options={[
-                  { label: t('stagesTable.durationUnitValues.s'), value: 's' },
-                  { label: t('stagesTable.durationUnitValues.m'), value: 'm' },
-                  { label: t('stagesTable.durationUnitValues.h'), value: 'h' },
+                  { label: t('Second(s)'), value: 's' },
+                  { label: t('Minute(s)'), value: 'm' },
+                  { label: t('Hour(s)'), value: 'h' },
                 ]}
               />
             </Form.Item>
@@ -98,26 +98,26 @@ const LoadPatternEditor: React.FC = () => {
             }}
           >
             <Form.Item
-              label={t('resourceEditor:namespaceLabel')}
+              label={t('Namespace')}
               name={['namespace']}
               normalize={(value) => (value !== undefined ? value : '')}
-              rules={[{ required: true, message: t('resourceEditor:namespaceRequiredMsg') }]}
+              rules={[{ required: true, message: t('Namespace is required') }]}
             >
               <BaseResourceSelect
-                resourceKindPlural={t('common:namespacePlural')}
+                resourceKind={t('Namespace')}
                 listHook={useListNamespacesQuery}
                 // Disable metadata fields if action is `edit`
                 disabled={params.action === 'edit'}
               />
             </Form.Item>
             <Form.Item
-              label={t('resourceEditor:nameLabel')}
+              label={t('Name')}
               name={['name']}
               rules={[
-                { required: true, message: t('resourceEditor:nameRequiredMsg') },
+                { required: true, message: t('Name is required') },
                 {
                   pattern: rfc1123RegExp,
-                  message: t('resourceEditor:nameRfc1123Msg'),
+                  message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
                 },
               ]}
             >
@@ -130,8 +130,12 @@ const LoadPatternEditor: React.FC = () => {
               <Card
                 title={
                   <span>
-                    {t('stagesTable.title')}{' '}
-                    <Tooltip title={t('stagesTable.tooltip')}>
+                    {t('Stages')}{' '}
+                    <Tooltip
+                      title={t(
+                        'The stages describe the level of load to send over time. The first one specifies the starting load measured in records per second (RPS); subsequent rows specify a new RPS and the amount of time desired to transition to that RPS linearly.'
+                      )}
+                    >
                       <InfoCircleOutlined className="text-slate-400 dark:text-slate-600" />
                     </Tooltip>
                   </span>
@@ -143,7 +147,7 @@ const LoadPatternEditor: React.FC = () => {
                     {
                       validator: async (rule, value) => {
                         if (value.length < 2) {
-                          throw new Error(t('stagesTable.atLeastTwoStagesMsg'));
+                          throw new Error(t('At least two stages are required'));
                         }
                       },
                     },
@@ -191,7 +195,7 @@ const LoadPatternEditor: React.FC = () => {
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">
                 <Button type="primary" htmlType="submit" loading={isCreatingOrUpdating}>
-                  {t('common:okBtn')}
+                  {t('OK')}
                 </Button>
                 <Button
                   htmlType="button"
@@ -200,7 +204,7 @@ const LoadPatternEditor: React.FC = () => {
                     navigate(-1);
                   }}
                 >
-                  {t('common:cancelBtn')}
+                  {t('Cancel')}
                 </Button>
               </div>
             </Form.Item>

@@ -7,8 +7,8 @@ import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { AxiosBaseQueryFn } from '@/services/baseApi';
 
 interface BaseResourceSelectProps<DTO> extends Omit<SelectProps, 'showSearch' | 'loading' | 'options'> {
-  /** Resource kind in plural */
-  resourceKindPlural: string;
+  /** Resource kind */
+  resourceKind: string;
   /** Hook for listing resources */
   listHook: UseQuery<QueryDefinition<void, AxiosBaseQueryFn, string, DTO[]>>;
   /** Callback to filter resources */
@@ -16,13 +16,13 @@ interface BaseResourceSelectProps<DTO> extends Omit<SelectProps, 'showSearch' | 
 }
 
 const BaseResourceSelect = <DTO extends { metadata: { name: string } }>({
-  resourceKindPlural,
+  resourceKind,
   listHook,
   filter,
   ...props
 }: BaseResourceSelectProps<DTO>) => {
   const { data, isFetching, isSuccess } = useResourceList({
-    resourceKindPlural,
+    resourceKind,
     listHook,
   });
 

@@ -10,15 +10,15 @@ import { NamespaceDTO } from '@/types/resourceManager/namespace';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const NamespaceList: React.FC = () => {
-  const { t } = useTranslation(['resourceList', 'common']);
+  const { t } = useTranslation();
   const { data, isLoading, isFetching, refetch } = useResourceList({
-    resourceKindPlural: t('common:namespacePlural'),
+    resourceKind: t('Namespace'),
     listHook: useListNamespacesQuery,
   });
 
   const columns: ColumnsType<NamespaceDTO> = [
     {
-      title: t('nameCol'),
+      title: t('Name'),
       dataIndex: ['metadata', 'name'],
       sorter: (a, b) => sortNamespace(a.metadata.name, b.metadata.name),
       defaultSortOrder: 'ascend',
@@ -28,7 +28,7 @@ const NamespaceList: React.FC = () => {
   return (
     <BaseResourceList
       allowDelete={(record) => record.metadata.name !== defaultNamespace}
-      resourceKind={t('common:namespace')}
+      resourceKind={t('Namespace')}
       resourceKindUrl="namespace"
       data={data}
       isLoading={isLoading}

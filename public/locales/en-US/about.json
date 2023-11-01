@@ -1,9 +1,0 @@
-{
-  "appVersion": "App Version",
-  "dependencyVersion": "{{dep}} Version",
-  "buildType": "Build Type",
-  "developmentBuild": "Dev Build",
-  "productionBuild": "Prod Build",
-  "buildLocalTime": "Build Time (Local)",
-  "buildTime": "Build Time"
-}

@@ -1,3 +1,0 @@
-{
-  "nameNoReservedKeywordMsg": "Name cannot contain reserved keywords such as \"kube\", \"system\", \"manager\", or \"controller\""
-}

@@ -25,10 +25,10 @@ import { getExperimentDTO, getExperimentVO } from '@/utils/resourceManager/conve
 const ExperimentEditor: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation(['experimentEditor', 'resourceEditor', 'common']);
+  const { t } = useTranslation();
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
-    resourceKind: t('common:experiment'),
+    resourceKind: t('Experiment'),
     getDefaultForm: getDefaultExperimentForm,
     lazyGetHook: useLazyGetExperimentQuery,
     createHook: useCreateExperimentMutation,
@@ -51,26 +51,26 @@ const ExperimentEditor: React.FC = () => {
             }}
           >
             <Form.Item
-              label={t('resourceEditor:namespaceLabel')}
+              label={t('Namespace')}
               name={['namespace']}
               normalize={(value) => (value !== undefined ? value : '')}
-              rules={[{ required: true, message: t('resourceEditor:namespaceRequiredMsg') }]}
+              rules={[{ required: true, message: t('Namespace is required') }]}
             >
               <BaseResourceSelect
-                resourceKindPlural={t('common:namespacePlural')}
+                resourceKind={t('Namespace')}
                 listHook={useListNamespacesQuery}
                 // Disable metadata fields if `params.action` is `edit`
                 disabled={params.action === 'edit'}
               />
             </Form.Item>
             <Form.Item
-              label={t('resourceEditor:nameLabel')}
+              label={t('Name')}
               name={['name']}
               rules={[
-                { required: true, message: t('resourceEditor:nameRequiredMsg') },
+                { required: true, message: t('Name is required') },
                 {
                   pattern: rfc1123RegExp,
-                  message: t('resourceEditor:nameRfc1123Msg'),
+                  message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
                 },
               ]}
             >
@@ -79,17 +79,14 @@ const ExperimentEditor: React.FC = () => {
                 disabled={params.action === 'edit'}
               />
             </Form.Item>
-            <Form.Item className="mb-0" label={t('pipelineRefLabel')} required>
+            <Form.Item className="mb-0" label={t('Pipeline')} required>
               <div className="flex gap-1">
                 <Form.Item
                   className="w-64 flex-auto"
                   name={['pipelineRef', 'namespace']}
-                  rules={[{ required: true, message: t('namespaceRequiredMsg') }]}
+                  rules={[{ required: true, message: t('Namespace is required') }]}
                 >
-                  <BaseResourceSelect
-                    resourceKindPlural={t('common:namespacePlural')}
-                    listHook={useListNamespacesQuery}
-                  />
+                  <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
                 </Form.Item>
                 <Form.Item
                   noStyle
@@ -101,10 +98,10 @@ const ExperimentEditor: React.FC = () => {
                     <Form.Item
                       className="w-64 flex-auto"
                       name={['pipelineRef', 'name']}
-                      rules={[{ required: true, message: t('nameRequiredMsg') }]}
+                      rules={[{ required: true, message: t('Name is required') }]}
                     >
                       <BaseResourceSelect
-                        resourceKindPlural={t('common:pipelinePlural')}
+                        resourceKind={t('Pipeline')}
                         listHook={useListPipelinesQuery}
                         filter={(item) =>
                           item.metadata.namespace ===
@@ -116,14 +113,14 @@ const ExperimentEditor: React.FC = () => {
                 </Form.Item>
               </div>
             </Form.Item>
-            <Form.Item label={t('loadPatternsLabel')} required>
+            <Form.Item label={t('LoadPatterns')} required>
               <Form.List
                 name={['loadPatterns']}
                 rules={[
                   {
                     validator: async (rule, value) => {
                       if (value.length === 0) {
-                        throw new Error(t('atLeastOneLoadPatternMsg'));
+                        throw new Error(t('At least one LoadPattern is required'));
                       }
                     },
                   },
@@ -137,22 +134,19 @@ const ExperimentEditor: React.FC = () => {
                           <Card>
                             <Form.Item
                               name={[loadPatternIdx, 'endpointName']}
-                              label={t('loadPattern.endpointNameLabel')}
-                              rules={[{ required: true, message: t('loadPattern.endpointNameRequiredMsg') }]}
+                              label={t('Endpoint Name')}
+                              rules={[{ required: true, message: t('Endpoint name is required') }]}
                             >
                               <Input />
                             </Form.Item>
-                            <Form.Item className="mb-0" label={t('loadPattern.loadPatternRefLabel')} required>
+                            <Form.Item className="mb-0" label={t('LoadPattern')} required>
                               <div className="flex gap-1">
                                 <Form.Item
                                   className="w-64 flex-auto"
                                   name={[loadPatternIdx, 'loadPatternRef', 'namespace']}
-                                  rules={[{ required: true, message: t('namespaceRequiredMsg') }]}
+                                  rules={[{ required: true, message: t('Namespace is required') }]}
                                 >
-                                  <BaseResourceSelect
-                                    resourceKindPlural={t('common:namespacePlural')}
-                                    listHook={useListNamespacesQuery}
-                                  />
+                                  <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
                                 </Form.Item>
                                 <Form.Item
                                   noStyle
@@ -165,10 +159,10 @@ const ExperimentEditor: React.FC = () => {
                                     <Form.Item
                                       className="w-64 flex-auto"
                                       name={[loadPatternIdx, 'loadPatternRef', 'name']}
-                                      rules={[{ required: true, message: t('nameRequiredMsg') }]}
+                                      rules={[{ required: true, message: t('Name is required') }]}
                                     >
                                       <BaseResourceSelect
-                                        resourceKindPlural={t('common:loadPatternPlural')}
+                                        resourceKind={t('LoadPattern')}
                                         listHook={useListLoadPatternsQuery}
                                         filter={(item) =>
                                           item.metadata.namespace ===
@@ -212,17 +206,17 @@ const ExperimentEditor: React.FC = () => {
                         add(newLoadPattern);
                       }}
                     >
-                      {t('resourceEditor:addBtn')}
+                      {t('Add')}
                     </Button>
                     <Form.ErrorList errors={errors} />
                   </>
                 )}
               </Form.List>
             </Form.Item>
-            <Form.Item name={['hasScheduledTime']} label={t('hasScheduledTimeLabel')} required>
+            <Form.Item name={['hasScheduledTime']} label={t('Scheduling Mode')} required>
               <Radio.Group>
-                <Radio value={false}>{t('hasScheduledTimeValues.false')}</Radio>
-                <Radio value={true}>{t('hasScheduledTimeValues.true')}</Radio>
+                <Radio value={false}>{t('Immediate')}</Radio>
+                <Radio value={true}>{t('Scheduled')}</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -232,9 +226,9 @@ const ExperimentEditor: React.FC = () => {
               {() =>
                 (form.getFieldValue('hasScheduledTime') as ExperimentVO['hasScheduledTime']) && (
                   <Form.Item
-                    label={t('scheduledTimeLabel')}
+                    label={t('Scheduled Time')}
                     name={['scheduledTime']}
-                    rules={[{ required: true, message: t('scheduledTimeRequiredMsg') }]}
+                    rules={[{ required: true, message: t('Scheduled time is required') }]}
                   >
                     <DateTimePicker />
                   </Form.Item>
@@ -244,7 +238,7 @@ const ExperimentEditor: React.FC = () => {
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">
                 <Button type="primary" htmlType="submit" loading={isCreatingOrUpdating}>
-                  {t('common:okBtn')}
+                  {t('OK')}
                 </Button>
                 <Button
                   htmlType="button"
@@ -253,7 +247,7 @@ const ExperimentEditor: React.FC = () => {
                     navigate(-1);
                   }}
                 >
-                  {t('common:cancelBtn')}
+                  {t('Cancel')}
                 </Button>
               </div>
             </Form.Item>

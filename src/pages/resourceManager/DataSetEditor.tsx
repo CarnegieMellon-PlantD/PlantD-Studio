@@ -24,10 +24,10 @@ import { getDataSetDTO, getDataSetVO } from '@/utils/resourceManager/convertData
 const DataSetEditor: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation(['dataSetEditor', 'resourceEditor', 'common']);
+  const { t } = useTranslation();
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
-    resourceKind: t('common:dataSet'),
+    resourceKind: t('DataSet'),
     getDefaultForm: getDefaultDataSetForm,
     lazyGetHook: useLazyGetDataSetQuery,
     createHook: useCreateDataSetMutation,
@@ -38,17 +38,17 @@ const DataSetEditor: React.FC = () => {
 
   const sortableTableColumns: ColumnsType<DataSetVO['schemas'][number]> = [
     {
-      title: t('schemasTable.nameCol'),
+      title: t('Name'),
       render: (text, record, index) => (
         <Form.Item noStyle shouldUpdate={(prev: DataSetVO, next: DataSetVO) => prev['namespace'] !== next['namespace']}>
           {() => (
             <Form.Item
               className="mb-0"
               name={[index, 'name']}
-              rules={[{ required: true, message: t('schemasTable.nameRequiredMsg') }]}
+              rules={[{ required: true, message: t('Name is required') }]}
             >
               <BaseResourceSelect
-                resourceKindPlural={t('common:schemaPlural')}
+                resourceKind={t('Schema')}
                 listHook={useListSchemasQuery}
                 filter={(schema) =>
                   schema.metadata.namespace === (form.getFieldValue(['namespace']) as DataSetVO['namespace'])
@@ -60,19 +60,19 @@ const DataSetEditor: React.FC = () => {
       ),
     },
     {
-      title: t('schemasTable.numRecordsCol'),
+      title: t('Records / File'),
       width: 250,
       render: (text, record, index) => (
         <div className="flex flex-col gap-1">
           <Form.Item
             className="mb-0"
-            label={t('schemasTable.minLabel')}
+            label={t('Min')}
             name={[index, 'numRecords', 'min']}
             normalize={(value) => (value === null ? 0 : value)}
             dependencies={[['schemas', index, 'numRecords', 'max']]}
             required
             rules={[
-              { type: 'number', min: 1, message: t('schemasTable.minGEOneMsg') },
+              { type: 'number', min: 1, message: t('Minimum must be >= 1') },
               {
                 validator: async (rule, value) => {
                   const min = value;
@@ -83,7 +83,7 @@ const DataSetEditor: React.FC = () => {
                     'max',
                   ]) as DataSetVO['schemas'][number]['numRecords']['max'];
                   if (min > max) {
-                    throw new Error(t('schemasTable.minLEMaxMsg'));
+                    throw new Error(t('Minimum must be <= maximum'));
                   }
                 },
               },
@@ -93,13 +93,13 @@ const DataSetEditor: React.FC = () => {
           </Form.Item>
           <Form.Item
             className="mb-0"
-            label={t('schemasTable.maxLabel')}
+            label={t('Max')}
             name={[index, 'numRecords', 'max']}
             normalize={(value) => (value === null ? 0 : value)}
             dependencies={[['schemas', index, 'numRecords', 'min']]}
             required
             rules={[
-              { type: 'number', min: 1, message: t('schemasTable.maxGEOneMsg') },
+              { type: 'number', min: 1, message: t('Maximum must be >= 1') },
               {
                 validator: async (rule, value) => {
                   const min = form.getFieldValue([
@@ -110,7 +110,7 @@ const DataSetEditor: React.FC = () => {
                   ]) as DataSetVO['schemas'][number]['numRecords']['min'];
                   const max = value;
                   if (min > max) {
-                    throw new Error(t('schemasTable.maxGEMinMsg'));
+                    throw new Error(t('Maximum must be >= minimum'));
                   }
                 },
               },
@@ -122,7 +122,7 @@ const DataSetEditor: React.FC = () => {
       ),
     },
     {
-      title: t('schemasTable.numFilesPerCompressedFileCol'),
+      title: t('Files / Compressed File'),
       width: 250,
       render: (text, record, index) => (
         <Form.Item
@@ -134,13 +134,13 @@ const DataSetEditor: React.FC = () => {
               <div className="flex flex-col gap-1">
                 <Form.Item
                   className="mb-0"
-                  label={t('schemasTable.minLabel')}
+                  label={t('Min')}
                   name={[index, 'numFilesPerCompressedFile', 'min']}
                   normalize={(value) => (value === null ? 0 : value)}
                   dependencies={[['schemas', index, 'numFilesPerCompressedFile', 'max']]}
                   required
                   rules={[
-                    { type: 'number', min: 1, message: t('schemasTable.minGEOneMsg') },
+                    { type: 'number', min: 1, message: t('Minimum must be >= 1') },
                     {
                       validator: async (rule, value) => {
                         const min = value;
@@ -151,7 +151,7 @@ const DataSetEditor: React.FC = () => {
                           'max',
                         ]) as DataSetVO['schemas'][number]['numFilesPerCompressedFile']['max'];
                         if (min > max) {
-                          throw new Error(t('schemasTable.minLEMaxMsg'));
+                          throw new Error(t('Minimum must be <= maximum'));
                         }
                       },
                     },
@@ -161,13 +161,13 @@ const DataSetEditor: React.FC = () => {
                 </Form.Item>
                 <Form.Item
                   className="mb-0"
-                  label={t('schemasTable.maxLabel')}
+                  label={t('Max')}
                   name={[index, 'numFilesPerCompressedFile', 'max']}
                   normalize={(value) => (value === null ? 0 : value)}
                   dependencies={[['schemas', index, 'numFilesPerCompressedFile', 'min']]}
                   required
                   rules={[
-                    { type: 'number', min: 1, message: t('schemasTable.maxGEOneMsg') },
+                    { type: 'number', min: 1, message: t('Maximum must be >= 1') },
                     {
                       validator: async (rule, value) => {
                         const min = form.getFieldValue([
@@ -178,7 +178,7 @@ const DataSetEditor: React.FC = () => {
                         ]) as DataSetVO['schemas'][number]['numFilesPerCompressedFile']['min'];
                         const max = value;
                         if (min > max) {
-                          throw new Error(t('schemasTable.maxGEMinMsg'));
+                          throw new Error(t('Maximum must be >= minimum'));
                         }
                       },
                     },
@@ -208,26 +208,26 @@ const DataSetEditor: React.FC = () => {
             }}
           >
             <Form.Item
-              label={t('resourceEditor:namespaceLabel')}
+              label={t('Namespace')}
               name={['namespace']}
               normalize={(value) => (value !== undefined ? value : '')}
-              rules={[{ required: true, message: t('resourceEditor:namespaceRequiredMsg') }]}
+              rules={[{ required: true, message: t('Namespace is required') }]}
             >
               <BaseResourceSelect
-                resourceKindPlural={t('common:namespacePlural')}
+                resourceKind={t('Namespace')}
                 listHook={useListNamespacesQuery}
                 // Disable metadata fields if action is `edit`
                 disabled={params.action === 'edit'}
               />
             </Form.Item>
             <Form.Item
-              label={t('resourceEditor:nameLabel')}
+              label={t('Name')}
               name={['name']}
               rules={[
-                { required: true, message: t('resourceEditor:nameRequiredMsg') },
+                { required: true, message: t('Name is required') },
                 {
                   pattern: rfc1123RegExp,
-                  message: t('resourceEditor:nameRfc1123Msg'),
+                  message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
                 },
               ]}
             >
@@ -237,28 +237,28 @@ const DataSetEditor: React.FC = () => {
               />
             </Form.Item>
             <Form.Item
-              label={t('numFilesLabel')}
+              label={t('Number of Files')}
               name={['numFiles']}
               normalize={(value) => (value === null ? 0 : value)}
               required
-              rules={[{ type: 'number', min: 1, message: t('numFilesGEOneMsg') }]}
+              rules={[{ type: 'number', min: 1, message: t('Number of files must be >= 1') }]}
             >
               <InputNumber />
             </Form.Item>
             <Form.Item
               label={t('fileFormatLabel')}
               name={['fileFormat']}
-              rules={[{ required: true, message: t('fileFormatRequiredMsg') }]}
+              rules={[{ required: true, message: t('File Format') }]}
             >
               <Select
                 showSearch
                 options={[
-                  { label: t('fileFormatValues.csv'), value: 'csv' },
-                  { label: t('fileFormatValues.binary'), value: 'binary' },
+                  { label: '.CSV', value: 'csv' },
+                  { label: '.BIN', value: 'binary' },
                 ]}
               />
             </Form.Item>
-            <Form.Item label={t('useCompressionLabel')} name={['useCompression']} valuePropName="checked">
+            <Form.Item label={t('Enable Compression')} name={['useCompression']} valuePropName="checked">
               <Checkbox />
             </Form.Item>
             <Form.Item
@@ -269,15 +269,17 @@ const DataSetEditor: React.FC = () => {
                 (form.getFieldValue(['useCompression']) as DataSetVO['useCompression']) && (
                   <>
                     <Form.Item
-                      label={t('compressedFileFormatLabel')}
+                      label={t('Compressed File Format')}
                       name={['compressedFileFormat']}
-                      rules={[{ required: true, message: t('compressedFileFormatRequiredMsg') }]}
+                      rules={[{ required: true, message: t('Compressed file format is required') }]}
                     >
-                      <Select showSearch options={[{ label: t('compressedFileFormatValues.zip'), value: 'zip' }]} />
+                      <Select showSearch options={[{ label: '.ZIP', value: 'zip' }]} />
                     </Form.Item>
                     <Form.Item
-                      label={t('compressPerSchemaLabel')}
-                      tooltip={t('compressPerSchemaTooltip')}
+                      label={t('Compress Per Schema')}
+                      tooltip={t(
+                        'Create a compressed file for each Schema instead of one for all Schemas in every repeat.'
+                      )}
                       name={['compressPerSchema']}
                       valuePropName="checked"
                     >
@@ -288,14 +290,14 @@ const DataSetEditor: React.FC = () => {
               }
             </Form.Item>
             <Form.Item wrapperCol={{ span: 24 }}>
-              <Card title={t('schemasTable.title')}>
+              <Card title={t('Schemas')}>
                 <Form.List
                   name={['schemas']}
                   rules={[
                     {
                       validator: async (rule, value) => {
                         if (value.length === 0) {
-                          throw new Error(t('schemasTable.atLeastOneSchemaMsg'));
+                          throw new Error(t('At least one Schema is required'));
                         }
                       },
                     },
@@ -343,7 +345,7 @@ const DataSetEditor: React.FC = () => {
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">
                 <Button type="primary" htmlType="submit" loading={isCreatingOrUpdating}>
-                  {t('common:okBtn')}
+                  {t('OK')}
                 </Button>
                 <Button
                   htmlType="button"
@@ -352,7 +354,7 @@ const DataSetEditor: React.FC = () => {
                     navigate(-1);
                   }}
                 >
-                  {t('common:cancelBtn')}
+                  {t('Cancel')}
                 </Button>
               </div>
             </Form.Item>

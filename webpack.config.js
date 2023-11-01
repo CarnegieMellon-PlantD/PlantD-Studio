@@ -119,7 +119,7 @@ const config = {
       APP_VERSION: JSON.stringify(packageJson.version),
       IS_DEVELOPMENT: JSON.stringify(isDevelopment),
       BUILD_LOCAL_TIME: JSON.stringify(new Date().toString()),
-      BUILD_TIME: JSON.stringify(new Date().toISOString()),
+      BUILD_ISO_TIME: JSON.stringify(new Date().toISOString()),
     }),
   ],
   resolve: {

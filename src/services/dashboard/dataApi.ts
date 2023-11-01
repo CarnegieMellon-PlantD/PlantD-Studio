@@ -1,4 +1,4 @@
-import { dataBaseUrl } from '@/constants/base';
+import { dataBasePath } from '@/constants/base';
 import { baseApi } from '@/services/baseApi';
 import { BiChannelData, TriChannelData } from '@/types/dashboard/data';
 import { BiChannelDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
@@ -7,7 +7,7 @@ const dataSetApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getBiChannelData: build.query<BiChannelData, BiChannelDataRequest>({
       query: (data) => ({
-        url: `${dataBaseUrl}/bi-channel`,
+        url: `${dataBasePath}/bi-channel`,
         method: 'POST',
         headers: {
           'X-HTTP-Method-Override': 'GET',
@@ -18,7 +18,7 @@ const dataSetApi = baseApi.injectEndpoints({
     }),
     getTriChannelData: build.query<TriChannelData, TriChannelDataRequest>({
       query: (data) => ({
-        url: `${dataBaseUrl}/tri-channel`,
+        url: `${dataBasePath}/tri-channel`,
         method: 'POST',
         headers: {
           'X-HTTP-Method-Override': 'GET',

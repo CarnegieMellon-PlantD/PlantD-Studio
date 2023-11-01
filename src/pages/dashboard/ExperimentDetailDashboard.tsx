@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { App } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
@@ -13,6 +14,7 @@ import { getErrMsg } from '@/utils/getErrMsg';
 const ExperimentDetailDashboard: React.FC = () => {
   const params = useParams();
   const { message } = App.useApp();
+  const { t } = useTranslation();
 
   const [timeRange, setTimeRange] = useState<[Dayjs, Dayjs]>(() => {
     const now = dayjs();
@@ -21,7 +23,7 @@ const ExperimentDetailDashboard: React.FC = () => {
 
   const dashboardProps = useMemo<DashboardProps>(
     () => ({
-      breadcrumbs: ['Dashboard', `Experiment Detail Dashboard: ${params.namespace}/${params.name}`],
+      breadcrumbs: [t('Dashboard'), `Experiment Detail Dashboard: ${params.namespace}/${params.name}`],
       timeRange,
       setTimeRange,
       showRefreshIntervalEdit: false,

@@ -1,4 +1,4 @@
-import { apiBaseUrl } from '@/constants/base';
+import { apiBasePath } from '@/constants/base';
 import { baseApi } from '@/services/baseApi';
 import { LoadPatternDTO } from '@/types/resourceManager/loadPattern';
 
@@ -6,7 +6,7 @@ const loadPatternApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     listLoadPatterns: build.query<LoadPatternDTO[], void>({
       query: () => ({
-        url: `${apiBaseUrl}/loadpatterns`,
+        url: `${apiBasePath}/loadpatterns`,
         method: 'GET',
       }),
       // Unwrap the response object
@@ -15,14 +15,14 @@ const loadPatternApi = baseApi.injectEndpoints({
     }),
     getLoadPattern: build.query<LoadPatternDTO, Pick<LoadPatternDTO, 'metadata'>>({
       query: ({ metadata }) => ({
-        url: `${apiBaseUrl}/loadpatterns/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/loadpatterns/${metadata.namespace}/${metadata.name}`,
         method: 'GET',
       }),
       providesTags: ['LoadPattern'],
     }),
     createLoadPattern: build.mutation<void, Pick<LoadPatternDTO, 'metadata' | 'spec'>>({
       query: ({ metadata, spec }) => ({
-        url: `${apiBaseUrl}/loadpatterns/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/loadpatterns/${metadata.namespace}/${metadata.name}`,
         method: 'POST',
         data: {
           spec,
@@ -32,7 +32,7 @@ const loadPatternApi = baseApi.injectEndpoints({
     }),
     updateLoadPattern: build.mutation<void, Pick<LoadPatternDTO, 'metadata' | 'spec'>>({
       query: ({ metadata, spec }) => ({
-        url: `${apiBaseUrl}/loadpatterns/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/loadpatterns/${metadata.namespace}/${metadata.name}`,
         method: 'PUT',
         data: {
           spec,
@@ -42,7 +42,7 @@ const loadPatternApi = baseApi.injectEndpoints({
     }),
     deleteLoadPattern: build.mutation<void, Pick<LoadPatternDTO, 'metadata'>>({
       query: ({ metadata }) => ({
-        url: `${apiBaseUrl}/loadpatterns/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/loadpatterns/${metadata.namespace}/${metadata.name}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['LoadPattern'],

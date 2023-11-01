@@ -8,8 +8,8 @@ import { AxiosBaseQueryFn } from '@/services/baseApi';
 import { getErrMsg } from '@/utils/getErrMsg';
 
 type UseResourceListOptions<DTO_L> = {
-  /** Resource kind in plural */
-  resourceKindPlural: string;
+  /** Resource kind */
+  resourceKind: string;
   /** Hook for listing resources */
   listHook: UseQuery<QueryDefinition<void, AxiosBaseQueryFn, string, DTO_L>>;
   /** Interval for polling in milliseconds, default to `0` which disables polling */
@@ -19,11 +19,11 @@ type UseResourceListOptions<DTO_L> = {
 type UseResourceListResults<DTO_L> = UseQueryHookResult<QueryDefinition<void, AxiosBaseQueryFn, string, DTO_L>>;
 
 export const useResourceList = <DTO_L>({
-  resourceKindPlural,
+  resourceKind,
   listHook,
   pollingInterval = 0,
 }: UseResourceListOptions<DTO_L>): UseResourceListResults<DTO_L> => {
-  const { t } = useTranslation(['resourceList']);
+  const { t } = useTranslation();
   const { message } = App.useApp();
 
   const result = listHook(undefined, { pollingInterval });
@@ -32,7 +32,7 @@ export const useResourceList = <DTO_L>({
   // Show error message if failed to list resources
   useUpdateEffect(() => {
     if (isError && error !== undefined) {
-      message.error(t('listErrorMsg', { kindPlural: resourceKindPlural, error: getErrMsg(error) }));
+      message.error(t('Failed to list {kind} resources: {error}', { kind: resourceKind, error: getErrMsg(error) }));
     }
   }, [isError, error]);
 

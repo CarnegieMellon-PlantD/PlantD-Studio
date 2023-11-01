@@ -1,4 +1,4 @@
-import { apiBaseUrl } from '@/constants/base';
+import { apiBasePath } from '@/constants/base';
 import { baseApi } from '@/services/baseApi';
 
 const utilApi = baseApi.injectEndpoints({
@@ -8,7 +8,7 @@ const utilApi = baseApi.injectEndpoints({
         const formData = new FormData();
         formData.append('file', file);
         return {
-          url: `${apiBaseUrl}/import`,
+          url: `${apiBasePath}/import`,
           method: 'POST',
           data: formData,
         };

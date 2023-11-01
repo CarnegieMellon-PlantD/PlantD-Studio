@@ -26,7 +26,7 @@ const ColumnSelect: React.FC<ColumnSelectProps> = ({
   currentColumnName,
   ...props
 }) => {
-  const { t } = useTranslation(['resourceList']);
+  const { t } = useTranslation();
   const { message } = App.useApp();
 
   const { data, isFetching, isSuccess, isError, error } = useListSchemasQuery();
@@ -55,7 +55,7 @@ const ColumnSelect: React.FC<ColumnSelectProps> = ({
   // Show error message if failed to list resources
   useUpdateEffect(() => {
     if (isError) {
-      message.error(t('listColumnsErrorMsg', { error: getErrMsg(error) }));
+      message.error(t('Failed to list columns in Schema resources: {error}', { error: getErrMsg(error) }));
     }
   }, [isError, error]);
 

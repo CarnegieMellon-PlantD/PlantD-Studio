@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Breadcrumb, Button, DatePicker, Select } from 'antd';
@@ -11,7 +12,6 @@ import GaugeChart from '@/components/dashboard/widgets/GaugeChart';
 import LineChart from '@/components/dashboard/widgets/LineChart';
 import PieChart from '@/components/dashboard/widgets/PieChart';
 import ScatterChart from '@/components/dashboard/widgets/ScatterChart';
-import { appName } from '@/constants/base';
 import { DashboardProps } from '@/types/dashboard/dashboardProps';
 
 const Dashboard: React.FC<DashboardProps> = ({
@@ -28,6 +28,8 @@ const Dashboard: React.FC<DashboardProps> = ({
   refreshButtonResetTime = 'never',
   widgets,
 }) => {
+  const { t } = useTranslation();
+
   const [dataGeneration, setDataGeneration] = useState(0);
   const refetchData = useCallback(() => {
     setDataGeneration((prev) => (prev + 1) % Number.MAX_SAFE_INTEGER);
@@ -58,14 +60,14 @@ const Dashboard: React.FC<DashboardProps> = ({
   const timeRangePresets = useMemo<RangePickerProps['presets']>(
     () => [
       ...[1, 5, 15, 30, 45].map((value) => ({
-        label: value <= 1 ? `Last ${value} minute` : `Last ${value} minutes`,
+        label: t('Last {value, plural, one {# minute} other {# minutes}}', { value }),
         value: (): [Dayjs, Dayjs] => {
           const now = dayjs();
           return [now.add(-value, 'minute'), now];
         },
       })),
       ...[1, 2, 4, 6, 12, 24, 48, 72].map((value) => ({
-        label: value <= 1 ? `Last ${value} hour` : `Last ${value} hours`,
+        label: t('Last {value, plural, one {# hour} other {# hours}}', { value }),
         value: (): [Dayjs, Dayjs] => {
           const now = dayjs();
           return [now.add(-value, 'hour'), now];
@@ -77,7 +79,10 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <div className="p-6">
-      <Breadcrumb items={[{ title: appName }, ...breadcrumbs.map((title) => ({ title }))]} className="mb-6" />
+      <Breadcrumb
+        items={[{ title: t('PlantD Studio') }, ...breadcrumbs.map((title) => ({ title }))]}
+        className="mb-6"
+      />
       {(showTimeRangeEdit || showRefreshIntervalEdit || showRefreshButton) && (
         <div className="mb-6 flex justify-end gap-4">
           {showTimeRangeEdit && (

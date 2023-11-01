@@ -15,4 +15,4 @@ declare module '*.less';
 declare const APP_VERSION: string;
 declare const IS_DEVELOPMENT: boolean;
 declare const BUILD_LOCAL_TIME: string;
-declare const BUILD_TIME: string;
+declare const BUILD_ISO_TIME: string;

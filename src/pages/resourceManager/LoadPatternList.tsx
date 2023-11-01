@@ -9,27 +9,27 @@ import { LoadPatternDTO } from '@/types/resourceManager/loadPattern';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const LoadPatternList: React.FC = () => {
-  const { t } = useTranslation(['loadPatternList', 'resourceList', 'common']);
+  const { t } = useTranslation();
   const { data, isLoading, isFetching, refetch } = useResourceList({
-    resourceKindPlural: t('common:loadPatternPlural'),
+    resourceKind: t('LoadPattern'),
     listHook: useListLoadPatternsQuery,
   });
 
   const columns: ColumnsType<LoadPatternDTO> = [
     {
-      title: t('resourceList:nameCol'),
+      title: t('Name'),
       dataIndex: ['metadata', 'name'],
       sorter: (a, b) => a.metadata.name.localeCompare(b.metadata.name),
     },
     {
-      title: t('resourceList:namespaceCol'),
+      title: t('Namespace'),
       width: 200,
       dataIndex: ['metadata', 'namespace'],
       sorter: (a, b) => sortNamespace(a.metadata.namespace, b.metadata.namespace),
       defaultSortOrder: 'ascend',
     },
     {
-      title: t('numStagesCol'),
+      title: t('Stages'),
       width: 150,
       render: (value, record) => <span>{record.spec.stages?.length ?? 0}</span>,
       sorter: (a, b) => (a.spec.stages?.length ?? 0) - (b.spec.stages?.length ?? 0),
@@ -41,7 +41,7 @@ const LoadPatternList: React.FC = () => {
       showNamespaceSelect
       allowClone
       allowEdit
-      resourceKind={t('common:loadPattern')}
+      resourceKind={t('LoadPattern')}
       resourceKindUrl="loadPattern"
       data={data}
       isLoading={isLoading}

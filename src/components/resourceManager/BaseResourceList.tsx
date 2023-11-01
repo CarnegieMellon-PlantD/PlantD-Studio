@@ -11,7 +11,6 @@ import { ColumnsType } from 'antd/es/table';
 import { useUpdateEffect } from 'usehooks-ts';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
-import { appName } from '@/constants/base';
 import { formStyle } from '@/constants/formStyles';
 import { AxiosBaseQueryFn } from '@/services/baseApi';
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
@@ -64,7 +63,7 @@ const BaseResourceList = <
   ...props
 }: BaseResourceListProps<DTO_R, DTO_L>) => {
   const navigate = useNavigate();
-  const { t } = useTranslation(['resourceList', 'common']);
+  const { t } = useTranslation();
   const { message } = App.useApp();
 
   const currentNamespace = useSelector((state: RootState) => state.appState.currentNamespace);
@@ -100,7 +99,7 @@ const BaseResourceList = <
   // Show success message if resource is deleted successfully
   useUpdateEffect(() => {
     if (isDeleteSuccess) {
-      message.success(t('deleteSuccessMsg', { kind: resourceKind }));
+      message.success(t('Deleted {kind} resource successfully', { kind: resourceKind }));
       // Hide delete modal
       setShowDeleteModal(false);
       setResourceToDelete(undefined);
@@ -112,7 +111,9 @@ const BaseResourceList = <
   // Show error message if failed to delete resource
   useUpdateEffect(() => {
     if (isDeleteError && deleteError !== undefined) {
-      message.error(t('deleteErrorMsg', { kind: resourceKind, error: getErrMsg(deleteError) }));
+      message.error(
+        t('Failed to delete {kind} resource: {error}', { kind: resourceKind, error: getErrMsg(deleteError) })
+      );
     }
   }, [isDeleteError, deleteError]);
 
@@ -120,7 +121,7 @@ const BaseResourceList = <
     () => [
       ...columns,
       {
-        title: t('actionsCol'),
+        title: t('Actions'),
         render: (text, record) => (
           <div className="flex">
             {allowClone !== false && (
@@ -136,7 +137,7 @@ const BaseResourceList = <
                   );
                 }}
               >
-                {t('cloneBtn')}
+                {t('Clone')}
               </Button>
             )}
             {allowEdit !== false && (
@@ -150,7 +151,7 @@ const BaseResourceList = <
                   navigate(`/${resourceKindUrl}/edit/${concatInPath(record.metadata.namespace, record.metadata.name)}`);
                 }}
               >
-                {t('editBtn')}
+                {t('Edit')}
               </Button>
             )}
             {allowDelete !== false && (
@@ -167,7 +168,7 @@ const BaseResourceList = <
                   } as DTO_L);
                 }}
               >
-                {t('deleteBtn')}
+                {t('Delete')}
               </Button>
             )}
           </div>
@@ -188,17 +189,17 @@ const BaseResourceList = <
   return (
     <div className="p-6">
       <Breadcrumb
-        items={[{ title: appName }, { title: t('common:resources') }, { title: resourceKind }]}
+        items={[{ title: 'PlantD Studio' }, { title: t('Resources') }, { title: resourceKind }]}
         className="mb-6"
       />
       {showNamespaceSelect && (
         <Card bordered={false} className="mb-6">
           <Form {...formStyle}>
-            <Form.Item className="mb-0" label={t('currentNamespaceLabel')}>
+            <Form.Item className="mb-0" label={t('Current Namespace')}>
               <BaseResourceSelect
-                resourceKindPlural={t('common:namespacePlural')}
+                resourceKind={t('Namespace')}
                 listHook={useListNamespacesQuery}
-                placeholder={t('currentNamespacePlaceholder')}
+                placeholder={t('All Namespaces')}
                 allowClear
                 value={currentNamespace}
                 onChange={(value) => {
@@ -219,7 +220,7 @@ const BaseResourceList = <
               navigate(`/${resourceKindUrl}/create`);
             }}
           >
-            {t('createBtn')}
+            {t('Create')}
           </Button>
           <Button
             icon={<FontAwesomeIcon icon={faRefresh} />}
@@ -228,7 +229,7 @@ const BaseResourceList = <
               refetch();
             }}
           >
-            {t('refreshBtn')}
+            {t('Refresh')}
           </Button>
         </div>
         <Table
@@ -244,15 +245,15 @@ const BaseResourceList = <
           {...props}
         />
         <Modal
-          title={t('deleteModalTitle', { kind: resourceKind })}
+          title={t('Delete {kind}', { kind: resourceKind })}
           open={showDeleteModal}
           confirmLoading={isDeleting}
           closable={false}
           // Destroy modal when closed to reset styles and avoid left padding on confirm button
           destroyOnClose
           okButtonProps={{ danger: true }}
-          okText={t('common:okBtn')}
-          cancelText={t('common:cancelBtn')}
+          okText={t('OK')}
+          cancelText={t('Cancel')}
           onCancel={() => {
             // Hide delete modal
             setShowDeleteModal(false);
@@ -265,9 +266,9 @@ const BaseResourceList = <
           }}
         >
           <span>
-            {t('deleteModalContent', {
+            {t('Are you sure you want to delete {kind} "{namespacedName}"?', {
               kind: resourceKind,
-              name: concatInPath(resourceToDelete?.metadata.namespace, resourceToDelete?.metadata.name ?? ''),
+              namespacedName: concatInPath(resourceToDelete?.metadata.namespace, resourceToDelete?.metadata.name),
             })}
           </span>
         </Modal>

@@ -1,4 +1,4 @@
-import { apiBaseUrl } from '@/constants/base';
+import { apiBasePath } from '@/constants/base';
 import { baseApi } from '@/services/baseApi';
 import { CostExporterDTO } from '@/types/resourceManager/costExporter';
 
@@ -6,7 +6,7 @@ const costExporterApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     listCostExporters: build.query<CostExporterDTO[], void>({
       query: () => ({
-        url: `${apiBaseUrl}/costexporters`,
+        url: `${apiBasePath}/costexporters`,
         method: 'GET',
       }),
       // Unwrap the response object
@@ -15,14 +15,14 @@ const costExporterApi = baseApi.injectEndpoints({
     }),
     getCostExporter: build.query<CostExporterDTO, Pick<CostExporterDTO, 'metadata'>>({
       query: ({ metadata }) => ({
-        url: `${apiBaseUrl}/costexporters/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/costexporters/${metadata.namespace}/${metadata.name}`,
         method: 'GET',
       }),
       providesTags: ['CostExporter'],
     }),
     createCostExporter: build.mutation<void, Pick<CostExporterDTO, 'metadata' | 'spec'>>({
       query: ({ metadata, spec }) => ({
-        url: `${apiBaseUrl}/costexporters/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/costexporters/${metadata.namespace}/${metadata.name}`,
         method: 'POST',
         data: {
           spec,
@@ -32,7 +32,7 @@ const costExporterApi = baseApi.injectEndpoints({
     }),
     updateCostExporter: build.mutation<void, Pick<CostExporterDTO, 'metadata' | 'spec'>>({
       query: ({ metadata, spec }) => ({
-        url: `${apiBaseUrl}/costexporters/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/costexporters/${metadata.namespace}/${metadata.name}`,
         method: 'PUT',
         data: {
           spec,
@@ -42,7 +42,7 @@ const costExporterApi = baseApi.injectEndpoints({
     }),
     deleteCostExporter: build.mutation<void, Pick<CostExporterDTO, 'metadata'>>({
       query: ({ metadata }) => ({
-        url: `${apiBaseUrl}/costexporters/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/costexporters/${metadata.namespace}/${metadata.name}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['CostExporter'],

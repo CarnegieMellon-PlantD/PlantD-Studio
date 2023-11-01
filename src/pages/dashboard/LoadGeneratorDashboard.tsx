@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -8,6 +9,7 @@ import { DashboardProps } from '@/types/dashboard/dashboardProps';
 
 const LoadGeneratorDashboard: React.FC = () => {
   const params = useParams();
+  const { t } = useTranslation();
 
   const [timeRange, setTimeRange] = useState<[Dayjs, Dayjs]>(() => {
     const now = dayjs();
@@ -16,7 +18,7 @@ const LoadGeneratorDashboard: React.FC = () => {
 
   const dashboardProps = useMemo<DashboardProps>(
     () => ({
-      breadcrumbs: ['Dashboard', `Load Generator Dashboard: ${params.namespace}/${params.name}`],
+      breadcrumbs: [t('Dashboard'), `Load Generator Dashboard: ${params.namespace}/${params.name}`],
       timeRange,
       setTimeRange,
       defaultRefreshInterval: 2,

@@ -9,27 +9,27 @@ import { SchemaDTO } from '@/types/resourceManager/schema';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const SchemaList: React.FC = () => {
-  const { t } = useTranslation(['schemaList', 'resourceList', 'common']);
+  const { t } = useTranslation();
   const { data, isLoading, isFetching, refetch } = useResourceList({
-    resourceKindPlural: t('common:schemaPlural'),
+    resourceKind: t('Schema'),
     listHook: useListSchemasQuery,
   });
 
   const columns: ColumnsType<SchemaDTO> = [
     {
-      title: t('resourceList:nameCol'),
+      title: t('Name'),
       dataIndex: ['metadata', 'name'],
       sorter: (a, b) => a.metadata.name.localeCompare(b.metadata.name),
     },
     {
-      title: t('resourceList:namespaceCol'),
+      title: t('Namespace'),
       width: 200,
       dataIndex: ['metadata', 'namespace'],
       sorter: (a, b) => sortNamespace(a.metadata.namespace, b.metadata.namespace),
       defaultSortOrder: 'ascend',
     },
     {
-      title: t('numColumnsCol'),
+      title: t('Columns'),
       width: 150,
       render: (text, record) => <span>{record.spec.columns?.length ?? 0}</span>,
       sorter: (a, b) => (a.spec.columns?.length ?? 0) - (b.spec.columns?.length ?? 0),
@@ -41,7 +41,7 @@ const SchemaList: React.FC = () => {
       showNamespaceSelect
       allowClone
       allowEdit
-      resourceKind={t('common:schema')}
+      resourceKind={t('Schema')}
       resourceKindUrl="schema"
       data={data}
       isLoading={isLoading}

@@ -20,7 +20,7 @@ const AppError: React.FC = () => {
           ? // JavaScript error
             error.name
           : // Unknown error
-            t('unknownError')}
+            t('Unknown Error')}
       </div>
       <div className="mb-4 px-8 lg:px-32">
         {isRouteErrorResponse(error)
@@ -30,7 +30,7 @@ const AppError: React.FC = () => {
           ? // JavaScript error
             error.message
           : // Unknown error
-            t('unknownErrorDesc')}
+            t('An unknown error has occurred. Please see console for more details and submit an issue on GitHub.')}
       </div>
       <div className="flex gap-2">
         <Button
@@ -41,7 +41,7 @@ const AppError: React.FC = () => {
             navigate('/');
           }}
         >
-          {t('goHomeBtn')}
+          {t('Go Home')}
         </Button>
       </div>
     </div>

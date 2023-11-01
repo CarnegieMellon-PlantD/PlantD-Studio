@@ -24,7 +24,7 @@ import { EndpointVO, PipelineVO } from '@/types/resourceManager/pipeline';
 import { getPipelineDTO, getPipelineVO } from '@/utils/resourceManager/convertPipeline';
 
 const KeyValuePair: React.FC<{ name: Array<string | number> }> = ({ name }) => {
-  const { t } = useTranslation(['pipelineEditor', 'resourceEditor']);
+  const { t } = useTranslation();
 
   return (
     <Form.List name={name}>
@@ -35,16 +35,16 @@ const KeyValuePair: React.FC<{ name: Array<string | number> }> = ({ name }) => {
               <Form.Item
                 className="w-48 flex-auto mb-2"
                 name={[idx, 'key']}
-                rules={[{ required: true, message: t('keyRequiredMsg') }]}
+                rules={[{ required: true, message: t('Key is required') }]}
               >
-                <Input.TextArea autoSize placeholder={t('keyPlaceholder')} />
+                <Input.TextArea autoSize placeholder={t('Key')} />
               </Form.Item>
               <Form.Item
                 className="w-96 flex-auto mb-2"
                 name={[idx, 'value']}
-                rules={[{ required: true, message: t('valueRequiredMsg') }]}
+                rules={[{ required: true, message: t('Value is required') }]}
               >
-                <Input.TextArea autoSize placeholder={t('valuePlaceholder')} />
+                <Input.TextArea autoSize placeholder={t('Value')} />
               </Form.Item>
               <Form.Item className="mb-2">
                 <Button
@@ -67,7 +67,7 @@ const KeyValuePair: React.FC<{ name: Array<string | number> }> = ({ name }) => {
               });
             }}
           >
-            {t('resourceEditor:addBtn')}
+            {t('Add')}
           </Button>
         </>
       )}
@@ -76,40 +76,40 @@ const KeyValuePair: React.FC<{ name: Array<string | number> }> = ({ name }) => {
 };
 
 const EndpointCard: React.FC<{
-  name: Array<string | number>;
-  fullName: Array<string | number>;
+  relFormPath: Array<string | number>;
+  absFormPath: Array<string | number>;
   isMetricsEndpoint: boolean;
-}> = ({ name, fullName, isMetricsEndpoint }) => {
-  const { t } = useTranslation(['pipelineEditor', 'common']);
+}> = ({ relFormPath, absFormPath, isMetricsEndpoint }) => {
+  const { t } = useTranslation();
   const form = Form.useFormInstance();
   const inCluster = form.getFieldValue(['inCluster']) as PipelineVO['inCluster'];
-  const endpointType = form.getFieldValue([...fullName, 'type']) as EndpointVO['type'];
-  const bodyType = form.getFieldValue([...fullName, 'http', 'body', 'type']) as EndpointVO['http']['body']['type'];
+  const endpointType = form.getFieldValue([...absFormPath, 'type']) as EndpointVO['type'];
+  const bodyType = form.getFieldValue([...absFormPath, 'http', 'body', 'type']) as EndpointVO['http']['body']['type'];
 
   return (
     <Card>
       {!isMetricsEndpoint && (
         <Form.Item
-          name={[...name, 'name']}
-          label={t('endpoint.nameLabel')}
-          rules={[{ required: true, message: t('endpoint.nameRequiredMsg') }]}
+          name={[...relFormPath, 'name']}
+          label={t('Name')}
+          rules={[{ required: true, message: t('Name is required') }]}
         >
           <Input />
         </Form.Item>
       )}
       {!(isMetricsEndpoint && inCluster) && (
         <Form.Item
-          name={[...name, 'type']}
-          label={t('endpoint.protocolLabel')}
-          rules={[{ required: true, message: t('endpoint.protocolRequiredMsg') }]}
+          name={[...relFormPath, 'type']}
+          label={t('Protocol')}
+          rules={[{ required: true, message: t('Protocol is required') }]}
         >
           <Radio.Group>
-            <Radio value="http">{t('endpoint.protocolValues.http')}</Radio>
+            <Radio value="http">{t('HTTP')}</Radio>
             {/* <Radio value="websocket" disabled>
-              {t('endpoint.protocolValues.websocket')}
+              {t('WebSocket')}
             </Radio>
             <Radio value="grpc" disabled>
-              {t('endpoint.protocolValues.grpc')}
+              {t('gRPC')}
             </Radio> */}
           </Radio.Group>
         </Form.Item>
@@ -117,11 +117,11 @@ const EndpointCard: React.FC<{
       {!(isMetricsEndpoint && inCluster) && endpointType === 'http' && (
         <>
           <Form.Item
-            name={[...name, 'http', 'url']}
-            label={t('endpoint.http.urlLabel')}
+            name={[...relFormPath, 'http', 'url']}
+            label={t('URL')}
             rules={[
-              { required: true, message: t('endpoint.http.urlRequiredMsg') },
-              { type: 'url', message: t('endpoint.http.urlInvalidMsg') },
+              { required: true, message: t('URL is required') },
+              { type: 'url', message: t('Must be a valid URL') },
             ]}
           >
             <Input />
@@ -129,9 +129,9 @@ const EndpointCard: React.FC<{
           {!isMetricsEndpoint && (
             <>
               <Form.Item
-                name={[...name, 'http', 'method']}
-                label={t('endpoint.http.methodLabel')}
-                rules={[{ required: true, message: t('endpoint.http.methodRequiredMsg') }]}
+                name={[...relFormPath, 'http', 'method']}
+                label={t('Method')}
+                rules={[{ required: true, message: t('Method is required') }]}
               >
                 <Select
                   options={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'].map((method) => ({
@@ -140,55 +140,52 @@ const EndpointCard: React.FC<{
                   }))}
                 />
               </Form.Item>
-              <Form.Item label={t('endpoint.http.headersLabel')}>
-                <KeyValuePair name={[...name, 'http', 'headers']} />
+              <Form.Item label={t('Headers')}>
+                <KeyValuePair name={[...relFormPath, 'http', 'headers']} />
               </Form.Item>
               <Form.Item
-                name={[...name, 'http', 'body', 'type']}
-                label={t('endpoint.http.bodyTypeLabel')}
-                rules={[{ required: true, message: t('endpoint.http.bodyTypeRequiredMsg') }]}
+                name={[...relFormPath, 'http', 'body', 'type']}
+                label={t('Body Source')}
+                rules={[{ required: true, message: t('Body source is required') }]}
               >
                 <Radio.Group>
-                  <Radio value="data">{t('endpoint.http.bodyTypeValues.data')}</Radio>
-                  <Radio value="dataSetRef">{t('endpoint.http.bodyTypeValues.dataSet')}</Radio>
+                  <Radio value="data">{t('Manual Input')}</Radio>
+                  <Radio value="dataSetRef">{t('DataSet')}</Radio>
                 </Radio.Group>
               </Form.Item>
               {bodyType === 'data' && (
                 <Form.Item
-                  name={[...name, 'http', 'body', 'data']}
-                  label={t('endpoint.http.bodyDataLabel')}
-                  rules={[{ required: true, message: t('endpoint.http.bodyDataRequiredMsg') }]}
+                  name={[...relFormPath, 'http', 'body', 'data']}
+                  label={t('Body')}
+                  rules={[{ required: true, message: t('Body is required') }]}
                 >
                   <Input.TextArea />
                 </Form.Item>
               )}
               {bodyType === 'dataSetRef' && (
                 <>
-                  <Form.Item className="mb-0" label={t('endpoint.http.bodyDataSetLabel')} required>
+                  <Form.Item className="mb-0" label={t('DataSet')} required>
                     <div className="flex gap-1">
                       <Form.Item
                         className="w-full"
-                        name={[...name, 'http', 'body', 'dataSetRef', 'namespace']}
-                        rules={[{ required: true, message: t('endpoint.http.bodyDataSetNamespaceRequiredMsg') }]}
+                        name={[...relFormPath, 'http', 'body', 'dataSetRef', 'namespace']}
+                        rules={[{ required: true, message: t('Namespace is required') }]}
                       >
-                        <BaseResourceSelect
-                          resourceKindPlural={t('common:namespacePlural')}
-                          listHook={useListNamespacesQuery}
-                        />
+                        <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
                       </Form.Item>
 
                       <Form.Item
                         className="w-full"
-                        name={[...name, 'http', 'body', 'dataSetRef', 'name']}
-                        rules={[{ required: true, message: t('endpoint.http.bodyDataSetNameRequiredMsg') }]}
+                        name={[...relFormPath, 'http', 'body', 'dataSetRef', 'name']}
+                        rules={[{ required: true, message: t('Name is required') }]}
                       >
                         <BaseResourceSelect
-                          resourceKindPlural={t('common:dataSetPlural')}
+                          resourceKind={t('DataSet')}
                           listHook={useListDataSetsQuery}
                           filter={(item) =>
                             item.metadata.namespace ===
                             (form.getFieldValue([
-                              ...fullName,
+                              ...absFormPath,
                               'http',
                               'body',
                               'dataSetRef',
@@ -207,31 +204,28 @@ const EndpointCard: React.FC<{
       )}
       {isMetricsEndpoint && inCluster && (
         <>
-          <Form.Item className="mb-0" label={t('endpoint.serviceLabel')} required>
+          <Form.Item className="mb-0" label={t('Service')} required>
             <div className="flex gap-1">
               <Form.Item
                 className="w-full"
                 name={['metricsEndpoint', 'serviceRef', 'namespace']}
-                rules={[{ required: true, message: t('endpoint.serviceNamespaceRequiredMsg') }]}
+                rules={[{ required: true, message: t('Namespace is required') }]}
               >
-                <BaseResourceSelect
-                  resourceKindPlural={t('common:namespacePlural')}
-                  listHook={useListNamespacesQuery}
-                />
+                <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
               </Form.Item>
               <Form.Item
                 className="w-full"
                 name={['metricsEndpoint', 'serviceRef', 'name']}
-                rules={[{ required: true, message: t('endpoint.serviceNameRequiredMsg') }]}
+                rules={[{ required: true, message: t('Name is required') }]}
               >
-                <Input placeholder={t('endpoint.serviceNamePlaceholder')} />
+                <Input placeholder={t('Service Name')} />
               </Form.Item>
             </div>
           </Form.Item>
           <Form.Item
-            label={t('endpoint.portLabel')}
+            label={t('Port')}
             name={['metricsEndpoint', 'port']}
-            rules={[{ required: true, message: t('endpoint.portRequiredMsg') }]}
+            rules={[{ required: true, message: t('Port is required') }]}
           >
             <Input />
           </Form.Item>
@@ -244,11 +238,11 @@ const EndpointCard: React.FC<{
 const PipelineEditor: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation(['pipelineEditor', 'resourceEditor', 'common']);
+  const { t } = useTranslation();
   const currentNamespace = useSelector((state: RootState) => state.appState.currentNamespace);
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
-    resourceKind: t('common:pipeline'),
+    resourceKind: t('Pipeline'),
     getDefaultForm: getDefaultPipelineForm,
     lazyGetHook: useLazyGetPipelineQuery,
     createHook: useCreatePipelineMutation,
@@ -271,26 +265,26 @@ const PipelineEditor: React.FC = () => {
             }}
           >
             <Form.Item
-              label={t('resourceEditor:namespaceLabel')}
+              label={t('Namespace')}
               name={['namespace']}
               normalize={(value) => (value !== undefined ? value : '')}
-              rules={[{ required: true, message: t('resourceEditor:namespaceRequiredMsg') }]}
+              rules={[{ required: true, message: t('Namespace is required') }]}
             >
               <BaseResourceSelect
-                resourceKindPlural={t('common:namespacePlural')}
+                resourceKind={t('Namespace')}
                 listHook={useListNamespacesQuery}
                 // Disable metadata fields if `params.action` is `edit`
                 disabled={params.action === 'edit'}
               />
             </Form.Item>
             <Form.Item
-              label={t('resourceEditor:nameLabel')}
+              label={t('Name')}
               name={['name']}
               rules={[
-                { required: true, message: t('resourceEditor:nameRequiredMsg') },
+                { required: true, message: t('Name is required') },
                 {
                   pattern: rfc1123RegExp,
-                  message: t('resourceEditor:nameRfc1123Msg'),
+                  message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
                 },
               ]}
             >
@@ -299,17 +293,17 @@ const PipelineEditor: React.FC = () => {
                 disabled={params.action === 'edit'}
               />
             </Form.Item>
-            <Form.Item label={t('inClusterLabel')} name={['inCluster']} valuePropName="checked">
+            <Form.Item label={t('In-Cluster Pipeline')} name={['inCluster']} valuePropName="checked">
               <Checkbox />
             </Form.Item>
-            <Form.Item label={t('pipelineEndpointsLabel')} required>
+            <Form.Item label={t('Pipeline Endpoints')} required>
               <Form.List
                 name={['pipelineEndpoints']}
                 rules={[
                   {
                     validator: async (rule, value) => {
                       if (value.length === 0) {
-                        throw new Error(t('atLeastOneEndpointMsg'));
+                        throw new Error(t('At least one endpoint is required'));
                       }
                     },
                   },
@@ -327,8 +321,8 @@ const PipelineEditor: React.FC = () => {
                         >
                           {() => (
                             <EndpointCard
-                              name={[endpointIdx]}
-                              fullName={['pipelineEndpoints', endpointIdx]}
+                              relFormPath={[endpointIdx]}
+                              absFormPath={['pipelineEndpoints', endpointIdx]}
                               isMetricsEndpoint={false}
                             />
                           )}
@@ -351,14 +345,14 @@ const PipelineEditor: React.FC = () => {
                         add(getDefaultEndpoint(currentNamespace ?? defaultNamespace));
                       }}
                     >
-                      {t('resourceEditor:addBtn')}
+                      {t('Add')}
                     </Button>
                     <Form.ErrorList errors={errors} />
                   </>
                 )}
               </Form.List>
             </Form.Item>
-            <Form.Item label={t('healthCheckEndpointsLabel')}>
+            <Form.Item label={t('Health Check Endpoints')}>
               <Form.List name={['healthCheckEndpoints']}>
                 {(fields, { add, remove }, { errors }) => (
                   <>
@@ -368,8 +362,8 @@ const PipelineEditor: React.FC = () => {
                           className="w-full mb-2"
                           name={[endpointIndex]}
                           rules={[
-                            { required: true, message: t('healthCheckEndpoint.urlRequiredMsg') },
-                            { type: 'url', message: t('healthCheckEndpoint.urlInvalidMsg') },
+                            { required: true, message: t('URL is required') },
+                            { type: 'url', message: t('Must be a valid URL') },
                           ]}
                         >
                           <Input />
@@ -387,35 +381,37 @@ const PipelineEditor: React.FC = () => {
                       </div>
                     ))}
                     <Button icon={<FontAwesomeIcon icon={faPlus} />} onClick={() => add('')}>
-                      {t('resourceEditor:addBtn')}
+                      {t('Add')}
                     </Button>
                     <Form.ErrorList errors={errors} />
                   </>
                 )}
               </Form.List>
             </Form.Item>
-            <Form.Item label={t('metricsEndpointLabel')}>
+            <Form.Item label={t('Metrics Endpoint')}>
               <Form.Item
                 shouldUpdate={(prev: PipelineVO, next: PipelineVO) =>
                   prev.inCluster !== next.inCluster || prev.metricsEndpoint !== next.metricsEndpoint
                 }
               >
-                {() => <EndpointCard name={['metricsEndpoint']} fullName={['metricsEndpoint']} isMetricsEndpoint />}
+                {() => (
+                  <EndpointCard relFormPath={['metricsEndpoint']} absFormPath={['metricsEndpoint']} isMetricsEndpoint />
+                )}
               </Form.Item>
             </Form.Item>
-            <Form.Item label={t('tagsLabel')}>
+            <Form.Item label={t('Tags')}>
               <KeyValuePair name={['extraMetrics', 'system', 'tags']} />
             </Form.Item>
-            <Form.Item name={['cloudVendor']} label={t('cloudVendorLabel')}>
+            <Form.Item name={['cloudVendor']} label={t('Cloud Vendor')}>
               <Input />
             </Form.Item>
-            <Form.Item name={['enableCostCalculation']} label={t('enableCostCalculationLabel')} valuePropName="checked">
+            <Form.Item name={['enableCostCalculation']} label={t('Enable Cost Calculation')} valuePropName="checked">
               <Checkbox />
             </Form.Item>
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">
                 <Button type="primary" htmlType="submit" loading={isCreatingOrUpdating}>
-                  {t('common:okBtn')}
+                  {t('OK')}
                 </Button>
                 <Button
                   htmlType="button"
@@ -423,7 +419,7 @@ const PipelineEditor: React.FC = () => {
                     navigate(-1);
                   }}
                 >
-                  {t('common:cancelBtn')}
+                  {t('Cancel')}
                 </Button>
               </div>
             </Form.Item>

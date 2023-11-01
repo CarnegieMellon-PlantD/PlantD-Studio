@@ -29,10 +29,10 @@ import { getSchemaColumnParams } from '@/utils/resourceManager/getSchemaColumnPa
 const SchemaEditor: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation(['schemaEditor', 'resourceEditor', 'common']);
+  const { t } = useTranslation();
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
-    resourceKind: t('common:schema'),
+    resourceKind: t('Schema'),
     getDefaultForm: getDefaultSchemaForm,
     lazyGetHook: useLazyGetSchemaQuery,
     createHook: useCreateSchemaMutation,
@@ -43,19 +43,15 @@ const SchemaEditor: React.FC = () => {
 
   const sortableTableColumns: ColumnsType<SchemaVO['columns'][number]> = [
     {
-      title: t('columnsTable.nameCol'),
+      title: t('Name'),
       render: (text, record, index) => (
-        <Form.Item
-          className="mb-0"
-          name={[index, 'name']}
-          rules={[{ required: true, message: t('columnsTable.nameRequiredMsg') }]}
-        >
+        <Form.Item className="mb-0" name={[index, 'name']} rules={[{ required: true, message: t('Name is required') }]}>
           <Input />
         </Form.Item>
       ),
     },
     {
-      title: t('columnsTable.typeCol'),
+      title: t('Type'),
       width: 250,
       render: (text, record, index) => (
         <Form.Item className="mb-0" name={[index, 'type']} normalize={(value) => (value !== undefined ? value : '')}>
@@ -64,7 +60,7 @@ const SchemaEditor: React.FC = () => {
       ),
     },
     {
-      title: t('columnsTable.paramsCol'),
+      title: t('Type Params'),
       width: 300,
       render: (text, record, index) => (
         <Form.List name={[index, 'params']}>
@@ -119,7 +115,7 @@ const SchemaEditor: React.FC = () => {
       ),
     },
     {
-      title: t('columnsTable.formulaCol'),
+      title: t('Formula'),
       width: 250,
       render: (text, record, index) => (
         <Form.Item className="mb-0" name={[index, 'formula']} normalize={(value) => (value !== undefined ? value : '')}>
@@ -128,7 +124,7 @@ const SchemaEditor: React.FC = () => {
       ),
     },
     {
-      title: t('columnsTable.argsCol'),
+      title: t('Formula Args'),
       width: 300,
       render: (text, record, index) => (
         <Form.Item
@@ -158,14 +154,14 @@ const SchemaEditor: React.FC = () => {
               return (
                 <Form.Item
                   className="mb-0"
-                  label={t('columnsTable.columnsLabel')}
+                  label={t('Columns')}
                   name={[index, 'args', 'value']}
                   required
                   rules={[
                     {
                       type: 'array',
                       min: 1,
-                      message: t('columnsTable.columnsNotEmptyMsg'),
+                      message: t('Columns cannot be empty'),
                     },
                   ]}
                 >
@@ -186,10 +182,10 @@ const SchemaEditor: React.FC = () => {
               return (
                 <Form.Item
                   className="mb-0"
-                  label={t('columnsTable.columnLabel')}
+                  label={t('Column')}
                   name={[index, 'args', 'value', 0]}
                   normalize={(value) => (value !== undefined ? value : '')}
-                  rules={[{ required: true, message: t('columnsTable.columnRequiredMsg') }]}
+                  rules={[{ required: true, message: t('Column is required') }]}
                 >
                   <ColumnSelect
                     schemaNamespace={schemaNamespace}
@@ -207,10 +203,10 @@ const SchemaEditor: React.FC = () => {
                 <div className="flex flex-col gap-1">
                   <Form.Item
                     className="mb-0"
-                    label={t('columnsTable.columnLabel')}
+                    label={t('Column')}
                     name={[index, 'args', 'value', 0]}
                     normalize={(value) => (value !== undefined ? value : '')}
-                    rules={[{ required: true, message: t('columnsTable.columnRequiredMsg') }]}
+                    rules={[{ required: true, message: t('Column is required') }]}
                   >
                     <ColumnSelect
                       schemaNamespace={schemaNamespace}
@@ -223,11 +219,11 @@ const SchemaEditor: React.FC = () => {
                   </Form.Item>
                   <Form.Item
                     className="mb-0"
-                    label={t('columnsTable.minLabel')}
+                    label={t('Min')}
                     name={[index, 'args', 'value', 1]}
                     dependencies={[['columns', index, 'args', 'value', 2]]}
                     rules={[
-                      { required: true, message: t('columnsTable.minRequiredMsg') },
+                      { required: true, message: t('Minimum is required') },
                       {
                         validator: async (rule, value) => {
                           const min = Number.parseFloat(value);
@@ -241,7 +237,7 @@ const SchemaEditor: React.FC = () => {
                             ]) as SchemaVO['columns'][number]['args']['value'][2]
                           );
                           if (min > max) {
-                            throw new Error(t('columnsTable.minLEMaxMsg'));
+                            throw new Error(t('Minimum must be <= maximum'));
                           }
                         },
                       },
@@ -251,11 +247,11 @@ const SchemaEditor: React.FC = () => {
                   </Form.Item>
                   <Form.Item
                     className="mb-0"
-                    label={t('columnsTable.maxLabel')}
+                    label={t('Max')}
                     name={[index, 'args', 'value', 2]}
                     dependencies={[['columns', index, 'args', 'value', 1]]}
                     rules={[
-                      { required: true, message: t('columnsTable.maxRequiredMsg') },
+                      { required: true, message: t('Maximum is required') },
                       {
                         validator: async (rule, value) => {
                           const min = Number.parseFloat(
@@ -269,7 +265,7 @@ const SchemaEditor: React.FC = () => {
                           );
                           const max = Number.parseFloat(value);
                           if (min > max) {
-                            throw new Error(t('columnsTable.maxGEMinMsg'));
+                            throw new Error(t('Maximum must be >= minimum'));
                           }
                         },
                       },
@@ -306,7 +302,7 @@ const SchemaEditor: React.FC = () => {
               const changedColumnIdx = changedValues.columns
                 .map((column, index) => (column !== undefined ? index : -1))
                 .filter((index) => index !== -1);
-              // When no column or more than one columns are changed
+              // When no column or more than one column are changed
               if (changedColumnIdx.length !== 1) {
                 return;
               }
@@ -338,26 +334,26 @@ const SchemaEditor: React.FC = () => {
             }}
           >
             <Form.Item
-              label={t('resourceEditor:namespaceLabel')}
+              label={t('Namespace')}
               name={['namespace']}
               normalize={(value) => (value !== undefined ? value : '')}
-              rules={[{ required: true, message: t('resourceEditor:namespaceRequiredMsg') }]}
+              rules={[{ required: true, message: t('Namespace is required') }]}
             >
               <BaseResourceSelect
-                resourceKindPlural={t('common:namespacePlural')}
+                resourceKind={t('Namespace')}
                 listHook={useListNamespacesQuery}
                 // Disable metadata fields if `params.action` is `edit`
                 disabled={params.action === 'edit'}
               />
             </Form.Item>
             <Form.Item
-              label={t('resourceEditor:nameLabel')}
+              label={t('Name')}
               name={['name']}
               rules={[
-                { required: true, message: t('resourceEditor:nameRequiredMsg') },
+                { required: true, message: t('Name is required') },
                 {
                   pattern: rfc1123RegExp,
-                  message: t('resourceEditor:nameRfc1123Msg'),
+                  message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
                 },
               ]}
             >
@@ -367,14 +363,14 @@ const SchemaEditor: React.FC = () => {
               />
             </Form.Item>
             <Form.Item wrapperCol={{ span: 24 }}>
-              <Card title={t('columnsTable.title')}>
+              <Card title={t('Columns')}>
                 <Form.List
                   name={['columns']}
                   rules={[
                     {
                       validator: async (rule, value) => {
                         if (value.length === 0) {
-                          throw new Error(t('columnsTable.atLeastOneColumnMsg'));
+                          throw new Error(t('At least one column is required'));
                         }
                       },
                     },
@@ -427,7 +423,7 @@ const SchemaEditor: React.FC = () => {
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">
                 <Button type="primary" htmlType="submit" loading={isCreatingOrUpdating}>
-                  {t('common:okBtn')}
+                  {t('OK')}
                 </Button>
                 <Button
                   htmlType="button"
@@ -436,7 +432,7 @@ const SchemaEditor: React.FC = () => {
                     navigate(-1);
                   }}
                 >
-                  {t('common:cancelBtn')}
+                  {t('Cancel')}
                 </Button>
               </div>
             </Form.Item>

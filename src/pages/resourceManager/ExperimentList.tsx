@@ -31,28 +31,28 @@ const ErrorTooltip: React.FC<{ record: ExperimentDTO }> = ({ record }) => {
 const ExperimentList: React.FC = () => {
   const navigate = useNavigate();
 
-  const { t } = useTranslation(['experimentList', 'resourceList', 'common']);
+  const { t } = useTranslation();
   const { data, isLoading, isFetching, refetch } = useResourceList({
-    resourceKindPlural: t('common:experimentPlural'),
+    resourceKind: t('Experiment'),
     listHook: useListExperimentsQuery,
     pollingInterval: 10000,
   });
 
   const columns: ColumnsType<ExperimentDTO> = [
     {
-      title: t('resourceList:nameCol'),
+      title: t('Name'),
       dataIndex: ['metadata', 'name'],
       sorter: (a, b) => a.metadata.name.localeCompare(b.metadata.name),
     },
     {
-      title: t('resourceList:namespaceCol'),
+      title: t('Namespace'),
       width: 200,
       dataIndex: ['metadata', 'namespace'],
       sorter: (a, b) => sortNamespace(a.metadata.namespace, b.metadata.namespace),
       defaultSortOrder: 'ascend',
     },
     {
-      title: t('durationCol'),
+      title: t('Duration'),
       width: 150,
       render: (text, record) =>
         Object.entries(record.status.duration ?? {})
@@ -60,7 +60,7 @@ const ExperimentList: React.FC = () => {
           .join(', '),
     },
     {
-      title: t('dashboardsCol'),
+      title: t('Dashboards'),
       width: 150,
       render: (text, record) => (
         <div className="flex gap-2">
@@ -72,7 +72,7 @@ const ExperimentList: React.FC = () => {
               navigate(`/dashboard/experimentDetail/${record.metadata.namespace}/${record.metadata.name}`);
             }}
           >
-            {t('detailDashboard')}
+            {t('Experiment Detail')}
           </Button>
           <Button
             type="text"
@@ -82,51 +82,51 @@ const ExperimentList: React.FC = () => {
               navigate(`/dashboard/loadGenerator/${record.metadata.namespace}/${record.metadata.name}`);
             }}
           >
-            {t('loadGeneratorDashboard')}
+            {t('Load Generator')}
           </Button>
         </div>
       ),
     },
     {
-      title: t('experimentStateCol'),
+      title: t('Status'),
       width: 150,
       render: (text, record) =>
         record.status.experimentState === ExperimentExperimentState.Pending ? (
-          <Badge status="warning" text={t('experimentStateValues.pending')} />
+          <Badge status="warning" text={t('Pending')} />
         ) : record.status.experimentState === ExperimentExperimentState.Initializing ? (
-          <Badge status="warning" text={t('experimentStateValues.initializing')} />
+          <Badge status="warning" text={t('Initializing')} />
         ) : record.status.experimentState === ExperimentExperimentState.WaitingForPipelineReady ? (
-          <Badge status="warning" text={t('experimentStateValues.waitingForPipelineReady')} />
+          <Badge status="warning" text={t('Waiting For Pipeline')} />
         ) : record.status.experimentState === ExperimentExperimentState.Ready ? (
-          <Badge status="success" text={t('experimentStateValues.ready')} />
+          <Badge status="success" text={t('Ready')} />
         ) : record.status.experimentState === ExperimentExperimentState.Running ? (
-          <Badge status="processing" text={t('experimentStateValues.running')} />
+          <Badge status="processing" text={t('Running')} />
         ) : record.status.experimentState === ExperimentExperimentState.Finished ? (
-          <Badge status="success" text={t('experimentStateValues.finished')} />
+          <Badge status="success" text={t('Finished')} />
         ) : record.status.experimentState?.startsWith(ExperimentExperimentState.Error) ? (
           <Badge
             status="error"
             text={
               <span>
-                {t('experimentStateValues.error')}
+                {t('Failed')}
                 <ErrorTooltip record={record} />
               </span>
             }
           />
         ) : (
-          <Badge status="default" text={record.status.experimentState ?? t('experimentStateValues.default')} />
+          <Badge status="default" text={record.status.experimentState ?? '-'} />
         ),
       filters: [
-        { text: t('experimentStateValues.pending'), value: ExperimentExperimentState.Pending },
-        { text: t('experimentStateValues.initializing'), value: ExperimentExperimentState.Initializing },
+        { text: t('Pending'), value: ExperimentExperimentState.Pending },
+        { text: t('Initializing'), value: ExperimentExperimentState.Initializing },
         {
-          text: t('experimentStateValues.waitingForPipelineReady'),
+          text: t('Waiting For Pipeline'),
           value: ExperimentExperimentState.WaitingForPipelineReady,
         },
-        { text: t('experimentStateValues.ready'), value: ExperimentExperimentState.Ready },
-        { text: t('experimentStateValues.running'), value: ExperimentExperimentState.Running },
-        { text: t('experimentStateValues.finished'), value: ExperimentExperimentState.Finished },
-        { text: t('experimentStateValues.error'), value: ExperimentExperimentState.Error },
+        { text: t('Ready'), value: ExperimentExperimentState.Ready },
+        { text: t('Running'), value: ExperimentExperimentState.Running },
+        { text: t('Finished'), value: ExperimentExperimentState.Finished },
+        { text: t('Failed'), value: ExperimentExperimentState.Error },
       ],
       onFilter: (value, record) =>
         record.status.experimentState?.startsWith(value as ExperimentExperimentState) ?? false,
@@ -141,7 +141,7 @@ const ExperimentList: React.FC = () => {
       showNamespaceSelect
       allowClone
       allowEdit
-      resourceKind={t('common:experiment')}
+      resourceKind={t('Experiment')}
       resourceKindUrl="experiment"
       data={data}
       isLoading={isLoading}

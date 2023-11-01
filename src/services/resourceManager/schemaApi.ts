@@ -1,4 +1,4 @@
-import { apiBaseUrl } from '@/constants/base';
+import { apiBasePath } from '@/constants/base';
 import { baseApi } from '@/services/baseApi';
 import { SchemaDTO } from '@/types/resourceManager/schema';
 
@@ -6,7 +6,7 @@ const schemaApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     listSchemas: build.query<SchemaDTO[], void>({
       query: () => ({
-        url: `${apiBaseUrl}/schemas`,
+        url: `${apiBasePath}/schemas`,
         method: 'GET',
       }),
       // Unwrap the response object
@@ -15,14 +15,14 @@ const schemaApi = baseApi.injectEndpoints({
     }),
     getSchema: build.query<SchemaDTO, Pick<SchemaDTO, 'metadata'>>({
       query: ({ metadata }) => ({
-        url: `${apiBaseUrl}/schemas/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/schemas/${metadata.namespace}/${metadata.name}`,
         method: 'GET',
       }),
       providesTags: ['Schema'],
     }),
     createSchema: build.mutation<void, Pick<SchemaDTO, 'metadata' | 'spec'>>({
       query: ({ metadata, spec }) => ({
-        url: `${apiBaseUrl}/schemas/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/schemas/${metadata.namespace}/${metadata.name}`,
         method: 'POST',
         data: {
           spec,
@@ -32,7 +32,7 @@ const schemaApi = baseApi.injectEndpoints({
     }),
     updateSchema: build.mutation<void, Pick<SchemaDTO, 'metadata' | 'spec'>>({
       query: ({ metadata, spec }) => ({
-        url: `${apiBaseUrl}/schemas/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/schemas/${metadata.namespace}/${metadata.name}`,
         method: 'PUT',
         data: {
           spec,
@@ -42,7 +42,7 @@ const schemaApi = baseApi.injectEndpoints({
     }),
     deleteSchema: build.mutation<void, Pick<SchemaDTO, 'metadata'>>({
       query: ({ metadata }) => ({
-        url: `${apiBaseUrl}/schemas/${metadata.namespace}/${metadata.name}`,
+        url: `${apiBasePath}/schemas/${metadata.namespace}/${metadata.name}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Schema'],

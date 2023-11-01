@@ -73,7 +73,7 @@ const SortableTable = <T extends object>({
   columns = [],
   ...props
 }: SortableTableProps<T>) => {
-  const { t } = useTranslation(['resourceEditor']);
+  const { t } = useTranslation();
 
   const columnsWithHandle = useMemo<ColumnsType<T>>(
     () => [
@@ -119,7 +119,7 @@ const SortableTable = <T extends object>({
           onCreateRow();
         }}
       >
-        {t('addBtn')}
+        {t('Add')}
       </Button>
       <DndContext
         onDragEnd={({ active, over }) => {

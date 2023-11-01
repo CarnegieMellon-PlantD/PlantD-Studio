@@ -25,7 +25,6 @@ import { Layout, Menu, MenuProps } from 'antd';
 import { useBoolean, useDarkMode } from 'usehooks-ts';
 
 import AppLoading from '@/components/AppLoading';
-import { appName } from '@/constants/base';
 import logo from '@/images/logo.svg';
 
 type MenuItem = Exclude<MenuProps['items'], undefined>[number];
@@ -49,6 +48,8 @@ const AppLayout: React.FC = () => {
   const { isDarkMode, toggle: toggleDarkMode } = useDarkMode();
   const { value: collapsed, setValue: setCollapsed, toggle: toggleCollapsed } = useBoolean(false);
   const { t, i18n } = useTranslation();
+
+  t('Context and Plural test', { context: 'ctx', count: 2 });
 
   const headerMenuItems = useMemo<MenuItem[]>(
     () => [
@@ -76,54 +77,54 @@ const AppLayout: React.FC = () => {
       {
         key: 'resources',
         icon: <FontAwesomeIcon icon={faCube} />,
-        label: t('resources'),
+        label: t('Resources'),
         children: [
           {
             key: 'namespace',
             icon: <FontAwesomeIcon icon={faGlobe} />,
-            label: t('namespace'),
+            label: t('Namespace'),
           },
           {
             key: 'schema',
             icon: <FontAwesomeIcon icon={faTableColumns} />,
-            label: t('schema'),
+            label: t('Schema'),
           },
           {
             key: 'dataSet',
             icon: <FontAwesomeIcon icon={faDatabase} />,
-            label: t('dataSet'),
+            label: t('DataSet'),
           },
           {
             key: 'loadPattern',
             icon: <FontAwesomeIcon icon={faChartArea} />,
-            label: t('loadPattern'),
+            label: t('LoadPattern'),
           },
           {
             key: 'pipeline',
             icon: <FontAwesomeIcon icon={faServer} />,
-            label: t('pipeline'),
+            label: t('Pipeline'),
           },
           {
             key: 'experiment',
             icon: <FontAwesomeIcon icon={faFlask} />,
-            label: t('experiment'),
+            label: t('Experiment'),
           },
         ],
       },
       {
         key: 'tools',
         icon: <FontAwesomeIcon icon={faWrench} />,
-        label: t('tools'),
+        label: t('Tools'),
         children: [
           {
             key: 'importExport',
             icon: <FontAwesomeIcon icon={faFileExport} />,
-            label: t('importExport'),
+            label: t('Import/Export'),
           },
           {
             key: 'about',
             icon: <FontAwesomeIcon icon={faCircleInfo} />,
-            label: t('about'),
+            label: t('About'),
           },
         ],
       },
@@ -193,7 +194,7 @@ const AppLayout: React.FC = () => {
         {/* Left part, disable shrink */}
         <div className="flex-none flex items-center gap-2 select-none">
           <img src={logo} alt={t('PlantD Studio')} className="w-12 h-12 pointer-events-none" />
-          <span className="font-logo text-xl text-white hidden lg:block">{appName}</span>
+          <span className="font-logo text-xl text-white hidden lg:block">{t('PlantD Studio')}</span>
         </div>
         {/* Right part */}
         <Menu
@@ -248,7 +249,7 @@ const AppLayout: React.FC = () => {
                 {
                   key: 'toggleDarkMode',
                   icon: <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />,
-                  label: isDarkMode ? t('lightMode') : t('darkMode'),
+                  label: isDarkMode ? t('Light Mode') : t('Dark Mode'),
                   onClick: () => {
                     toggleDarkMode();
                   },

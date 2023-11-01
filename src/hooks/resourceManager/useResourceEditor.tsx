@@ -8,7 +8,7 @@ import { MutationDefinition, QueryDefinition } from '@reduxjs/toolkit/query';
 import { App, Breadcrumb, Form, FormInstance } from 'antd';
 import { useEffectOnce, useUpdateEffect } from 'usehooks-ts';
 
-import { appName, defaultNamespace } from '@/constants/base';
+import { defaultNamespace } from '@/constants/base';
 import { AxiosBaseQueryFn } from '@/services/baseApi';
 import { RootState } from '@/store';
 import { getErrMsg } from '@/utils/getErrMsg';
@@ -62,7 +62,7 @@ export const useResourceEditor = <VO, DTO_R, DTO_W, DTO_L>({
   const params = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { t } = useTranslation(['resourceEditor', 'common']);
+  const { t } = useTranslation();
   const currentNamespace = useSelector((state: RootState) => state.appState.currentNamespace);
 
   const { message } = App.useApp();
@@ -116,7 +116,7 @@ export const useResourceEditor = <VO, DTO_R, DTO_W, DTO_L>({
   );
   if (!isCreateMode && !isCloneMode && !isEditMode) {
     // Throw error to trigger error page
-    throw new InvalidURLParamsError(t('invalidPathParamsMsg', { url: location.pathname }));
+    throw new InvalidURLParamsError(t('Error: Invalid URL {url}', { url: location.pathname }));
   }
 
   // Apply default form data in `create` mode
@@ -148,14 +148,14 @@ export const useResourceEditor = <VO, DTO_R, DTO_W, DTO_L>({
   // Show error message if failed to get the resource
   useUpdateEffect(() => {
     if (isGetError && getError !== undefined) {
-      message.error(t('getErrorMsg', { kind: resourceKind, error: getErrMsg(getError) }));
+      message.error(t('Failed to get {kind} resource: {error}', { kind: resourceKind, error: getErrMsg(getError) }));
     }
   }, [isGetError, getError]);
 
   // Show success message if resource is created successfully
   useUpdateEffect(() => {
     if (isCreateSuccess) {
-      message.success(t('createSuccessMsg', { kind: resourceKind }));
+      message.success(t('Created {kind} resource successfully', { kind: resourceKind }));
       // Reset mutation
       resetCreate();
       // Go back
@@ -166,14 +166,16 @@ export const useResourceEditor = <VO, DTO_R, DTO_W, DTO_L>({
   // Show error message if failed to create resource
   useUpdateEffect(() => {
     if (isCreateError && createError !== undefined) {
-      message.error(t('createErrorMsg', { kind: resourceKind, error: getErrMsg(createError) }));
+      message.error(
+        t('Failed to create {kind} resource: {error}', { kind: resourceKind, error: getErrMsg(createError) })
+      );
     }
   }, [isCreateError, createError]);
 
   // Show success message if resource is updated successfully
   useUpdateEffect(() => {
     if (isUpdateSuccess) {
-      message.success(t('updateSuccessMsg', { kind: resourceKind }));
+      message.success(t('Updated {kind} resource successfully', { kind: resourceKind }));
       // Reset mutation
       resetUpdate();
       // Go back
@@ -184,7 +186,9 @@ export const useResourceEditor = <VO, DTO_R, DTO_W, DTO_L>({
   // Show error message if failed to update resource
   useUpdateEffect(() => {
     if (isUpdateError && updateError !== undefined) {
-      message.error(t('updateErrorMsg', { kind: resourceKind, error: getErrMsg(updateError) }));
+      message.error(
+        t('Failed to update {kind} resource: {error}', { kind: resourceKind, error: getErrMsg(updateError) })
+      );
     }
   }, [isUpdateError, updateError]);
 
@@ -199,18 +203,18 @@ export const useResourceEditor = <VO, DTO_R, DTO_W, DTO_L>({
   const breadcrumb = (
     <Breadcrumb
       items={[
-        { title: appName },
-        { title: t('common:resources') },
+        { title: t('PlantD Studio') },
+        { title: t('Resources') },
         { title: resourceKind },
         {
           title: isCreateMode
             ? // isCreateMode
-              t('createTitle')
+              t('Create')
             : isCloneMode
             ? // isCloneMode
-              t('cloneTitle', { target: `${params.namespace}/${params.name}` })
+              t('Clone', { target: `${params.namespace}/${params.name}` })
             : // isEditMode
-              t('editTitle', { target: `${params.namespace}/${params.name}` }),
+              t('Edit', { target: `${params.namespace}/${params.name}` }),
         },
       ]}
     />

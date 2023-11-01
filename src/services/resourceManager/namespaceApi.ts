@@ -1,4 +1,4 @@
-import { apiBaseUrl } from '@/constants/base';
+import { apiBasePath } from '@/constants/base';
 import { namespaceNoReservedKeywordRegExp } from '@/constants/regExps';
 import { baseApi } from '@/services/baseApi';
 import { NamespaceDTO } from '@/types/resourceManager/namespace';
@@ -7,7 +7,7 @@ const namespaceApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     listNamespaces: build.query<NamespaceDTO[], void>({
       query: () => ({
-        url: `${apiBaseUrl}/namespaces`,
+        url: `${apiBasePath}/namespaces`,
         method: 'GET',
       }),
       // Unwrap the response object
@@ -17,14 +17,14 @@ const namespaceApi = baseApi.injectEndpoints({
     }),
     createNamespace: build.mutation<void, Pick<NamespaceDTO, 'metadata'>>({
       query: ({ metadata }) => ({
-        url: `${apiBaseUrl}/namespaces/${metadata.name}`,
+        url: `${apiBasePath}/namespaces/${metadata.name}`,
         method: 'POST',
       }),
       invalidatesTags: ['Namespace'],
     }),
     deleteNamespace: build.mutation<void, Pick<NamespaceDTO, 'metadata'>>({
       query: ({ metadata }) => ({
-        url: `${apiBaseUrl}/namespaces/${metadata.name}`,
+        url: `${apiBasePath}/namespaces/${metadata.name}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Namespace'],

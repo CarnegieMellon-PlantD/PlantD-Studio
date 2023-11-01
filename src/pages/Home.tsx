@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { faCheckCircle, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { App, Badge, Breadcrumb, Card, Statistic, Table } from 'antd';
+import { useUpdateEffect } from 'usehooks-ts';
 
-import { appName } from '@/constants/base';
 import { useListCostExportersQuery } from '@/services/resourceManager/costExporterApi';
 import { useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
 import { useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
@@ -39,7 +39,7 @@ const Home: React.FC = () => {
     metadata: plantDCoreMetadata,
   });
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (isGetPlantDCoreError) {
       message.error(`Failed to get PlantDCore: ${getErrMsg(getPlantDCoreError)}`);
     }
@@ -47,7 +47,7 @@ const Home: React.FC = () => {
 
   const { data: namespaces, isError: isListNamespacesError, error: listNamespacesError } = useListNamespacesQuery();
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (isListNamespacesError) {
       message.error(`Failed to list Namespaces: ${getErrMsg(listNamespacesError)}`);
     }
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
 
   const { data: schemas, isError: isListSchemasError, error: listSchemasError } = useListSchemasQuery();
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (isListSchemasError) {
       message.error(`Failed to list Schemas: ${getErrMsg(listSchemasError)}`);
     }
@@ -63,7 +63,7 @@ const Home: React.FC = () => {
 
   const { data: dataSets, isError: isListDataSetsError, error: listDataSetsError } = useListDataSetsQuery();
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (isListDataSetsError) {
       message.error(`Failed to list DataSets: ${getErrMsg(listDataSetsError)}`);
     }
@@ -75,7 +75,7 @@ const Home: React.FC = () => {
     error: listLoadPatternsError,
   } = useListLoadPatternsQuery();
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (isListLoadPatternsError) {
       message.error(`Failed to list LoadPatterns: ${getErrMsg(listLoadPatternsError)}`);
     }
@@ -83,7 +83,7 @@ const Home: React.FC = () => {
 
   const { data: pipelines, isError: isListPipelinesError, error: listPipelinesError } = useListPipelinesQuery();
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (isListPipelinesError) {
       message.error(`Failed to list Pipelines: ${getErrMsg(listPipelinesError)}`);
     }
@@ -91,7 +91,7 @@ const Home: React.FC = () => {
 
   const { data: experiments, isError: isListExperimentsError, error: listExperimentsError } = useListExperimentsQuery();
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (isListExperimentsError) {
       message.error(`Failed to list Experiments: ${getErrMsg(listExperimentsError)}`);
     }
@@ -103,7 +103,7 @@ const Home: React.FC = () => {
     error: listCostExportersError,
   } = useListCostExportersQuery();
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (isListCostExportersError) {
       message.error(`Failed to list CostExporters: ${getErrMsg(listCostExportersError)}`);
     }
@@ -119,7 +119,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="p-6">
-      <Breadcrumb items={[{ title: appName }, { title: t('System Overview') }]} className="mb-6" />
+      <Breadcrumb items={[{ title: t('PlantD Studio') }, { title: t('System Overview') }]} className="mb-6" />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         <Card bordered={false} className="col-span-2 lg:col-span-2 xl:col-span-4">

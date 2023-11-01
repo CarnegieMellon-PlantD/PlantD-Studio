@@ -12,10 +12,10 @@ import { getNamespaceDTO, getNamespaceVO } from '@/utils/resourceManager/convert
 
 const NamespaceEditor: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation(['namespaceEditor', 'resourceEditor', 'common']);
+  const { t } = useTranslation();
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
-    resourceKind: t('common:namespace'),
+    resourceKind: t('Namespace'),
     getDefaultForm: getDefaultNamespaceForm,
     lazyGetHook: null,
     createHook: useCreateNamespaceMutation,
@@ -38,17 +38,17 @@ const NamespaceEditor: React.FC = () => {
             }}
           >
             <Form.Item
-              label={t('resourceEditor:nameLabel')}
+              label={t('Name')}
               name={['name']}
               rules={[
-                { required: true, message: t('resourceEditor:nameRequiredMsg') },
+                { required: true, message: t('Name is required') },
                 {
                   pattern: rfc1123RegExp,
-                  message: t('resourceEditor:nameRfc1123Msg'),
+                  message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
                 },
                 {
                   pattern: namespaceNoReservedKeywordRegExp,
-                  message: t('nameNoReservedKeywordMsg'),
+                  message: t('Name cannot contain reserved words "kube", "system", "manager", or "controller"'),
                 },
               ]}
             >
@@ -57,7 +57,7 @@ const NamespaceEditor: React.FC = () => {
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">
                 <Button type="primary" htmlType="submit" loading={isCreatingOrUpdating}>
-                  {t('common:okBtn')}
+                  {t('OK')}
                 </Button>
                 <Button
                   htmlType="button"
@@ -66,7 +66,7 @@ const NamespaceEditor: React.FC = () => {
                     navigate(-1);
                   }}
                 >
-                  {t('common:cancelBtn')}
+                  {t('Cancel')}
                 </Button>
               </div>
             </Form.Item>

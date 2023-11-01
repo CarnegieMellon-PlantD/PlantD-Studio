@@ -16,43 +16,43 @@ import {
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const PipelineList: React.FC = () => {
-  const { t } = useTranslation(['pipelineList', 'resourceList', 'common']);
+  const { t } = useTranslation();
   const { data, isLoading, isFetching, refetch } = useResourceList({
-    resourceKindPlural: t('common:pipelinePlural'),
+    resourceKind: t('Pipeline'),
     listHook: useListPipelinesQuery,
     pollingInterval: 10000,
   });
 
   const columns: ColumnsType<PipelineDTO> = [
     {
-      title: t('resourceList:nameCol'),
+      title: t('Name'),
       dataIndex: ['metadata', 'name'],
       sorter: (a, b) => a.metadata.name.localeCompare(b.metadata.name),
     },
     {
-      title: t('resourceList:namespaceCol'),
+      title: t('Namespace'),
       width: 200,
       dataIndex: ['metadata', 'namespace'],
       sorter: (a, b) => sortNamespace(a.metadata.namespace, b.metadata.namespace),
       defaultSortOrder: 'ascend',
     },
     {
-      title: t('pipelineStateCol'),
+      title: t('Status'),
       width: 150,
       render: (text, record) =>
         record.status.pipelineState == PipelinePipelineState.Initializing ? (
-          <Badge status="warning" text={t('pipelineStateValues.initializing')} />
+          <Badge status="warning" text={t('Initializing')} />
         ) : record.status.pipelineState == PipelinePipelineState.Available ? (
-          <Badge status="success" text={t('pipelineStateValues.available')} />
+          <Badge status="success" text={t('Available')} />
         ) : record.status.pipelineState == PipelinePipelineState.Engaged ? (
-          <Badge status="processing" text={t('pipelineStateValues.engaged')} />
+          <Badge status="processing" text={t('Engaged')} />
         ) : (
-          <Badge status="default" text={record.status.pipelineState ?? t('pipelineStateValues.default')} />
+          <Badge status="default" text={record.status.pipelineState ?? '-'} />
         ),
       filters: [
-        { text: t('pipelineStateValues.initializing'), value: PipelinePipelineState.Initializing },
-        { text: t('pipelineStateValues.available'), value: PipelinePipelineState.Available },
-        { text: t('pipelineStateValues.engaged'), value: PipelinePipelineState.Engaged },
+        { text: t('Initializing'), value: PipelinePipelineState.Initializing },
+        { text: t('Available'), value: PipelinePipelineState.Available },
+        { text: t('Engaged'), value: PipelinePipelineState.Engaged },
       ],
       onFilter: (value, record) => record.status.pipelineState === value,
       sorter: (a, b) =>
@@ -60,19 +60,19 @@ const PipelineList: React.FC = () => {
         allPipelinePipelineStates.indexOf(b.status.pipelineState as never),
     },
     {
-      title: t('statusCheckCol'),
+      title: t('Health Check'),
       width: 150,
       render: (text, record) =>
         record.status.statusCheck === PipelineStatusCheck.OK ? (
-          <Badge status="success" text={t('statusCheckValues.ok')} />
+          <Badge status="success" text={t('Succeeded')} />
         ) : record.status.statusCheck === PipelineStatusCheck.Failed ? (
-          <Badge status="error" text={t('statusCheckValues.failed')} />
+          <Badge status="error" text={t('Failed')} />
         ) : (
-          <Badge status="default" text={record.status.statusCheck ?? t('statusCheckValues.default')} />
+          <Badge status="default" text={record.status.statusCheck ?? '-'} />
         ),
       filters: [
-        { text: t('statusCheckValues.ok'), value: PipelineStatusCheck.OK },
-        { text: t('statusCheckValues.failed'), value: PipelineStatusCheck.Failed },
+        { text: t('Succeeded'), value: PipelineStatusCheck.OK },
+        { text: t('Failed'), value: PipelineStatusCheck.Failed },
       ],
       onFilter: (value, record) => record.status.statusCheck === value,
       sorter: (a, b) =>
@@ -85,7 +85,7 @@ const PipelineList: React.FC = () => {
       showNamespaceSelect
       allowClone
       allowEdit
-      resourceKind={t('common:pipeline')}
+      resourceKind={t('Pipeline')}
       resourceKindUrl="pipeline"
       data={data}
       isLoading={isLoading}

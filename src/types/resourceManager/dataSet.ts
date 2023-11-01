@@ -30,7 +30,7 @@ export type DataSetStatus = {
   jobStatus?: DataSetJobStatus | string;
   pvcStatus?: DataSetPvcStatus | string;
   errorCount?: number;
-  errors?: Record<string, string[]>;
+  errors?: Record<DataSetErrorType | string, string[]>;
 };
 
 /** Type definition for the data transfer object of a DataSet */
@@ -92,6 +92,12 @@ export const allDataSetJobStatuses: DataSetJobStatus[] = [
   DataSetJobStatus.Failed,
   DataSetJobStatus.Unknown,
 ];
+
+/** Enums of keys of `status.errors` */
+export enum DataSetErrorType {
+  Container = 'container',
+  Pod = 'pod',
+}
 
 /** Enums of `status.pvcStatus */
 export enum DataSetPvcStatus {
