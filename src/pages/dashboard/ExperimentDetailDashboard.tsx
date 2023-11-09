@@ -125,7 +125,7 @@ const ExperimentDetailDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `irate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s]) / irate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s])`,
+                query: `sum by(span_name)(irate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s])) / sum by(span_name)(irate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s]))`,
                 start: timeRange[0].unix(),
                 end: timeRange[1].unix(),
                 step: Math.floor((timeRange[1].unix() - timeRange[0].unix()) / 200),
@@ -147,13 +147,13 @@ const ExperimentDetailDashboard: React.FC = () => {
             dataRequest: {
               source: 'prometheus',
               params: {
-                query: `rate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${
+                query: `sum by(span_name)(rate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${
                   params.name
                 }", namespace="${params.namespace}"}[${
                   timeRange[1].unix() - timeRange[0].unix()
-                }s]) / rate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${
+                }s])) / sum by(span_name)(rate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${
                   params.name
-                }", namespace="${params.namespace}"}[${timeRange[1].unix() - timeRange[0].unix()}s])`,
+                }", namespace="${params.namespace}"}[${timeRange[1].unix() - timeRange[0].unix()}s]))`,
                 end: timeRange[1].unix(),
                 labelSelector: ['span_name'],
               },
