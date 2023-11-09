@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.2.0...v1.2.1) (2023-11-09)
+
+### Bug Fixes
+
+- **dashboard:** add aggregation to avoid duplicate spans ([c0004ca](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/c0004ca3ccd1989546a5d0b08c0082f35d32a51a))
+
 ## [1.2.0](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.1.1...v1.2.0) (2023-10-25)
 
 ### Features
