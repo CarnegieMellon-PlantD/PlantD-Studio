@@ -246,9 +246,9 @@ const DataSetEditor: React.FC = () => {
               <InputNumber />
             </Form.Item>
             <Form.Item
-              label={t('fileFormatLabel')}
+              label={t('File Format')}
               name={['fileFormat']}
-              rules={[{ required: true, message: t('File Format') }]}
+              rules={[{ required: true, message: t('File format is required') }]}
             >
               <Select
                 showSearch

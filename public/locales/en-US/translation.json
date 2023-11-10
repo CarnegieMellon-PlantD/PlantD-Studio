@@ -67,6 +67,7 @@
   "Failed to list {kind} resources: {error}": "Failed to list {kind} resources: {error}",
   "Failed to update {kind} resource: {error}": "Failed to update {kind} resource: {error}",
   "File Format": "File Format",
+  "File format is required": "File format is required",
   "Files / Compressed File": "Files / Compressed File",
   "Finished": "Finished",
   "Formula": "Formula",
@@ -170,7 +171,6 @@
   "Volume Status": "Volume Status",
   "Waiting For Pipeline": "Waiting For Pipeline",
   "WebSocket": "WebSocket",
-  "fileFormatLabel": "fileFormatLabel",
   "gRPC": "gRPC",
   "{count, plural, one {# Error} other {# Errors}}": "{count, plural, one {# Error} other {# Errors}}",
   "{package} Version": "{package} Version"
