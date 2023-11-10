@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.2.1...v1.2.2) (2023-11-10)
+
+### Features
+
+- **dashboard:** add axis titles and units ([b58960a](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/b58960a086e790a614f37ec0b6e4ed9ef0c710c6))
+
+### Bug Fixes
+
+- **i18n:** fix translation ([fcbed33](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/fcbed33813de7784861845e0d43304f28ce6d199))
+
 ### [1.2.1](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.2.0...v1.2.1) (2023-11-09)
 
 ### Bug Fixes
