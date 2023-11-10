@@ -12,6 +12,8 @@ export interface LineChartProps extends BaseWidgetProps {
     xAxisType?: 'default' | 'time';
     xAxisMin?: number;
     xAxisMax?: number;
+    xAxisTitle?: string;
+    yAxisTitle?: string;
   };
 }
 
@@ -29,6 +31,7 @@ export interface GaugeChartProps extends BaseWidgetProps {
   widget: {
     type?: 'default' | 'percent' | 'byte';
     precision?: number;
+    suffix?: string;
   };
 }
 

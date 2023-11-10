@@ -27,12 +27,12 @@ const GaugeChart: React.FC<GaugeChartProps> = ({ width, height, title, dataReque
               value={y ?? '-'}
               formatter={(value) =>
                 typeof value === 'string'
-                  ? value
+                  ? `${value}${widget.suffix ?? ''}`
                   : widget.type === 'percent'
                   ? `${(value * 100).toFixed(widget.precision ?? 0)}%`
                   : widget.type === 'byte'
                   ? getFriendlyByte(value, widget.precision ?? 0)
-                  : value.toFixed(widget.precision)
+                  : `${value.toFixed(widget.precision)}${widget.suffix ?? ''}`
               }
             />
           ))}

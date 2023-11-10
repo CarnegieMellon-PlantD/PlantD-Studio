@@ -34,6 +34,14 @@ const LineChart: React.FC<LineChartProps> = ({ width, height, title, dataRequest
       xAxis: {
         min: widget.xAxisMin,
         max: widget.xAxisMax,
+        title: {
+          text: widget.xAxisTitle ?? '',
+        },
+      },
+      yAxis: {
+        title: {
+          text: widget.yAxisTitle ?? '',
+        },
       },
       legend: {
         position: 'top',

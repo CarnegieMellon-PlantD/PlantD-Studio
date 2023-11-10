@@ -74,6 +74,7 @@ const LoadGeneratorDashboard: React.FC = () => {
             },
             widget: {
               type: 'default',
+              suffix: ' RPS',
             },
           },
         },
@@ -93,6 +94,7 @@ const LoadGeneratorDashboard: React.FC = () => {
             widget: {
               type: 'default',
               precision: 5,
+              suffix: ' ms',
             },
           },
         },
@@ -153,6 +155,8 @@ const LoadGeneratorDashboard: React.FC = () => {
               xAxisType: 'time',
               xAxisMin: timeRange[0].unix(),
               xAxisMax: timeRange[1].unix(),
+              xAxisTitle: 'Time',
+              yAxisTitle: 'Request / Second',
             },
           },
         },
