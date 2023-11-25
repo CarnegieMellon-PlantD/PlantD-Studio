@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.3](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.2.2...v1.2.3) (2023-11-25)
+
+### Bug Fixes
+
+- fix crash when status field is omitted ([b4a7bc2](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/b4a7bc26f48929b6444286fd7d7344ce42e821db)), closes [#2](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/issues/2)
+
 ### [1.2.2](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.2.1...v1.2.2) (2023-11-10)
 
 ### Features
