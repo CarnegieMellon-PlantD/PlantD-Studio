@@ -190,7 +190,7 @@ const ExperimentDetailDashboard: React.FC = () => {
       const experiment = data.find(
         (experiment) => experiment.metadata.namespace === params.namespace && experiment.metadata.name === params.name
       );
-      if (experiment?.status.startTime === undefined) {
+      if (experiment?.status?.startTime === undefined) {
         return;
       }
       const startTime = dayjs(experiment.status.startTime);

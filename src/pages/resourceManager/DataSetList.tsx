@@ -27,7 +27,7 @@ const getTagColorFromCategory = (category: string) => {
 const ErrorDetail: React.FC<{ record: DataSetDTO }> = ({ record }) => {
   const dataSource = useMemo(
     () =>
-      record.status.errors === undefined
+      record.status?.errors === undefined
         ? []
         : Object.entries(record.status.errors).flatMap(([category, errors]) =>
             errors.map((error) => ({
@@ -36,7 +36,7 @@ const ErrorDetail: React.FC<{ record: DataSetDTO }> = ({ record }) => {
               error,
             }))
           ),
-    [record.status.errors]
+    [record.status?.errors]
   );
 
   return (
@@ -75,8 +75,8 @@ const ErrorCount: React.FC<{ record: DataSetDTO }> = ({ record }) => {
   );
 
   return (
-    record.status.errorCount !== undefined &&
-    record.status.errorCount > 0 && (
+    record.status?.errorCount !== undefined &&
+    record.status?.errorCount > 0 && (
       <>
         {' '}
         (
@@ -124,13 +124,13 @@ const DataSetList: React.FC = () => {
       title: t('Job Status'),
       width: 150,
       render: (text, record) =>
-        record.status.jobStatus === DataSetJobStatus.Creating ? (
+        record.status?.jobStatus === DataSetJobStatus.Creating ? (
           <Badge status="processing" text={t('Creating')} />
-        ) : record.status.jobStatus === DataSetJobStatus.Generating ? (
+        ) : record.status?.jobStatus === DataSetJobStatus.Generating ? (
           <Badge status="processing" text={t('Generating')} />
-        ) : record.status.jobStatus === DataSetJobStatus.Success ? (
+        ) : record.status?.jobStatus === DataSetJobStatus.Success ? (
           <Badge status="success" text={t('Succeeded')} />
-        ) : record.status.jobStatus === DataSetJobStatus.Failed ? (
+        ) : record.status?.jobStatus === DataSetJobStatus.Failed ? (
           <Badge
             status="error"
             text={
@@ -140,10 +140,10 @@ const DataSetList: React.FC = () => {
               </span>
             }
           />
-        ) : record.status.jobStatus === DataSetJobStatus.Unknown ? (
+        ) : record.status?.jobStatus === DataSetJobStatus.Unknown ? (
           <Badge status="warning" text={t('Unknown')} />
         ) : (
-          <Badge status="default" text={record.status.jobStatus ?? '-'} />
+          <Badge status="default" text={record.status?.jobStatus ?? '-'} />
         ),
       filters: [
         { text: t('Creating'), value: DataSetJobStatus.Creating },
@@ -152,25 +152,25 @@ const DataSetList: React.FC = () => {
         { text: t('Failed'), value: DataSetJobStatus.Failed },
         { text: t('Unknown'), value: DataSetJobStatus.Unknown },
       ],
-      onFilter: (value, record) => record.status.jobStatus === value,
+      onFilter: (value, record) => record.status?.jobStatus === value,
       sorter: (a, b) =>
-        allDataSetJobStatuses.indexOf(a.status.jobStatus as never) -
-        allDataSetJobStatuses.indexOf(b.status.jobStatus as never),
+        allDataSetJobStatuses.indexOf(a.status?.jobStatus as never) -
+        allDataSetJobStatuses.indexOf(b.status?.jobStatus as never),
     },
     {
       title: t('Volume Status'),
       width: 150,
       render: (text, record) =>
-        record.status.pvcStatus === DataSetPvcStatus.Available ? (
+        record.status?.pvcStatus === DataSetPvcStatus.Available ? (
           <Badge status="warning" text={t('Available')} />
-        ) : record.status.pvcStatus === DataSetPvcStatus.Bound ? (
+        ) : record.status?.pvcStatus === DataSetPvcStatus.Bound ? (
           <Badge status="success" text={t('Bound')} />
-        ) : record.status.pvcStatus === DataSetPvcStatus.Released ? (
+        ) : record.status?.pvcStatus === DataSetPvcStatus.Released ? (
           <Badge status="warning" text={t('Released')} />
-        ) : record.status.pvcStatus === DataSetPvcStatus.Failed ? (
+        ) : record.status?.pvcStatus === DataSetPvcStatus.Failed ? (
           <Badge status="error" text={t('Failed')} />
         ) : (
-          <Badge status="default" text={record.status.pvcStatus ?? '-'} />
+          <Badge status="default" text={record.status?.pvcStatus ?? '-'} />
         ),
       filters: [
         {
@@ -184,10 +184,10 @@ const DataSetList: React.FC = () => {
         },
         { text: t('Failed'), value: DataSetPvcStatus.Failed },
       ],
-      onFilter: (value, record) => record.status.pvcStatus === value,
+      onFilter: (value, record) => record.status?.pvcStatus === value,
       sorter: (a, b) =>
-        allDataSetPvcStatuses.indexOf(a.status.pvcStatus as never) -
-        allDataSetPvcStatuses.indexOf(b.status.pvcStatus as never),
+        allDataSetPvcStatuses.indexOf(a.status?.pvcStatus as never) -
+        allDataSetPvcStatuses.indexOf(b.status?.pvcStatus as never),
     },
     {
       title: t('Sample Dataset'),
@@ -196,7 +196,7 @@ const DataSetList: React.FC = () => {
         <Button
           type="text"
           size="small"
-          disabled={record.status.jobStatus !== 'Success'}
+          disabled={record.status?.jobStatus !== 'Success'}
           icon={<FontAwesomeIcon icon={faDownload} />}
           onClick={async () => {
             window.open(

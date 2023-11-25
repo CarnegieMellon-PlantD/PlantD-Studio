@@ -23,7 +23,7 @@ export type LoadPatternStatus = Record<string, never>;
 export type LoadPatternDTO = {
   metadata: LoadPatternMetadata;
   spec: LoadPatternSpec;
-  status: LoadPatternStatus;
+  status: LoadPatternStatus | undefined;
 };
 
 /** Type definition for the view object of a LoadPattern */

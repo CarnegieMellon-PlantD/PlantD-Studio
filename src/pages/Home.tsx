@@ -111,9 +111,9 @@ const Home: React.FC = () => {
 
   const isAllRunning = useMemo(
     () =>
-      isReady(plantDCore?.status.kubeProxyStatus) &&
-      isReady(plantDCore?.status.studioStatus) &&
-      isReady(plantDCore?.status.prometheusStatus),
+      isReady(plantDCore?.status?.kubeProxyStatus) &&
+      isReady(plantDCore?.status?.studioStatus) &&
+      isReady(plantDCore?.status?.prometheusStatus),
     [plantDCore]
   );
 
@@ -137,18 +137,18 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-2 gap-1">
             <span className="text-gray-500">PlantD Proxy:</span>
             <Badge
-              status={isReady(plantDCore?.status.kubeProxyStatus) ? 'success' : 'warning'}
-              text={plantDCore?.status.kubeProxyStatus ?? '-'}
+              status={isReady(plantDCore?.status?.kubeProxyStatus) ? 'success' : 'warning'}
+              text={plantDCore?.status?.kubeProxyStatus ?? '-'}
             />
             <span className="text-gray-500">PlantD Studio:</span>
             <Badge
-              status={isReady(plantDCore?.status.studioStatus) ? 'success' : 'warning'}
-              text={plantDCore?.status.studioStatus ?? '-'}
+              status={isReady(plantDCore?.status?.studioStatus) ? 'success' : 'warning'}
+              text={plantDCore?.status?.studioStatus ?? '-'}
             />
             <span className="text-gray-500">Prometheus:</span>
             <Badge
-              status={isReady(plantDCore?.status.prometheusStatus) ? 'success' : 'warning'}
-              text={plantDCore?.status.prometheusStatus ?? '-'}
+              status={isReady(plantDCore?.status?.prometheusStatus) ? 'success' : 'warning'}
+              text={plantDCore?.status?.prometheusStatus ?? '-'}
             />
           </div>
         </Card>
@@ -190,7 +190,7 @@ const Home: React.FC = () => {
               {
                 key: 'lastExecutionTime',
                 title: 'Last Execution Time',
-                render: (_, record) => record.status.jobCompletionTime ?? '-',
+                render: (_, record) => record.status?.jobCompletionTime ?? '-',
               },
             ]}
           />

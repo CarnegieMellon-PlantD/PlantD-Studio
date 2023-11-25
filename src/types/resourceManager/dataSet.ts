@@ -37,7 +37,7 @@ export type DataSetStatus = {
 export type DataSetDTO = {
   metadata: DataSetMetadata;
   spec: DataSetSpec;
-  status: DataSetStatus;
+  status: DataSetStatus | undefined;
 };
 
 /** Type definition for the view object of a DataSet */

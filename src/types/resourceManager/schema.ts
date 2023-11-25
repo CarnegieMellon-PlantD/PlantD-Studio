@@ -27,7 +27,7 @@ export type SchemaStatus = Record<string, never>;
 export type SchemaDTO = {
   metadata: SchemaMetadata;
   spec: SchemaSpec;
-  status: SchemaStatus;
+  status: SchemaStatus | undefined;
 };
 
 /** Type definition for the view object of a Schema */

@@ -29,7 +29,7 @@ export type PipelineStatus = {
 export type PipelineDTO = {
   metadata: PipelineMetadata;
   spec: PipelineSpec;
-  status: PipelineStatus;
+  status: PipelineStatus | undefined;
 };
 
 /** Type definition for the view object of a Pipeline */

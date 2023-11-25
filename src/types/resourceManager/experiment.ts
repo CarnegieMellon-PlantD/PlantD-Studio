@@ -31,7 +31,7 @@ export type ExperimentStatus = {
 export type ExperimentDTO = {
   metadata: ExperimentMetadata;
   spec: ExperimentSpec;
-  status: ExperimentStatus;
+  status: ExperimentStatus | undefined;
 };
 
 /** Type definition for the view object of an Experiment */

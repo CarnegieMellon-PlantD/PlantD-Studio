@@ -21,7 +21,7 @@ const ErrorTooltip: React.FC<{ record: ExperimentDTO }> = ({ record }) => {
   return (
     <>
       {' '}
-      <Tooltip title={record.status.experimentState}>
+      <Tooltip title={record.status?.experimentState}>
         <InfoCircleOutlined className="cursor-pointer" />
       </Tooltip>
     </>
@@ -55,7 +55,7 @@ const ExperimentList: React.FC = () => {
       title: t('Duration'),
       width: 150,
       render: (text, record) =>
-        Object.entries(record.status.duration ?? {})
+        Object.entries(record.status?.duration ?? {})
           .map(([key, value]) => `${key}: ${value}`)
           .join(', '),
     },
@@ -91,19 +91,19 @@ const ExperimentList: React.FC = () => {
       title: t('Status'),
       width: 150,
       render: (text, record) =>
-        record.status.experimentState === ExperimentExperimentState.Pending ? (
+        record.status?.experimentState === ExperimentExperimentState.Pending ? (
           <Badge status="warning" text={t('Pending')} />
-        ) : record.status.experimentState === ExperimentExperimentState.Initializing ? (
+        ) : record.status?.experimentState === ExperimentExperimentState.Initializing ? (
           <Badge status="warning" text={t('Initializing')} />
-        ) : record.status.experimentState === ExperimentExperimentState.WaitingForPipelineReady ? (
+        ) : record.status?.experimentState === ExperimentExperimentState.WaitingForPipelineReady ? (
           <Badge status="warning" text={t('Waiting For Pipeline')} />
-        ) : record.status.experimentState === ExperimentExperimentState.Ready ? (
+        ) : record.status?.experimentState === ExperimentExperimentState.Ready ? (
           <Badge status="success" text={t('Ready')} />
-        ) : record.status.experimentState === ExperimentExperimentState.Running ? (
+        ) : record.status?.experimentState === ExperimentExperimentState.Running ? (
           <Badge status="processing" text={t('Running')} />
-        ) : record.status.experimentState === ExperimentExperimentState.Finished ? (
+        ) : record.status?.experimentState === ExperimentExperimentState.Finished ? (
           <Badge status="success" text={t('Finished')} />
-        ) : record.status.experimentState?.startsWith(ExperimentExperimentState.Error) ? (
+        ) : record.status?.experimentState?.startsWith(ExperimentExperimentState.Error) ? (
           <Badge
             status="error"
             text={
@@ -114,7 +114,7 @@ const ExperimentList: React.FC = () => {
             }
           />
         ) : (
-          <Badge status="default" text={record.status.experimentState ?? '-'} />
+          <Badge status="default" text={record.status?.experimentState ?? '-'} />
         ),
       filters: [
         { text: t('Pending'), value: ExperimentExperimentState.Pending },
@@ -129,10 +129,10 @@ const ExperimentList: React.FC = () => {
         { text: t('Failed'), value: ExperimentExperimentState.Error },
       ],
       onFilter: (value, record) =>
-        record.status.experimentState?.startsWith(value as ExperimentExperimentState) ?? false,
+        record.status?.experimentState?.startsWith(value as ExperimentExperimentState) ?? false,
       sorter: (a, b) =>
-        allExperimentExperimentStates.indexOf(a.status.experimentState as never) -
-        allExperimentExperimentStates.indexOf(b.status.experimentState as never),
+        allExperimentExperimentStates.indexOf(a.status?.experimentState as never) -
+        allExperimentExperimentStates.indexOf(b.status?.experimentState as never),
     },
   ];
 

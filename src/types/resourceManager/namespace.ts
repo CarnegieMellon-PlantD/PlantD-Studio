@@ -13,7 +13,7 @@ export type NamespaceStatus = Record<string, never>;
 export type NamespaceDTO = {
   metadata: NamespaceMetadata;
   spec: NamespaceSpec;
-  status: NamespaceStatus;
+  status: NamespaceStatus | undefined;
 };
 
 /** Type definition for the view object of a Namespace */

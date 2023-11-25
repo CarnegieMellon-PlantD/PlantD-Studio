@@ -40,44 +40,44 @@ const PipelineList: React.FC = () => {
       title: t('Status'),
       width: 150,
       render: (text, record) =>
-        record.status.pipelineState == PipelinePipelineState.Initializing ? (
+        record.status?.pipelineState == PipelinePipelineState.Initializing ? (
           <Badge status="warning" text={t('Initializing')} />
-        ) : record.status.pipelineState == PipelinePipelineState.Available ? (
+        ) : record.status?.pipelineState == PipelinePipelineState.Available ? (
           <Badge status="success" text={t('Available')} />
-        ) : record.status.pipelineState == PipelinePipelineState.Engaged ? (
+        ) : record.status?.pipelineState == PipelinePipelineState.Engaged ? (
           <Badge status="processing" text={t('Engaged')} />
         ) : (
-          <Badge status="default" text={record.status.pipelineState ?? '-'} />
+          <Badge status="default" text={record.status?.pipelineState ?? '-'} />
         ),
       filters: [
         { text: t('Initializing'), value: PipelinePipelineState.Initializing },
         { text: t('Available'), value: PipelinePipelineState.Available },
         { text: t('Engaged'), value: PipelinePipelineState.Engaged },
       ],
-      onFilter: (value, record) => record.status.pipelineState === value,
+      onFilter: (value, record) => record.status?.pipelineState === value,
       sorter: (a, b) =>
-        allPipelinePipelineStates.indexOf(a.status.pipelineState as never) -
-        allPipelinePipelineStates.indexOf(b.status.pipelineState as never),
+        allPipelinePipelineStates.indexOf(a.status?.pipelineState as never) -
+        allPipelinePipelineStates.indexOf(b.status?.pipelineState as never),
     },
     {
       title: t('Health Check'),
       width: 150,
       render: (text, record) =>
-        record.status.statusCheck === PipelineStatusCheck.OK ? (
+        record.status?.statusCheck === PipelineStatusCheck.OK ? (
           <Badge status="success" text={t('Succeeded')} />
-        ) : record.status.statusCheck === PipelineStatusCheck.Failed ? (
+        ) : record.status?.statusCheck === PipelineStatusCheck.Failed ? (
           <Badge status="error" text={t('Failed')} />
         ) : (
-          <Badge status="default" text={record.status.statusCheck ?? '-'} />
+          <Badge status="default" text={record.status?.statusCheck ?? '-'} />
         ),
       filters: [
         { text: t('Succeeded'), value: PipelineStatusCheck.OK },
         { text: t('Failed'), value: PipelineStatusCheck.Failed },
       ],
-      onFilter: (value, record) => record.status.statusCheck === value,
+      onFilter: (value, record) => record.status?.statusCheck === value,
       sorter: (a, b) =>
-        allPipelineStatusChecks.indexOf(a.status.statusCheck as never) -
-        allPipelineStatusChecks.indexOf(b.status.statusCheck as never),
+        allPipelineStatusChecks.indexOf(a.status?.statusCheck as never) -
+        allPipelineStatusChecks.indexOf(b.status?.statusCheck as never),
     },
   ];
   return (

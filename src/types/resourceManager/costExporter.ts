@@ -26,7 +26,7 @@ export type CostExporterStatus = {
 export type CostExporterDTO = {
   metadata: CostExporterMetadata;
   spec: CostExporterSpec;
-  status: CostExporterStatus;
+  status: CostExporterStatus | undefined;
 };
 
 /** Type definition for the view object of a CostExporter */

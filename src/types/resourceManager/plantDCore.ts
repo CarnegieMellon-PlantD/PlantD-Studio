@@ -20,7 +20,7 @@ export type PlantDCoreStatus = {
 export type PlantDCoreDTO = {
   metadata: PlantDCoreMetadata;
   spec: PlantDCoreSpec;
-  status: PlantDCoreStatus;
+  status: PlantDCoreStatus | undefined;
 };
 
 /** Type definition for the view object of a PlantDCore */
