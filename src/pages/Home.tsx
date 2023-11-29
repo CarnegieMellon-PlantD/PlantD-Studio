@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { App, Badge, Breadcrumb, Card, Statistic, Table } from 'antd';
 import { useUpdateEffect } from 'usehooks-ts';
 
+import { plantDCoreMetadata } from '@/constants/base';
 import { useListCostExportersQuery } from '@/services/resourceManager/costExporterApi';
 import { useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
 import { useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
@@ -16,11 +17,6 @@ import { useGetPlantDCoreQuery } from '@/services/resourceManager/plantDCoreApi'
 import { useListSchemasQuery } from '@/services/resourceManager/schemaApi';
 import { getClsName } from '@/utils/getClsName';
 import { getErrMsg } from '@/utils/getErrMsg';
-
-const plantDCoreMetadata = {
-  namespace: 'plantd-operator-system',
-  name: 'plantdcore-core',
-};
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
