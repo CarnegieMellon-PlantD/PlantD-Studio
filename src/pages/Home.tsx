@@ -22,11 +22,6 @@ const plantDCoreMetadata = {
   name: 'plantdcore-core',
 };
 
-const isReady = (status: string | undefined): boolean => {
-  const result = status?.match(/^Running \((\d+)\/(\d+)\)$/);
-  return result !== undefined && result !== null && result[1] === result[2];
-};
-
 const Home: React.FC = () => {
   const { t } = useTranslation();
   const { message } = App.useApp();
@@ -111,9 +106,10 @@ const Home: React.FC = () => {
 
   const isAllRunning = useMemo(
     () =>
-      isReady(plantDCore?.status?.kubeProxyStatus) &&
-      isReady(plantDCore?.status?.studioStatus) &&
-      isReady(plantDCore?.status?.prometheusStatus),
+      plantDCore?.status?.kubeProxyReady &&
+      plantDCore?.status?.studioReady &&
+      plantDCore?.status?.prometheusReady &&
+      plantDCore?.status?.redisReady,
     [plantDCore]
   );
 
@@ -129,7 +125,7 @@ const Home: React.FC = () => {
               className={getClsName(isAllRunning ? 'text-green-600' : 'text-orange-600', 'text-8xl')}
             />
             <span className="text-xl">
-              {isAllRunning ? 'Everything is up and running' : 'Some modules are not running as expected'}
+              {isAllRunning ? t('Everything is up and running.') : t('Some modules are not running as expected.')}
             </span>
           </div>
         </Card>
@@ -137,59 +133,64 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-2 gap-1">
             <span className="text-gray-500">PlantD Proxy:</span>
             <Badge
-              status={isReady(plantDCore?.status?.kubeProxyStatus) ? 'success' : 'warning'}
+              status={plantDCore?.status?.kubeProxyReady ? 'success' : 'warning'}
               text={plantDCore?.status?.kubeProxyStatus ?? '-'}
             />
             <span className="text-gray-500">PlantD Studio:</span>
             <Badge
-              status={isReady(plantDCore?.status?.studioStatus) ? 'success' : 'warning'}
+              status={plantDCore?.status?.studioReady ? 'success' : 'warning'}
               text={plantDCore?.status?.studioStatus ?? '-'}
             />
             <span className="text-gray-500">Prometheus:</span>
             <Badge
-              status={isReady(plantDCore?.status?.prometheusStatus) ? 'success' : 'warning'}
+              status={plantDCore?.status?.prometheusReady ? 'success' : 'warning'}
               text={plantDCore?.status?.prometheusStatus ?? '-'}
+            />
+            <span className="text-gray-500">Redis:</span>
+            <Badge
+              status={plantDCore?.status?.redisReady ? 'success' : 'warning'}
+              text={plantDCore?.status?.redisStatus ?? '-'}
             />
           </div>
         </Card>
         <Card bordered={false}>
-          <Statistic title="Namespace" value={namespaces?.length ?? '-'} />
+          <Statistic title={t('Namespace')} value={namespaces?.length ?? '-'} />
         </Card>
         <Card bordered={false}>
-          <Statistic title="Schema" value={schemas?.length ?? '-'} />
+          <Statistic title={t('Schema')} value={schemas?.length ?? '-'} />
         </Card>
         <Card bordered={false}>
-          <Statistic title="DataSet" value={dataSets?.length ?? '-'} />
+          <Statistic title={t('DataSet')} value={dataSets?.length ?? '-'} />
         </Card>
         <Card bordered={false}>
-          <Statistic title="LoadPattern" value={loadPatterns?.length ?? '-'} />
+          <Statistic title={t('LoadPattern')} value={loadPatterns?.length ?? '-'} />
         </Card>
         <Card bordered={false}>
-          <Statistic title="Pipeline" value={pipelines?.length ?? '-'} />
+          <Statistic title={t('Pipeline')} value={pipelines?.length ?? '-'} />
         </Card>
         <Card bordered={false}>
-          <Statistic title="Experiment" value={experiments?.length ?? '-'} />
+          <Statistic title={t('Experiment')} value={experiments?.length ?? '-'} />
         </Card>
         <Card bordered={false}>
-          <Statistic title="CostExporter" value={costExporters?.length ?? '-'} />
+          <Statistic title={t('CostExporter')} value={costExporters?.length ?? '-'} />
         </Card>
-        <Card title="CostExporter Execution Status" className="col-span-2 lg:col-span-4 xl:col-span-6">
+        <Card title={t('CostExporter Statistics')} className="col-span-2 lg:col-span-4 xl:col-span-6">
           <Table
             dataSource={costExporters}
             columns={[
               {
                 key: 'name',
-                title: 'Name',
+                title: t('Name'),
                 render: (_, record) => record.metadata.name ?? '-',
               },
               {
                 key: 'namespace',
-                title: 'Namespace',
+                title: t('Namespace'),
                 render: (_, record) => record.metadata.namespace ?? '-',
               },
               {
                 key: 'lastExecutionTime',
-                title: 'Last Execution Time',
+                title: t('Last Execution Time'),
                 render: (_, record) => record.status?.jobCompletionTime ?? '-',
               },
             ]}

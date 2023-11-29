@@ -11,9 +11,14 @@ export type PlantDCoreSpec = {
 
 /** Type definition for the status of a PlantDCore */
 export type PlantDCoreStatus = {
+  kubeProxyReady?: boolean;
+  studioReady?: boolean;
+  prometheusReady?: boolean;
+  redisReady?: boolean;
   kubeProxyStatus?: string;
   studioStatus?: string;
   prometheusStatus?: string;
+  redisStatus?: string;
 };
 
 /** Type definition for the data transfer object of a PlantDCore */
