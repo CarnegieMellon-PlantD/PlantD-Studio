@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.2.3...v1.3.0) (2023-11-30)
+
+### Features
+
+- **dashboard:** add redis-ts support and cost dashboard ([49d4c92](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/49d4c923f728155061f3d549c6dcf6a27b7ab85f)), closes [#1](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/issues/1)
+- **home:** add redis and i18n ([0f1efe5](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/0f1efe56ff9fd80bb500a476f71573bbf977db3b))
+
 ### [1.2.3](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.2.2...v1.2.3) (2023-11-25)
 
 ### Bug Fixes
