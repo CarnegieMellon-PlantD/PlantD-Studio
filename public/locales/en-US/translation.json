@@ -74,7 +74,7 @@
   "Failed": "Failed",
   "Failed to create {kind} resource: {error}": "Failed to create {kind} resource: {error}",
   "Failed to delete {kind} resource: {error}": "Failed to delete {kind} resource: {error}",
-  "Failed to get Experiment information: {error}": "Failed to get Experiment information: {error}",
+  "Failed to get Experiment resource: {error}": "Failed to get Experiment resource: {error}",
   "Failed to get {kind} resource: {error}": "Failed to get {kind} resource: {error}",
   "Failed to import resources {error}": "Failed to import resources {error}",
   "Failed to list columns in Schema resources: {error}": "Failed to list columns in Schema resources: {error}",

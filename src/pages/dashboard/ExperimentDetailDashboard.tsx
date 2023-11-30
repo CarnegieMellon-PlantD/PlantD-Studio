@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { App } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
-import { useUpdateEffect } from 'usehooks-ts';
+import { useEffectOnce, useUpdateEffect } from 'usehooks-ts';
 
 import Dashboard from '@/components/dashboard/Dashboard';
-import { useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
+import { useLazyGetExperimentQuery } from '@/services/resourceManager/experimentApi';
 import { DashboardProps } from '@/types/dashboard/dashboardProps';
+import { ExperimentExperimentState } from '@/types/resourceManager/experiment';
 import { percentValueFormatter, prefixSuffixValueFormatter } from '@/utils/dashboard/gaugeChartValueFormatters';
 import { getStep } from '@/utils/dashboard/getStep';
 import { getErrMsg } from '@/utils/getErrMsg';
@@ -58,23 +59,30 @@ const ExperimentDetailDashboard: React.FC = () => {
   });
 
   // Automatically set time range based on Experiment's start time
-  const { data, isError, error } = useListExperimentsQuery();
-
+  const [getExperiment, { data, isError, error }] = useLazyGetExperimentQuery();
+  useEffectOnce(() => {
+    getExperiment({
+      metadata: {
+        namespace: params.namespace ?? '',
+        name: params.name ?? '',
+      },
+    });
+  });
   useUpdateEffect(() => {
     if (isError && error !== undefined) {
-      message.error(t('Failed to get Experiment information: {error}', { error: getErrMsg(error) }));
+      message.error(t('Failed to get Experiment resource: {error}', { error: getErrMsg(error) }));
     }
   }, [isError, error]);
-
   useEffect(() => {
     if (data !== undefined) {
-      const experiment = data.find(
-        (experiment) => experiment.metadata.namespace === params.namespace && experiment.metadata.name === params.name
-      );
-      if (experiment?.status?.startTime === undefined) {
+      if (
+        data?.status?.startTime === undefined ||
+        (data?.status?.experimentState !== ExperimentExperimentState.Finished &&
+          data?.status?.experimentState !== ExperimentExperimentState.Error)
+      ) {
         return;
       }
-      const startTime = dayjs(experiment.status.startTime);
+      const startTime = dayjs(data.status.startTime);
       // Since no end time is available, assume the duration of the Experiment to be 2 hour
       setTimeRange([startTime, startTime.add(30, 'minute')]);
     }
