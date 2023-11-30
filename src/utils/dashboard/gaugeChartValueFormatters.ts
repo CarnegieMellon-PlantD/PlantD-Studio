@@ -32,7 +32,7 @@ export const byteSIUnitValueFormatter = (precision: number): GaugeChartValueForm
       return value;
     }
     let idx = 0;
-    while (value > base) {
+    while (value >= base) {
       value /= base;
       idx++;
     }
@@ -48,7 +48,7 @@ export const byteBinUnitValueFormatter = (precision: number): GaugeChartValueFor
       return value;
     }
     let idx = 0;
-    while (value > base) {
+    while (value >= base) {
       value /= base;
       idx++;
     }
