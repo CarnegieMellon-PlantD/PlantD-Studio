@@ -78,6 +78,7 @@
   "Failed to get {kind} resource: {error}": "Failed to get {kind} resource: {error}",
   "Failed to import resources {error}": "Failed to import resources {error}",
   "Failed to list columns in Schema resources: {error}": "Failed to list columns in Schema resources: {error}",
+  "Failed to list endpoints in Pipeline resources: {error}": "Failed to list endpoints in Pipeline resources: {error}",
   "Failed to list {kind} resources: {error}": "Failed to list {kind} resources: {error}",
   "Failed to update {kind} resource: {error}": "Failed to update {kind} resource: {error}",
   "File Format": "File Format",
