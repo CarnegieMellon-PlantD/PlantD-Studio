@@ -9,7 +9,43 @@ import { useUpdateEffect } from 'usehooks-ts';
 import Dashboard from '@/components/dashboard/Dashboard';
 import { useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
 import { DashboardProps } from '@/types/dashboard/dashboardProps';
+import { percentValueFormatter, prefixSuffixValueFormatter } from '@/utils/dashboard/gaugeChartValueFormatters';
+import { getStep } from '@/utils/dashboard/getStep';
 import { getErrMsg } from '@/utils/getErrMsg';
+
+const numSamples = 400;
+const realTimeRange = '30s';
+
+const getRealTimeSuccessRateQuery = (namespace: string, name: string): string => {
+  return `100 * (sum by(span_name) (irate(calls_total{namespace="${namespace}",job="${name}",status_code="STATUS_CODE_UNSET"}[${realTimeRange}])))/(sum by(span_name) (irate(calls_total{namespace="${namespace}",job="${name}"}[${realTimeRange}])))`;
+};
+
+const getAvgSuccessRateQuery = (namespace: string, name: string, startTime: number, endTime: number): string => {
+  const range = `${endTime - startTime}s`;
+  return `(sum by(span_name) (rate(calls_total{namespace="${namespace}",job="${name}",status_code="STATUS_CODE_UNSET"}[${range}])))/(sum by(span_name) (rate(calls_total{namespace="${namespace}",job="${name}"}[${range}])))`;
+};
+
+const getRealTimeThroughput = (namespace: string, name: string): string => {
+  return `sum by(span_name)(irate(calls_total{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${realTimeRange}]))`;
+};
+
+const getAvgThroughput = (namespace: string, name: string, startTime: number, endTime: number): string => {
+  const range = `${endTime - startTime}s`;
+  return `sum by(span_name)(rate(calls_total{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${range}]))`;
+};
+
+const getRealTimeLatency = (namespace: string, name: string): string => {
+  return `sum by(span_name)(irate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${realTimeRange}])) / sum by(span_name)(irate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${realTimeRange}]))`;
+};
+
+const getAvgLatency = (namespace: string, name: string, startTime: number, endTime: number): string => {
+  const range = `${endTime - startTime}s`;
+  return `sum by(span_name)(rate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${range}])) / sum by(span_name)(rate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${range}]))`;
+};
+
+const getCostFilters = (namespace: string, name: string): string[] => {
+  return [`experiment=${namespace}/${name}`];
+};
 
 const ExperimentDetailDashboard: React.FC = () => {
   const params = useParams();
@@ -21,167 +57,12 @@ const ExperimentDetailDashboard: React.FC = () => {
     return [now.add(-1, 'hour'), now];
   });
 
-  const dashboardProps = useMemo<DashboardProps>(
-    () => ({
-      breadcrumbs: [t('Dashboard'), `Experiment Detail Dashboard: ${params.namespace}/${params.name}`],
-      timeRange,
-      setTimeRange,
-      showRefreshIntervalEdit: false,
-      widgets: [
-        {
-          type: 'line',
-          props: {
-            title: 'Realtime Success Rate',
-            width: 4,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `100 * (sum by(span_name) (irate(calls_total{namespace="${params.namespace}",job="${params.name}",status_code="STATUS_CODE_UNSET"}[30s])))/(sum by(span_name) (irate(calls_total{namespace="${params.namespace}",job="${params.name}"}[30s])))`,
-                start: timeRange[0].unix(),
-                end: timeRange[1].unix(),
-                step: Math.floor((timeRange[1].unix() - timeRange[0].unix()) / 400),
-                labelSelector: ['span_name'],
-              },
-            },
-            widget: {
-              xAxisType: 'time',
-              xAxisMin: timeRange[0].unix(),
-              xAxisMax: timeRange[1].unix(),
-              xAxisTitle: 'Time',
-              yAxisTitle: 'Success Rate (%)',
-            },
-          },
-        },
-        {
-          type: 'gauge',
-          props: {
-            title: 'Average Success Rate',
-            width: 2,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `(sum by(span_name) (rate(calls_total{namespace="${params.namespace}",job="${
-                  params.name
-                }",status_code="STATUS_CODE_UNSET"}[${
-                  timeRange[1].unix() - timeRange[0].unix()
-                }s])))/(sum by(span_name) (rate(calls_total{namespace="${params.namespace}",job="${params.name}"}[${
-                  timeRange[1].unix() - timeRange[0].unix()
-                }s])))`,
-                end: timeRange[1].unix(),
-                labelSelector: ['span_name'],
-              },
-            },
-            widget: {
-              type: 'percent',
-              precision: 2,
-            },
-          },
-        },
-        {
-          type: 'line',
-          props: {
-            title: 'Realtime Throughput',
-            width: 4,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `sum by(span_name)(irate(calls_total{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s]))`,
-                start: timeRange[0].unix(),
-                end: timeRange[1].unix(),
-                step: Math.floor((timeRange[1].unix() - timeRange[0].unix()) / 400),
-                labelSelector: ['span_name'],
-              },
-            },
-            widget: {
-              xAxisType: 'time',
-              xAxisMin: timeRange[0].unix(),
-              xAxisMax: timeRange[1].unix(),
-              xAxisTitle: 'Time',
-              yAxisTitle: 'Request / Second',
-            },
-          },
-        },
-        {
-          type: 'gauge',
-          props: {
-            title: 'Average Throughput',
-            width: 2,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `sum by(span_name)(rate(calls_total{status_code="STATUS_CODE_UNSET", job="${
-                  params.name
-                }", namespace="${params.namespace}"}[${timeRange[1].unix() - timeRange[0].unix()}s]))`,
-                end: timeRange[1].unix(),
-                labelSelector: ['span_name'],
-              },
-            },
-            widget: {
-              precision: 2,
-              suffix: ' RPS',
-            },
-          },
-        },
-        {
-          type: 'line',
-          props: {
-            title: 'Realtime Latency',
-            width: 4,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `sum by(span_name)(irate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s])) / sum by(span_name)(irate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${params.name}", namespace="${params.namespace}"}[30s]))`,
-                start: timeRange[0].unix(),
-                end: timeRange[1].unix(),
-                step: Math.floor((timeRange[1].unix() - timeRange[0].unix()) / 200),
-                labelSelector: ['span_name'],
-              },
-            },
-            widget: {
-              xAxisType: 'time',
-              xAxisMin: timeRange[0].unix(),
-              xAxisMax: timeRange[1].unix(),
-              xAxisTitle: 'Time',
-              yAxisTitle: 'Latency (ms)',
-            },
-          },
-        },
-        {
-          type: 'gauge',
-          props: {
-            title: 'Average Latency',
-            width: 2,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `sum by(span_name)(rate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${
-                  params.name
-                }", namespace="${params.namespace}"}[${
-                  timeRange[1].unix() - timeRange[0].unix()
-                }s])) / sum by(span_name)(rate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${
-                  params.name
-                }", namespace="${params.namespace}"}[${timeRange[1].unix() - timeRange[0].unix()}s]))`,
-                end: timeRange[1].unix(),
-                labelSelector: ['span_name'],
-              },
-            },
-            widget: {
-              precision: 2,
-              suffix: ' ms',
-            },
-          },
-        },
-      ],
-    }),
-    [timeRange, params.namespace, params.name]
-  );
-
   // Automatically set time range based on Experiment's start time
   const { data, isError, error } = useListExperimentsQuery();
 
   useUpdateEffect(() => {
     if (isError && error !== undefined) {
-      message.error(`Failed to get Experiment information: ${getErrMsg(error)}`);
+      message.error(t('Failed to get Experiment information: {error}', { error: getErrMsg(error) }));
     }
   }, [isError, error]);
 
@@ -195,9 +76,169 @@ const ExperimentDetailDashboard: React.FC = () => {
       }
       const startTime = dayjs(experiment.status.startTime);
       // Since no end time is available, assume the duration of the Experiment to be 2 hour
-      setTimeRange([startTime, startTime.add(2, 'hour')]);
+      setTimeRange([startTime, startTime.add(30, 'minute')]);
     }
   }, [data, params.namespace, params.name]);
+
+  const dashboardProps = useMemo<DashboardProps>(
+    () => ({
+      breadcrumbs: [
+        t('Dashboard'),
+        t('Experiment Details: {target}', { target: `${params.namespace}/${params.name}` }),
+      ],
+      timeRange,
+      setTimeRange,
+      showRefreshIntervalEdit: false,
+      widgets: [
+        {
+          __type: 'line',
+          title: t('Realtime Success Rate'),
+          gridWidth: 4,
+          request: {
+            __source: 'prometheus',
+            query: getRealTimeSuccessRateQuery(params.namespace ?? '', params.name ?? ''),
+            start: timeRange[0].unix(),
+            end: timeRange[1].unix(),
+            step: getStep(timeRange[0].unix(), timeRange[1].unix(), numSamples),
+            labelSelector: ['span_name'],
+          },
+          display: {
+            height: 250,
+            xAxisType: 'time',
+            xAxisMin: timeRange[0].unix(),
+            xAxisMax: timeRange[1].unix(),
+            xAxisTitle: t('Time'),
+            yAxisMin: 0,
+            yAxisMax: 100,
+            yAxisTitle: t('Success Rate (%)'),
+          },
+        },
+        {
+          __type: 'gauge',
+          title: t('Average Success Rate'),
+          gridWidth: 2,
+          request: {
+            __source: 'prometheus',
+            query: getAvgSuccessRateQuery(
+              params.namespace ?? '',
+              params.name ?? '',
+              timeRange[0].unix(),
+              timeRange[1].unix()
+            ),
+            end: timeRange[1].unix(),
+            labelSelector: ['span_name'],
+          },
+          display: {
+            valueFormatter: percentValueFormatter(2),
+          },
+        },
+        {
+          __type: 'line',
+          title: t('Realtime Throughput'),
+          gridWidth: 4,
+          request: {
+            __source: 'prometheus',
+            query: getRealTimeThroughput(params.namespace ?? '', params.name ?? ''),
+            start: timeRange[0].unix(),
+            end: timeRange[1].unix(),
+            step: getStep(timeRange[0].unix(), timeRange[1].unix(), numSamples),
+            labelSelector: ['span_name'],
+          },
+          display: {
+            height: 250,
+            xAxisType: 'time',
+            xAxisMin: timeRange[0].unix(),
+            xAxisMax: timeRange[1].unix(),
+            xAxisTitle: t('Time'),
+            yAxisTitle: t('Request / Second'),
+          },
+        },
+        {
+          __type: 'gauge',
+          title: t('Average Throughput'),
+          gridWidth: 2,
+          request: {
+            __source: 'prometheus',
+            query: getAvgThroughput(
+              params.namespace ?? '',
+              params.name ?? '',
+              timeRange[0].unix(),
+              timeRange[1].unix()
+            ),
+            end: timeRange[1].unix(),
+            labelSelector: ['span_name'],
+          },
+          display: {
+            valueFormatter: prefixSuffixValueFormatter(2, '', ' RPS'),
+          },
+        },
+        {
+          __type: 'line',
+          title: t('Realtime Latency'),
+          gridWidth: 4,
+          request: {
+            __source: 'prometheus',
+            query: getRealTimeLatency(params.namespace ?? '', params.name ?? ''),
+            start: timeRange[0].unix(),
+            end: timeRange[1].unix(),
+            step: getStep(timeRange[0].unix(), timeRange[1].unix(), numSamples),
+            labelSelector: ['span_name'],
+          },
+          display: {
+            height: 250,
+            xAxisType: 'time',
+            xAxisMin: timeRange[0].unix(),
+            xAxisMax: timeRange[1].unix(),
+            xAxisTitle: t('Time'),
+            yAxisTitle: t('Latency (ms)'),
+          },
+        },
+        {
+          __type: 'gauge',
+          title: t('Average Latency'),
+          gridWidth: 2,
+          request: {
+            __source: 'prometheus',
+            query: getAvgLatency(params.namespace ?? '', params.name ?? '', timeRange[0].unix(), timeRange[1].unix()),
+            end: timeRange[1].unix(),
+            labelSelector: ['span_name'],
+          },
+          display: {
+            valueFormatter: prefixSuffixValueFormatter(2, '', ' ms'),
+          },
+        },
+        {
+          __type: 'bar',
+          title: t('Cost'),
+          gridWidth: 4,
+          request: {
+            __source: 'redis-ts',
+            filters: getCostFilters(params.namespace ?? '', params.name ?? ''),
+            labelSelector: ['resource'],
+          },
+          display: {
+            height: 400,
+            xAxisTitle: t('Cost ($)'),
+          },
+        },
+        {
+          __type: 'gauge',
+          title: t('Cost'),
+          gridWidth: 2,
+          request: {
+            __source: 'redis-ts',
+            filters: getCostFilters(params.namespace ?? '', params.name ?? ''),
+            labelSelector: ['resource'],
+          },
+          display: {
+            height: 400,
+            valueFormatter: prefixSuffixValueFormatter(4, '$', ''),
+          },
+        },
+      ],
+    }),
+    [timeRange, params.namespace, params.name]
+  );
 
   return <Dashboard {...dashboardProps} />;
 };

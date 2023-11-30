@@ -1,13 +1,22 @@
 import * as React from 'react';
 import { Dayjs } from 'dayjs';
 
-import { GaugeChartProps, LineChartProps, PieChartProps, ScatterChartProps } from '@/types/dashboard/widgetProps';
+import {
+  AreaChartProps,
+  BarChartProps,
+  GaugeChartProps,
+  LineChartProps,
+  PieChartProps,
+  ScatterChartProps,
+} from '@/types/dashboard/widgetProps';
 
 type WidgetManifest =
-  | { type: 'line'; props: LineChartProps }
-  | { type: 'scatter'; props: ScatterChartProps }
-  | { type: 'gauge'; props: GaugeChartProps }
-  | { type: 'pie'; props: PieChartProps };
+  | ({ __type: 'gauge' } & GaugeChartProps)
+  | ({ __type: 'pie' } & PieChartProps)
+  | ({ __type: 'bar' } & BarChartProps)
+  | ({ __type: 'line' } & LineChartProps)
+  | ({ __type: 'area' } & AreaChartProps)
+  | ({ __type: 'scatter' } & ScatterChartProps);
 
 export interface DashboardProps {
   breadcrumbs?: React.ReactNode[];

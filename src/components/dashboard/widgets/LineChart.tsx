@@ -1,17 +1,23 @@
 import * as React from 'react';
 import { useContext, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Line, LineConfig } from '@ant-design/plots';
-import { Card } from 'antd';
+import { Badge, Card, Tooltip } from 'antd';
 import dayjs from 'dayjs';
+import { useDarkMode } from 'usehooks-ts';
 
 import DashboardContext from '@/components/dashboard/DashboardContext';
+import { longDateTimeFormat, shortDateTimeFormat } from '@/constants/dashboards';
 import { useGetTriChannelDataQuery } from '@/services/dashboard/dataApi';
 import { LineChartProps } from '@/types/dashboard/widgetProps';
 import { getWidgetClsName } from '@/utils/dashboard/getWidgetClsName';
+import { getErrMsg } from '@/utils/getErrMsg';
 
-const LineChart: React.FC<LineChartProps> = ({ width, height, title, dataRequest, widget }) => {
+const LineChart: React.FC<LineChartProps> = ({ request, display, ...props }) => {
+  const { t } = useTranslation();
+  const { isDarkMode } = useDarkMode();
   const { dataGeneration } = useContext(DashboardContext);
-  const { data, refetch } = useGetTriChannelDataQuery(dataRequest);
+  const { data, error, isSuccess, isError, isFetching, refetch } = useGetTriChannelDataQuery(request);
 
   useEffect(() => {
     refetch();
@@ -19,42 +25,84 @@ const LineChart: React.FC<LineChartProps> = ({ width, height, title, dataRequest
 
   const config = useMemo<LineConfig>(
     () => ({
+      theme: isDarkMode ? 'dark' : 'light',
       data: data ?? [],
       xField: 'x',
       yField: 'y',
       seriesField: 'series',
-      padding: 'auto',
+      width: display.width,
+      height: display.height,
       meta: {
         x: {
           type: 'linear',
           formatter:
-            widget.xAxisType === 'time' ? (value) => dayjs.unix(value).format('YYYY-MM-DD HH:mm:ss') : undefined,
+            display.xAxisType === 'time' ? (value) => dayjs.unix(value).format(shortDateTimeFormat) : undefined,
         },
       },
       xAxis: {
-        min: widget.xAxisMin,
-        max: widget.xAxisMax,
+        min: display.xAxisMin,
+        max: display.xAxisMax,
         title: {
-          text: widget.xAxisTitle ?? '',
+          text: display.xAxisTitle ?? '',
+        },
+        grid: {
+          line: {
+            style: {
+              stroke: '#a8a8a8',
+            },
+          },
         },
       },
       yAxis: {
+        min: display.yAxisMin,
+        max: display.yAxisMax,
         title: {
-          text: widget.yAxisTitle ?? '',
+          text: display.yAxisTitle ?? '',
+        },
+        grid: {
+          line: {
+            style: {
+              stroke: '#a8a8a8',
+            },
+          },
         },
       },
+      tooltip: {
+        title: (t, d) => (display.xAxisType === 'time' ? dayjs.unix(d.x).format(longDateTimeFormat) : t),
+      },
       legend: {
-        position: 'top',
+        position: 'bottom',
       },
       animation: false,
       connectNulls: false,
     }),
-    [data, widget.xAxisType, widget.xAxisMin, widget.xAxisMax]
+    [isDarkMode, data, display]
   );
 
   return (
-    <Card title={title} className={getWidgetClsName(width ?? 1, height ?? 1)}>
-      <Line {...config} />
+    <Card
+      title={props.title}
+      extra={
+        isFetching ? (
+          <Badge status="processing" />
+        ) : isSuccess ? (
+          <Badge status="success" />
+        ) : isError ? (
+          <Tooltip title={getErrMsg(error)}>
+            <Badge status="error" />
+          </Tooltip>
+        ) : null
+      }
+      size="small"
+      bordered={false}
+      bodyStyle={{ padding: '10px 5px 0 5px' }}
+      className={getWidgetClsName(props.gridWidth ?? 1, props.gridHeight ?? 1)}
+    >
+      {data !== undefined && data.length > 0 ? (
+        <Line {...config} />
+      ) : (
+        <div className="text-center text-xl text-gray-400 dark:text-gray-500 py-7">{t('NO DATA')}</div>
+      )}
     </Card>
   );
 };

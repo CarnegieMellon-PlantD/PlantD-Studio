@@ -8,6 +8,8 @@ import { RangePickerProps } from 'antd/es/date-picker';
 import dayjs, { Dayjs } from 'dayjs';
 
 import DashboardContext from '@/components/dashboard/DashboardContext';
+import AreaChart from '@/components/dashboard/widgets/AreaChart';
+import BarChart from '@/components/dashboard/widgets/BarChart';
 import GaugeChart from '@/components/dashboard/widgets/GaugeChart';
 import LineChart from '@/components/dashboard/widgets/LineChart';
 import PieChart from '@/components/dashboard/widgets/PieChart';
@@ -134,15 +136,19 @@ const Dashboard: React.FC<DashboardProps> = ({
       )}
       <DashboardContext.Provider value={{ dataGeneration }}>
         <div className="grid gap-4 grid-cols-2 lg:grid-cols-6">
-          {widgets.map(({ type, props }, index) =>
-            type === 'line' ? (
-              <LineChart key={index} {...props} />
-            ) : type === 'scatter' ? (
-              <ScatterChart key={index} {...props} />
-            ) : type === 'gauge' ? (
-              <GaugeChart key={index} {...props} />
-            ) : type === 'pie' ? (
-              <PieChart key={index} {...props} />
+          {widgets.map((widget, index) =>
+            widget.__type === 'gauge' ? (
+              <GaugeChart key={index} {...widget} />
+            ) : widget.__type === 'pie' ? (
+              <PieChart key={index} {...widget} />
+            ) : widget.__type === 'bar' ? (
+              <BarChart key={index} {...widget} />
+            ) : widget.__type === 'line' ? (
+              <LineChart key={index} {...widget} />
+            ) : widget.__type === 'area' ? (
+              <AreaChart key={index} {...widget} />
+            ) : widget.__type === 'scatter' ? (
+              <ScatterChart key={index} {...widget} />
             ) : null
           )}
         </div>

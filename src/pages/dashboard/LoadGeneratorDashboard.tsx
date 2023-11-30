@@ -1,163 +1,182 @@
 import * as React from 'react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
+import { App } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
+import { useUpdateEffect } from 'usehooks-ts';
 
 import Dashboard from '@/components/dashboard/Dashboard';
+import { useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
 import { DashboardProps } from '@/types/dashboard/dashboardProps';
+import { ExperimentExperimentState } from '@/types/resourceManager/experiment';
+import { byteBinUnitValueFormatter, prefixSuffixValueFormatter } from '@/utils/dashboard/gaugeChartValueFormatters';
+import { getStep } from '@/utils/dashboard/getStep';
+import { getErrMsg } from '@/utils/getErrMsg';
+
+const numSamples = 600;
+const realTimeRange = '1m';
+
+const getTotalRequestQuery = (namespace: string, name: string): string => {
+  return `sum by(endpoint) (k6_http_reqs_total{experiment="${namespace}/${name}"})`;
+};
+
+const getHTTPFailureQuery = (namespace: string, name: string): string => {
+  return `sum by(endpoint) (k6_http_reqs_total{experiment="${namespace}/${name}", expected_response="false"})`;
+};
+
+const getPeakRPSQuery = (namespace: string, name: string): string => {
+  return `avg by(endpoint) (deriv(k6_http_reqs_total{experiment="${namespace}/${name}"}[${realTimeRange}]))`;
+};
+
+const getP99ResponseTimeQuery = (namespace: string, name: string): string => {
+  return `avg by(endpoint) (k6_http_req_waiting_p99{experiment="${namespace}/${name}"})`;
+};
+
+const getDataReceivedQuery = (namespace: string, name: string): string => {
+  return `sum by(endpoint) (k6_data_received_total{experiment="${namespace}/${name}"})`;
+};
+
+const getDataSentQuery = (namespace: string, name: string): string => {
+  return `sum by(endpoint) (k6_data_sent_total{experiment="${namespace}/${name}"})`;
+};
 
 const LoadGeneratorDashboard: React.FC = () => {
   const params = useParams();
+  const { message } = App.useApp();
   const { t } = useTranslation();
 
   const [timeRange, setTimeRange] = useState<[Dayjs, Dayjs]>(() => {
     const now = dayjs();
-    return [now.add(-2, 'hour'), now];
+    return [now.add(-1, 'hour'), now];
   });
+
+  // Automatically set time range based on Experiment's start time
+  const { data, isError, error } = useListExperimentsQuery();
+
+  useUpdateEffect(() => {
+    if (isError && error !== undefined) {
+      message.error(t('Failed to get Experiment information: {error}', { error: getErrMsg(error) }));
+    }
+  }, [isError, error]);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      const experiment = data.find(
+        (experiment) => experiment.metadata.namespace === params.namespace && experiment.metadata.name === params.name
+      );
+      if (
+        experiment?.status?.startTime === undefined ||
+        (experiment?.status?.experimentState !== ExperimentExperimentState.Finished &&
+          experiment?.status?.experimentState !== ExperimentExperimentState.Error)
+      ) {
+        return;
+      }
+      const startTime = dayjs(experiment.status.startTime);
+      // Since no end time is available, assume the duration of the Experiment to be 2 hour
+      setTimeRange([startTime, startTime.add(30, 'minute')]);
+    }
+  }, [data, params.namespace, params.name]);
 
   const dashboardProps = useMemo<DashboardProps>(
     () => ({
-      breadcrumbs: [t('Dashboard'), `Load Generator Dashboard: ${params.namespace}/${params.name}`],
+      breadcrumbs: [t('Dashboard'), t('Load Generator: {target}', { target: `${params.namespace}/${params.name}` })],
       timeRange,
       setTimeRange,
-      defaultRefreshInterval: 2,
       widgets: [
         {
-          type: 'gauge',
-          props: {
-            title: 'Request Made',
-            width: 1,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `sum by(endpoint)(k6_http_reqs_total{experiment="${params.namespace}/${params.name}"})`,
-                end: timeRange[1].unix(),
-                labelSelector: ['endpoint'],
-              },
-            },
-            widget: {
-              type: 'default',
-            },
+          __type: 'gauge',
+          title: t('Total Request'),
+          request: {
+            __source: 'prometheus',
+            query: getTotalRequestQuery(params.namespace ?? '', params.name ?? ''),
+            end: timeRange[1].unix(),
+            labelSelector: ['endpoint'],
+          },
+          display: {},
+        },
+        {
+          __type: 'gauge',
+          title: t('HTTP Failure'),
+          request: {
+            __source: 'prometheus',
+            query: getHTTPFailureQuery(params.namespace ?? '', params.name ?? ''),
+            end: timeRange[1].unix(),
+            labelSelector: ['endpoint'],
+          },
+          display: {},
+        },
+        {
+          __type: 'gauge',
+          title: t('Peak RPS'),
+          request: {
+            __source: 'prometheus',
+            query: getPeakRPSQuery(params.namespace ?? '', params.name ?? ''),
+            end: timeRange[1].unix(),
+            labelSelector: ['endpoint'],
+          },
+          display: {
+            valueFormatter: prefixSuffixValueFormatter(2, '', ''),
           },
         },
         {
-          type: 'gauge',
-          props: {
-            title: 'HTTP Failures',
-            width: 1,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `sum by(endpoint)(k6_http_reqs_total{experiment="${params.namespace}/${params.name}", expected_response="false"})`,
-                end: timeRange[1].unix(),
-                labelSelector: ['endpoint'],
-              },
-            },
-            widget: {
-              type: 'default',
-            },
+          __type: 'gauge',
+          title: t('P99 Response Time'),
+          request: {
+            __source: 'prometheus',
+            query: getP99ResponseTimeQuery(params.namespace ?? '', params.name ?? ''),
+            end: timeRange[1].unix(),
+            labelSelector: ['endpoint'],
+          },
+          display: {
+            valueFormatter: prefixSuffixValueFormatter(2, '', ' ms'),
           },
         },
         {
-          type: 'gauge',
-          props: {
-            title: 'Peak RPS',
-            width: 1,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `sum by(endpoint)(deriv(k6_http_reqs_total{experiment="${params.namespace}/${params.name}"}[1m]))`,
-                end: timeRange[1].unix(),
-                labelSelector: ['endpoint'],
-              },
-            },
-            widget: {
-              type: 'default',
-              suffix: ' RPS',
-            },
+          __type: 'gauge',
+          title: t('Data Received'),
+          request: {
+            __source: 'prometheus',
+            query: getDataReceivedQuery(params.namespace ?? '', params.name ?? ''),
+            end: timeRange[1].unix(),
+            labelSelector: ['endpoint'],
+          },
+          display: {
+            valueFormatter: byteBinUnitValueFormatter(2),
           },
         },
         {
-          type: 'gauge',
-          props: {
-            title: 'P99 Response Time',
-            width: 1,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `k6_http_req_waiting_p99{experiment="${params.namespace}/${params.name}"}`,
-                end: timeRange[1].unix(),
-                labelSelector: ['endpoint'],
-              },
-            },
-            widget: {
-              type: 'default',
-              precision: 5,
-              suffix: ' ms',
-            },
+          __type: 'gauge',
+          title: t('Data Sent'),
+          request: {
+            __source: 'prometheus',
+            query: getDataSentQuery(params.namespace ?? '', params.name ?? ''),
+            end: timeRange[1].unix(),
+            labelSelector: ['endpoint'],
+          },
+          display: {
+            valueFormatter: byteBinUnitValueFormatter(2),
           },
         },
         {
-          type: 'gauge',
-          props: {
-            title: 'Data Received',
-            width: 1,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `k6_data_received_total{experiment="${params.namespace}/${params.name}"}`,
-                end: timeRange[1].unix(),
-                labelSelector: ['endpoint'],
-              },
-            },
-            widget: {
-              type: 'byte',
-              precision: 2,
-            },
+          __type: 'line',
+          title: t('Requests'),
+          gridWidth: 6,
+          request: {
+            __source: 'prometheus',
+            query: `sum by(endpoint)(irate(k6_http_reqs_total{experiment="${params.namespace}/${params.name}"}[30s]))`,
+            start: timeRange[0].unix(),
+            end: timeRange[1].unix(),
+            step: getStep(timeRange[0].unix(), timeRange[1].unix(), numSamples),
+            labelSelector: ['endpoint'],
           },
-        },
-        {
-          type: 'gauge',
-          props: {
-            title: 'Data Sent',
-            width: 1,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `k6_data_sent_total{experiment="${params.namespace}/${params.name}"}`,
-                end: timeRange[1].unix(),
-                labelSelector: ['endpoint'],
-              },
-            },
-            widget: {
-              type: 'byte',
-              precision: 2,
-            },
-          },
-        },
-        {
-          type: 'line',
-          props: {
-            title: 'Requests',
-            width: 6,
-            dataRequest: {
-              source: 'prometheus',
-              params: {
-                query: `sum by(endpoint)(irate(k6_http_reqs_total{experiment="${params.namespace}/${params.name}"}[30s]))`,
-                start: timeRange[0].unix(),
-                end: timeRange[1].unix(),
-                step: Math.floor((timeRange[1].unix() - timeRange[0].unix()) / 1000),
-                labelSelector: ['endpoint'],
-              },
-            },
-            widget: {
-              xAxisType: 'time',
-              xAxisMin: timeRange[0].unix(),
-              xAxisMax: timeRange[1].unix(),
-              xAxisTitle: 'Time',
-              yAxisTitle: 'Request / Second',
-            },
+          display: {
+            height: 600,
+            xAxisType: 'time',
+            xAxisMin: timeRange[0].unix(),
+            xAxisMax: timeRange[1].unix(),
+            xAxisTitle: t('Time'),
+            yAxisTitle: t('Request / Second'),
           },
         },
       ],

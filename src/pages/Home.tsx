@@ -170,7 +170,7 @@ const Home: React.FC = () => {
         <Card bordered={false}>
           <Statistic title={t('CostExporter')} value={costExporters?.length ?? '-'} />
         </Card>
-        <Card title={t('CostExporter Statistics')} className="col-span-2 lg:col-span-4 xl:col-span-6">
+        <Card title={t('CostExporter Statistics')} bordered={false} className="col-span-2 lg:col-span-4 xl:col-span-6">
           <Table
             dataSource={costExporters}
             columns={[

@@ -212,9 +212,9 @@ export const useResourceEditor = <VO, DTO_R, DTO_W, DTO_L>({
               t('Create')
             : isCloneMode
             ? // isCloneMode
-              t('Clone', { target: `${params.namespace}/${params.name}` })
+              t('Clone: {target}', { target: `${params.namespace}/${params.name}` })
             : // isEditMode
-              t('Edit', { target: `${params.namespace}/${params.name}` }),
+              t('Edit: {target}', { target: `${params.namespace}/${params.name}` }),
         },
       ]}
     />
