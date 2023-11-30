@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { useContext, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Badge, Card, Statistic, Tooltip } from 'antd';
 
 import DashboardContext from '@/components/dashboard/DashboardContext';
+import { NoData } from '@/components/dashboard/widgets/NoData';
 import { useGetBiChannelDataQuery } from '@/services/dashboard/dataApi';
 import { GaugeChartProps } from '@/types/dashboard/widgetProps';
 import { getWidgetClsName } from '@/utils/dashboard/getWidgetClsName';
 import { getErrMsg } from '@/utils/getErrMsg';
 
 const GaugeChart: React.FC<GaugeChartProps> = ({ request, display, ...props }) => {
-  const { t } = useTranslation();
   const { dataGeneration } = useContext(DashboardContext);
   const { data, error, isSuccess, isError, isFetching, refetch } = useGetBiChannelDataQuery(request);
 
@@ -54,8 +53,9 @@ const GaugeChart: React.FC<GaugeChartProps> = ({ request, display, ...props }) =
             </div>
           </div>
         ) : (
-          <div style={{ padding: '10px 5px 0 5px' }}>
-            <div className="text-center text-xl text-gray-400 dark:text-gray-500 py-7">{t('NO DATA')}</div>
+          // Re-creating padding environment of <Card> body, because we disable it before
+          <div style={{ padding: '5px' }}>
+            <NoData />
           </div>
         ))}
     </Card>

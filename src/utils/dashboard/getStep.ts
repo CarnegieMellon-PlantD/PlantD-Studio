@@ -1,3 +1,3 @@
 export const getStep = (startTime: number, endTime: number, numSamples: number): number => {
-  return Math.floor((endTime - startTime) / numSamples);
+  return Math.max(Math.floor((endTime - startTime) / numSamples), 1);
 };

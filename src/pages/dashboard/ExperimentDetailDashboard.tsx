@@ -26,21 +26,21 @@ const getAvgSuccessRateQuery = (namespace: string, name: string, startTime: numb
 };
 
 const getRealTimeThroughput = (namespace: string, name: string): string => {
-  return `sum by(span_name)(irate(calls_total{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${realTimeRange}]))`;
+  return `sum by(span_name) (irate(calls_total{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${realTimeRange}]))`;
 };
 
 const getAvgThroughput = (namespace: string, name: string, startTime: number, endTime: number): string => {
   const range = `${endTime - startTime}s`;
-  return `sum by(span_name)(rate(calls_total{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${range}]))`;
+  return `sum by(span_name) (rate(calls_total{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${range}]))`;
 };
 
 const getRealTimeLatency = (namespace: string, name: string): string => {
-  return `sum by(span_name)(irate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${realTimeRange}])) / sum by(span_name)(irate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${realTimeRange}]))`;
+  return `sum by(span_name) (irate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${realTimeRange}])) / sum by(span_name)(irate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${realTimeRange}]))`;
 };
 
 const getAvgLatency = (namespace: string, name: string, startTime: number, endTime: number): string => {
   const range = `${endTime - startTime}s`;
-  return `sum by(span_name)(rate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${range}])) / sum by(span_name)(rate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${range}]))`;
+  return `sum by(span_name) (rate(duration_milliseconds_sum{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${range}])) / sum by(span_name)(rate(duration_milliseconds_count{status_code="STATUS_CODE_UNSET", job="${name}", namespace="${namespace}"}[${range}]))`;
 };
 
 const getCostFilters = (namespace: string, name: string): string[] => {
