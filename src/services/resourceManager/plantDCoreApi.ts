@@ -24,4 +24,4 @@ const plantDCoreApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetPlantDCoreQuery, useUpdatePlantDCoreMutation } = plantDCoreApi;
+export const { useGetPlantDCoreQuery, useLazyGetPlantDCoreQuery, useUpdatePlantDCoreMutation } = plantDCoreApi;

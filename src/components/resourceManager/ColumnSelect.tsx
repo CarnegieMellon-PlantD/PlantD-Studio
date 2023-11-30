@@ -9,7 +9,7 @@ import { SchemaVO } from '@/types/resourceManager/schema';
 import { getErrMsg } from '@/utils/getErrMsg';
 
 interface ColumnSelectProps extends Omit<SelectProps, 'showSearch' | 'loading' | 'options'> {
-  /** Namespace of the Current Schema */
+  /** Namespace of the current Schema */
   schemaNamespace: SchemaVO['namespace'];
   /** Name of the current Schema */
   schemaName: SchemaVO['name'];
@@ -54,7 +54,7 @@ const ColumnSelect: React.FC<ColumnSelectProps> = ({
 
   // Show error message if failed to list resources
   useUpdateEffect(() => {
-    if (isError) {
+    if (isError && error !== undefined) {
       message.error(t('Failed to list columns in Schema resources: {error}', { error: getErrMsg(error) }));
     }
   }, [isError, error]);

@@ -7,6 +7,7 @@ import { Button, Card, Form, Input, Radio, Spin } from 'antd';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
 import DateTimePicker from '@/components/resourceManager/DateTimePicker';
+import EndpointSelect from '@/components/resourceManager/EndpointSelect';
 import { formStyle } from '@/constants/formStyles';
 import { rfc1123RegExp } from '@/constants/regExps';
 import { getDefaultExperimentForm } from '@/constants/resourceManager/defaultForm/experiment';
@@ -133,11 +134,31 @@ const ExperimentEditor: React.FC = () => {
                         <Form.Item className="w-full mb-2">
                           <Card>
                             <Form.Item
-                              name={[loadPatternIdx, 'endpointName']}
-                              label={t('Endpoint Name')}
-                              rules={[{ required: true, message: t('Endpoint name is required') }]}
+                              noStyle
+                              shouldUpdate={(prev: ExperimentVO, next: ExperimentVO) =>
+                                prev.pipelineRef.namespace !== next.pipelineRef.namespace ||
+                                prev.pipelineRef.name !== next.pipelineRef.name
+                              }
                             >
-                              <Input />
+                              {() => (
+                                <Form.Item
+                                  name={[loadPatternIdx, 'endpointName']}
+                                  label={t('Endpoint Name')}
+                                  rules={[{ required: true, message: t('Endpoint name is required') }]}
+                                >
+                                  <EndpointSelect
+                                    pipelineNamespace={
+                                      form.getFieldValue([
+                                        'pipelineRef',
+                                        'namespace',
+                                      ]) as ExperimentVO['pipelineRef']['namespace']
+                                    }
+                                    pipelineName={
+                                      form.getFieldValue(['pipelineRef', 'name']) as ExperimentVO['pipelineRef']['name']
+                                    }
+                                  />
+                                </Form.Item>
+                              )}
                             </Form.Item>
                             <Form.Item className="mb-0" label={t('LoadPattern')} required>
                               <div className="flex gap-1">

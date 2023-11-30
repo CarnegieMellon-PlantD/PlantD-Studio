@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { App } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
-import { useEffectOnce, useUpdateEffect } from 'usehooks-ts';
+import { useUpdateEffect } from 'usehooks-ts';
 
 import Dashboard from '@/components/dashboard/Dashboard';
-import { useLazyGetExperimentQuery } from '@/services/resourceManager/experimentApi';
+import { useGetExperimentQuery } from '@/services/resourceManager/experimentApi';
 import { DashboardProps } from '@/types/dashboard/dashboardProps';
 import { ExperimentExperimentState } from '@/types/resourceManager/experiment';
 import { percentValueFormatter, prefixSuffixValueFormatter } from '@/utils/dashboard/gaugeChartValueFormatters';
@@ -59,14 +59,11 @@ const ExperimentDetailDashboard: React.FC = () => {
   });
 
   // Automatically set time range based on Experiment's start time
-  const [getExperiment, { data, isError, error }] = useLazyGetExperimentQuery();
-  useEffectOnce(() => {
-    getExperiment({
-      metadata: {
-        namespace: params.namespace ?? '',
-        name: params.name ?? '',
-      },
-    });
+  const { data, isError, error } = useGetExperimentQuery({
+    metadata: {
+      namespace: params.namespace ?? '',
+      name: params.name ?? '',
+    },
   });
   useUpdateEffect(() => {
     if (isError && error !== undefined) {

@@ -52,6 +52,7 @@ const dataSetApi = baseApi.injectEndpoints({
 
 export const {
   useListDataSetsQuery,
+  useGetDataSetQuery,
   useLazyGetDataSetQuery,
   useCreateDataSetMutation,
   useUpdateDataSetMutation,

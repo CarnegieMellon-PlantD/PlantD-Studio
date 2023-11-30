@@ -52,6 +52,7 @@ const experimentApi = baseApi.injectEndpoints({
 
 export const {
   useListExperimentsQuery,
+  useGetExperimentQuery,
   useLazyGetExperimentQuery,
   useCreateExperimentMutation,
   useUpdateExperimentMutation,

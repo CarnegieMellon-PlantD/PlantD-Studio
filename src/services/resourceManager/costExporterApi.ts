@@ -52,6 +52,7 @@ const costExporterApi = baseApi.injectEndpoints({
 
 export const {
   useListCostExportersQuery,
+  useGetCostExporterQuery,
   useLazyGetCostExporterQuery,
   useCreateCostExporterMutation,
   useUpdateCostExporterMutation,

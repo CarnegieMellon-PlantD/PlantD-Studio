@@ -52,6 +52,7 @@ const pipelineApi = baseApi.injectEndpoints({
 
 export const {
   useListPipelinesQuery,
+  useGetPipelineQuery,
   useLazyGetPipelineQuery,
   useCreatePipelineMutation,
   useUpdatePipelineMutation,

@@ -52,6 +52,7 @@ const schemaApi = baseApi.injectEndpoints({
 
 export const {
   useListSchemasQuery,
+  useGetSchemaQuery,
   useLazyGetSchemaQuery,
   useCreateSchemaMutation,
   useUpdateSchemaMutation,

@@ -52,6 +52,7 @@ const loadPatternApi = baseApi.injectEndpoints({
 
 export const {
   useListLoadPatternsQuery,
+  useGetLoadPatternQuery,
   useLazyGetLoadPatternQuery,
   useCreateLoadPatternMutation,
   useUpdateLoadPatternMutation,
