@@ -47,7 +47,6 @@ const GaugeChart: React.FC<GaugeChartProps> = ({ request, display, ...props }) =
                   title={display.titleFormatter === undefined ? series : display.titleFormatter(series)}
                   value={y ?? '-'}
                   formatter={display.valueFormatter}
-                  valueStyle={display.valueStyle?.(y)}
                 />
               ))}
             </div>

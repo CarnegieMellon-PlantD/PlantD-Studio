@@ -48,8 +48,9 @@ const LoadGeneratorDashboard: React.FC = () => {
 
   const [timeRange, setTimeRange] = useState<[Dayjs, Dayjs]>(() => {
     const now = dayjs();
-    return [now.add(-1, 'hour'), now];
+    return [now.add(-30, 'minute'), now];
   });
+  const [refreshInterval, setRefreshInterval] = useState(5);
 
   // Automatically set time range based on Experiment's start time
   const { data, isError, error } = useGetExperimentQuery({
@@ -73,8 +74,9 @@ const LoadGeneratorDashboard: React.FC = () => {
         return;
       }
       const startTime = dayjs(data.status.startTime);
-      // Since no end time is available, assume the duration of the Experiment to be 2 hour
+      // Since no end time is available, assume the duration of the Experiment to be 30 minutes
       setTimeRange([startTime, startTime.add(30, 'minute')]);
+      setRefreshInterval(0);
     }
   }, [data, params.namespace, params.name]);
 
@@ -83,6 +85,9 @@ const LoadGeneratorDashboard: React.FC = () => {
       breadcrumbs: [t('Dashboard'), t('Load Generator: {target}', { target: `${params.namespace}/${params.name}` })],
       timeRange,
       setTimeRange,
+      refreshInterval,
+      setRefreshInterval,
+      refreshButtonResetTime: 'auto-refresh-only',
       widgets: [
         {
           __type: 'gauge',
@@ -181,7 +186,7 @@ const LoadGeneratorDashboard: React.FC = () => {
         },
       ],
     }),
-    [timeRange, params.namespace, params.name]
+    [timeRange, refreshInterval, params.namespace, params.name]
   );
 
   return <Dashboard {...dashboardProps} />;

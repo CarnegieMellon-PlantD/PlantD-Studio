@@ -15,6 +15,7 @@ import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi'
 import { useListPipelinesQuery } from '@/services/resourceManager/pipelineApi';
 import { useGetPlantDCoreQuery } from '@/services/resourceManager/plantDCoreApi';
 import { useListSchemasQuery } from '@/services/resourceManager/schemaApi';
+import { concatInPath } from '@/utils/concatInPath';
 import { getClsName } from '@/utils/getClsName';
 import { getErrMsg } from '@/utils/getErrMsg';
 
@@ -173,6 +174,7 @@ const Home: React.FC = () => {
         <Card title={t('CostExporter Statistics')} bordered={false} className="col-span-2 lg:col-span-4 xl:col-span-6">
           <Table
             dataSource={costExporters}
+            rowKey={(record) => concatInPath(record.metadata.namespace, record.metadata.name)}
             columns={[
               {
                 key: 'name',

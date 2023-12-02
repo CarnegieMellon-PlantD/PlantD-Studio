@@ -108,6 +108,7 @@
   "Key is required": "Key is required",
   "Kind": "Kind",
   "Last Execution Time": "Last Execution Time",
+  "Last {value, plural, one {# day} other {# days}}": "Last {value, plural, one {# day} other {# days}}",
   "Last {value, plural, one {# hour} other {# hours}}": "Last {value, plural, one {# hour} other {# hours}}",
   "Last {value, plural, one {# minute} other {# minutes}}": "Last {value, plural, one {# minute} other {# minutes}}",
   "Latency (ms)": "Latency (ms)",
