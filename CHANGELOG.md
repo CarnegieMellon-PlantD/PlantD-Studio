@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.3.0...v1.3.1) (2023-12-02)
+
+### Features
+
+- **dashboard:** automatically determine time range and refresh interval ([e90d08c](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/e90d08cd420fc6b54fdb34a61494c12b931114aa))
+- **experiment-editor:** add endpoint select ([ac8e01c](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/ac8e01ca02410d64bea28d0ce8cbec5073917c04))
+
+### Bug Fixes
+
+- **dashboard:** use get api to fetch experiment info ([9eaa095](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/9eaa095f0c19304ad8c5e91567f54e608d1afafb))
+
 ## [1.3.0](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.2.3...v1.3.0) (2023-11-30)
 
 ### Features
