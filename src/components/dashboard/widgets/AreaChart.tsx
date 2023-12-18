@@ -7,7 +7,7 @@ import { useDarkMode } from 'usehooks-ts';
 
 import DashboardContext from '@/components/dashboard/DashboardContext';
 import { NoData } from '@/components/dashboard/widgets/NoData';
-import { longDateTimeFormat, shortDateTimeFormat } from '@/constants/dashboards';
+import { longDateTimeFormat, shortDateTimeFormat } from '@/constants/dashboard';
 import { useGetTriChannelDataQuery } from '@/services/dashboard/dataApi';
 import { AreaChartProps } from '@/types/dashboard/widgetProps';
 import { getWidgetClsName } from '@/utils/dashboard/getWidgetClsName';

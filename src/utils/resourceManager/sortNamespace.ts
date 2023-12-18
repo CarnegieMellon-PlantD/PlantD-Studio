@@ -1,4 +1,4 @@
-import { defaultNamespace } from '@/constants/base';
+import { defaultNamespace } from '@/constants/resourceManager';
 
 /**
  * Sort the Namespaces

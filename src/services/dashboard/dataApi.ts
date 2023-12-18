@@ -1,10 +1,20 @@
-import { dataBasePath } from '@/constants/base';
+import { dataBasePath } from '@/constants';
 import { baseApi } from '@/services/baseApi';
-import { BiChannelDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
+import { BiChannelDataRequest, RedisRawDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
 import { BiChannelData, TriChannelData } from '@/types/dashboard/dataResponses';
 
 const dataSetApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
+    getRedisRawData: build.query<string, RedisRawDataRequest>({
+      query: (data) => ({
+        url: `${dataBasePath}/raw/redis`,
+        method: 'POST',
+        headers: {
+          'X-HTTP-Method-Override': 'GET',
+        },
+        data,
+      }),
+    }),
     getBiChannelData: build.query<BiChannelData, BiChannelDataRequest>({
       query: ({ __source, ...data }) => ({
         url: `${dataBasePath}/bi-channel/${__source}`,
@@ -30,4 +40,4 @@ const dataSetApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetBiChannelDataQuery, useGetTriChannelDataQuery } = dataSetApi;
+export const { useGetRedisRawDataQuery, useGetBiChannelDataQuery, useGetTriChannelDataQuery } = dataSetApi;

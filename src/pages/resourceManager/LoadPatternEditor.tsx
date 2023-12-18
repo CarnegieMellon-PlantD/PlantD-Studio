@@ -8,9 +8,9 @@ import { ColumnsType } from 'antd/es/table';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
 import SortableTable from '@/components/resourceManager/SortableTable';
-import { formStyle } from '@/constants/formStyles';
-import { rfc1123RegExp } from '@/constants/regExps';
 import { getDefaultLoadPatternForm } from '@/constants/resourceManager/defaultForm/loadPattern';
+import { formStyle } from '@/constants/resourceManager/formStyles';
+import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
 import {
   useCreateLoadPatternMutation,

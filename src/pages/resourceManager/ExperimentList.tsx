@@ -8,6 +8,7 @@ import { Badge, Button, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 
 import BaseResourceList from '@/components/resourceManager/BaseResourceList';
+import { autoRefreshInterval } from '@/constants/resourceManager';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeleteExperimentMutation, useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
 import {
@@ -35,7 +36,7 @@ const ExperimentList: React.FC = () => {
   const { data, isLoading, isFetching, refetch } = useResourceList({
     resourceKind: t('Experiment'),
     listHook: useListExperimentsQuery,
-    pollingInterval: 10000,
+    pollingInterval: autoRefreshInterval,
   });
 
   const columns: ColumnsType<ExperimentDTO> = [

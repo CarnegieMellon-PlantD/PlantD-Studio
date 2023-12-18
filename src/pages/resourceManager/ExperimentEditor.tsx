@@ -8,9 +8,9 @@ import { Button, Card, Form, Input, Radio, Spin } from 'antd';
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
 import DateTimePicker from '@/components/resourceManager/DateTimePicker';
 import EndpointSelect from '@/components/resourceManager/EndpointSelect';
-import { formStyle } from '@/constants/formStyles';
-import { rfc1123RegExp } from '@/constants/regExps';
 import { getDefaultExperimentForm } from '@/constants/resourceManager/defaultForm/experiment';
+import { formStyle } from '@/constants/resourceManager/formStyles';
+import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
 import {
   useCreateExperimentMutation,

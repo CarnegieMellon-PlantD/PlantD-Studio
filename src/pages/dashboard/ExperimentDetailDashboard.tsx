@@ -7,6 +7,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useUpdateEffect } from 'usehooks-ts';
 
 import Dashboard from '@/components/dashboard/Dashboard';
+import { defaultExperimentDuration, defaultRefreshInterval } from '@/constants/dashboard';
 import { useGetExperimentQuery } from '@/services/resourceManager/experimentApi';
 import { DashboardProps } from '@/types/dashboard/dashboardProps';
 import { ExperimentExperimentState } from '@/types/resourceManager/experiment';
@@ -55,9 +56,9 @@ const ExperimentDetailDashboard: React.FC = () => {
 
   const [timeRange, setTimeRange] = useState<[Dayjs, Dayjs]>(() => {
     const now = dayjs();
-    return [now.add(-30, 'minute'), now];
+    return [now.add(-defaultExperimentDuration, 'minute'), now];
   });
-  const [refreshInterval, setRefreshInterval] = useState(5);
+  const [refreshInterval, setRefreshInterval] = useState(defaultRefreshInterval);
 
   // Automatically set time range based on Experiment's start time
   const { data, isError, error } = useGetExperimentQuery({
@@ -68,7 +69,7 @@ const ExperimentDetailDashboard: React.FC = () => {
   });
   useUpdateEffect(() => {
     if (isError && error !== undefined) {
-      message.error(t('Failed to get Experiment resource: {error}', { error: getErrMsg(error) }));
+      message.error(t('Failed to get {kind} resource: {error}', { kind: t('Experiment'), error: getErrMsg(error) }));
     }
   }, [isError, error]);
   useEffect(() => {
@@ -81,8 +82,8 @@ const ExperimentDetailDashboard: React.FC = () => {
         return;
       }
       const startTime = dayjs(data.status.startTime);
-      // Since no end time is available, assume the duration of the Experiment to be 30 minutes
-      setTimeRange([startTime, startTime.add(30, 'minute')]);
+      // Since no end time is available, assume the duration of the Experiment to be the default value
+      setTimeRange([startTime, startTime.add(defaultExperimentDuration, 'minute')]);
       setRefreshInterval(0);
     }
   }, [data, params.namespace, params.name]);
@@ -246,7 +247,7 @@ const ExperimentDetailDashboard: React.FC = () => {
         },
       ],
     }),
-    [timeRange, refreshInterval, params.namespace, params.name]
+    [t, timeRange, refreshInterval, params.namespace, params.name]
   );
 
   return <Dashboard {...dashboardProps} />;

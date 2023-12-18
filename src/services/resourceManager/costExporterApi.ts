@@ -1,4 +1,4 @@
-import { apiBasePath } from '@/constants/base';
+import { apiBasePath } from '@/constants';
 import { baseApi } from '@/services/baseApi';
 import { CostExporterDTO } from '@/types/resourceManager/costExporter';
 

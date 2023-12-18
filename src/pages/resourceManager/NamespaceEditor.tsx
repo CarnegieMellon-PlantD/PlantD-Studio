@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, Form, Input, Spin } from 'antd';
 
-import { formStyle } from '@/constants/formStyles';
-import { namespaceNoReservedKeywordRegExp, rfc1123RegExp } from '@/constants/regExps';
 import { getDefaultNamespaceForm } from '@/constants/resourceManager/defaultForm/namespace';
+import { formStyle } from '@/constants/resourceManager/formStyles';
+import { namespaceNoReservedKeywordRegExp, rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
 import { useCreateNamespaceMutation } from '@/services/resourceManager/namespaceApi';
 import { getNamespaceDTO, getNamespaceVO } from '@/utils/resourceManager/convertNamespace';

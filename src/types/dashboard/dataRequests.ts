@@ -1,3 +1,8 @@
+/** Request for raw data from Redis */
+export type RedisRawDataRequest = {
+  key: string;
+};
+
 /** Request for BiChannelData from Prometheus */
 export type PrometheusBiChannelDataRequest = {
   __source: 'prometheus';

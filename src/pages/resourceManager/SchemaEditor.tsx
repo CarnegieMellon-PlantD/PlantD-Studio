@@ -11,9 +11,9 @@ import ColumnSelect from '@/components/resourceManager/ColumnSelect';
 import FormulaSelect from '@/components/resourceManager/FormulaSelect';
 import SortableTable from '@/components/resourceManager/SortableTable';
 import TypeSelect from '@/components/resourceManager/TypeSelect';
-import { formStyle } from '@/constants/formStyles';
-import { rfc1123RegExp } from '@/constants/regExps';
 import { getDefaultSchemaForm } from '@/constants/resourceManager/defaultForm/schema';
+import { formStyle } from '@/constants/resourceManager/formStyles';
+import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
 import {
