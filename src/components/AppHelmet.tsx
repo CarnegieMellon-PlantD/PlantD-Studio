@@ -3,7 +3,6 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import logo from '@/images/logo.svg';
 import { RootState } from '@/store';
 
 const AppHelmet: React.FC = () => {
@@ -13,7 +12,6 @@ const AppHelmet: React.FC = () => {
   return (
     <HelmetProvider>
       <Helmet>
-        <link rel="icon" href={logo} type="image/svg" />
         <title>{title ?? t('PlantD Studio')}</title>
       </Helmet>
     </HelmetProvider>
