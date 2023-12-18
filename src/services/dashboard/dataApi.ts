@@ -1,4 +1,4 @@
-import { dataBasePath } from '@/constants/base';
+import { dataBasePath } from '@/constants';
 import { baseApi } from '@/services/baseApi';
 import { BiChannelDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
 import { BiChannelData, TriChannelData } from '@/types/dashboard/dataResponses';

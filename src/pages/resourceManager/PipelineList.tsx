@@ -4,6 +4,7 @@ import { Badge } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 
 import BaseResourceList from '@/components/resourceManager/BaseResourceList';
+import { autoRefreshInterval } from '@/constants/resourceManager';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeletePipelineMutation, useListPipelinesQuery } from '@/services/resourceManager/pipelineApi';
 import {
@@ -20,7 +21,7 @@ const PipelineList: React.FC = () => {
   const { data, isLoading, isFetching, refetch } = useResourceList({
     resourceKind: t('Pipeline'),
     listHook: useListPipelinesQuery,
-    pollingInterval: 10000,
+    pollingInterval: autoRefreshInterval,
   });
 
   const columns: ColumnsType<PipelineDTO> = [

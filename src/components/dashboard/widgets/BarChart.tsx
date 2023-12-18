@@ -44,7 +44,7 @@ const BarChart: React.FC<BarChartProps> = ({ request, display, ...props }) => {
       },
       animation: false,
     }),
-    [data]
+    [isDarkMode, data, display]
   );
 
   return (

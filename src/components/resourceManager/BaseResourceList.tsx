@@ -11,7 +11,7 @@ import { ColumnsType } from 'antd/es/table';
 import { useUpdateEffect } from 'usehooks-ts';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
-import { formStyle } from '@/constants/formStyles';
+import { formStyle } from '@/constants/resourceManager/formStyles';
 import { AxiosBaseQueryFn } from '@/services/baseApi';
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
 import { updateCurrentNamespace } from '@/slices/appState';

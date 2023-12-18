@@ -58,10 +58,18 @@ const Dashboard: React.FC<DashboardProps> = ({
     () => (timeRange !== undefined && setTimeRange !== undefined ? setTimeRange : setInternalTimeRange),
     [timeRange, setTimeRange, setInternalTimeRange]
   );
-  const mergedRefreshInterval =
-    refreshInterval !== undefined && setRefreshInterval !== undefined ? refreshInterval : internalRefreshInterval;
-  const mergedSetRefreshInterval =
-    refreshInterval !== undefined && setRefreshInterval !== undefined ? setRefreshInterval : setInternalRefreshInterval;
+  const mergedRefreshInterval = useMemo(
+    () =>
+      refreshInterval !== undefined && setRefreshInterval !== undefined ? refreshInterval : internalRefreshInterval,
+    [refreshInterval, setRefreshInterval, internalRefreshInterval]
+  );
+  const mergedSetRefreshInterval = useMemo(
+    () =>
+      refreshInterval !== undefined && setRefreshInterval !== undefined
+        ? setRefreshInterval
+        : setInternalRefreshInterval,
+    [refreshInterval, setRefreshInterval, setInternalRefreshInterval]
+  );
 
   useEffect(() => {
     if (mergedRefreshInterval === 0) {
@@ -108,7 +116,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         },
       })),
     ],
-    []
+    [t]
   );
 
   return (

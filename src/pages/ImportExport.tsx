@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { faAdd, faCloudDownload, faCloudUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,37 +7,20 @@ import { App, Breadcrumb, Button, Card, Spin, Table, Upload } from 'antd';
 import Alert from 'antd/es/alert/Alert';
 import { ColumnsType } from 'antd/es/table';
 import { RcFile, UploadFile } from 'antd/es/upload/interface';
+import { useUpdateEffect } from 'usehooks-ts';
 
-import { apiBasePath } from '@/constants/base';
-import { useResourceList } from '@/hooks/resourceManager/useResourceList';
-import { useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
-import { useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
-import { useListLoadPatternsQuery } from '@/services/resourceManager/loadPatternApi';
-import { useListPipelinesQuery } from '@/services/resourceManager/pipelineApi';
-import { useListSchemasQuery } from '@/services/resourceManager/schemaApi';
-import { useImportResourcesMutation } from '@/services/resourceManager/utilApi';
+import { apiBasePath } from '@/constants';
+import { useGetI18nKind } from '@/hooks/resourceManager/useGetI18nKind';
+import {
+  useImportResourcesMutation,
+  useListKindsQuery,
+  useListResourcesQuery,
+} from '@/services/resourceManager/utilApi';
+import { ResourceLocator } from '@/types/resourceManager/utils';
 import { getErrMsg } from '@/utils/getErrMsg';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
-/** Enums of resource kinds */
-enum Kind {
-  Schema = 'Schema',
-  DataSet = 'DataSet',
-  LoadPattern = 'LoadPattern',
-  Pipeline = 'Pipeline',
-  Experiment = 'Experiment',
-}
-
-type Resource = {
-  kind: Kind;
-  namespace: string;
-  name: string;
-};
-
-const getRowKey = (record: Resource) => `${record.kind}/${record.namespace}/${record.name}`;
-
-/** All resource kinds for enumerating and sorting */
-const allKinds: Kind[] = [Kind.Schema, Kind.DataSet, Kind.LoadPattern, Kind.Pipeline, Kind.Experiment];
+const getRowKey = (rl: ResourceLocator) => `${rl.kind}/${rl.namespace}/${rl.name}`;
 
 const ImportPanel: React.FC = () => {
   const { t } = useTranslation();
@@ -120,101 +103,56 @@ const ImportPanel: React.FC = () => {
 
 const ExportPanel: React.FC = () => {
   const { t } = useTranslation();
-  const [selectedRows, setSelectedRows] = useState<Resource[]>([]);
+  const { message } = App.useApp();
+  const [selectedRows, setSelectedRows] = useState<ResourceLocator[]>([]);
+  const getI18nKind = useGetI18nKind();
 
-  const { data: schemas, isFetching: isSchemaLoading } = useResourceList({
-    resourceKind: t('Schema'),
-    listHook: useListSchemasQuery,
-  });
-  const { data: dataSets, isFetching: isDataSetLoading } = useResourceList({
-    resourceKind: t('DataSet'),
-    listHook: useListDataSetsQuery,
-  });
-  const { data: loadPatterns, isFetching: isLoadPatternLoading } = useResourceList({
-    resourceKind: t('LoadPattern'),
-    listHook: useListLoadPatternsQuery,
-  });
-  const { data: pipelines, isFetching: isPipelineLoading } = useResourceList({
-    resourceKind: t('Pipeline'),
-    listHook: useListPipelinesQuery,
-  });
-  const { data: experiments, isFetching: isExperimentLoading } = useResourceList({
-    resourceKind: t('Experiment'),
-    listHook: useListExperimentsQuery,
-  });
+  const {
+    data: kinds,
+    isLoading: isListKindsLoading,
+    isError: isListKindsError,
+    error: listKindsError,
+  } = useListKindsQuery();
+  const {
+    data: resources,
+    isLoading: isListResourcesLoading,
+    isError: isListResourcesError,
+    error: listResourcesError,
+  } = useListResourcesQuery();
 
-  const data = useMemo<Resource[]>(
-    () => [
-      ...(schemas?.map((resource) => ({
-        kind: Kind.Schema,
-        namespace: resource.metadata.namespace,
-        name: resource.metadata.name,
-      })) ?? []),
-      ...(dataSets?.map((resource) => ({
-        kind: Kind.DataSet,
-        namespace: resource.metadata.namespace,
-        name: resource.metadata.name,
-      })) ?? []),
-      ...(loadPatterns?.map((resource) => ({
-        kind: Kind.LoadPattern,
-        namespace: resource.metadata.namespace,
-        name: resource.metadata.name,
-      })) ?? []),
-      ...(pipelines?.map((resource) => ({
-        kind: Kind.Pipeline,
-        namespace: resource.metadata.namespace,
-        name: resource.metadata.name,
-      })) ?? []),
-      ...(experiments?.map((resource) => ({
-        kind: Kind.Experiment,
-        namespace: resource.metadata.namespace,
-        name: resource.metadata.name,
-      })) ?? []),
-    ],
-    [schemas, dataSets, loadPatterns, pipelines, experiments]
-  );
+  useUpdateEffect(() => {
+    if (isListKindsError && listKindsError !== undefined) {
+      message.error(t('Failed to list kinds: {error}', { error: getErrMsg(listKindsError) }));
+    }
+  }, [isListKindsError, listKindsError]);
 
-  const isLoading = useMemo(
-    () => isSchemaLoading || isDataSetLoading || isLoadPatternLoading || isPipelineLoading || isExperimentLoading,
-    [isSchemaLoading, isDataSetLoading, isLoadPatternLoading, isPipelineLoading, isExperimentLoading]
-  );
+  useUpdateEffect(() => {
+    if (isListResourcesError && listResourcesError !== undefined) {
+      message.error(t('Failed to list resources: {error}', { error: getErrMsg(listResourcesError) }));
+    }
+  }, [isListResourcesError, listResourcesError]);
 
-  const getI18nKind = useCallback(
-    (kind: Kind) => {
-      switch (kind) {
-        case Kind.Schema:
-          return t('Schema');
-        case Kind.DataSet:
-          return t('DataSet');
-        case Kind.LoadPattern:
-          return t('LoadPattern');
-        case Kind.Pipeline:
-          return t('Pipeline');
-        case Kind.Experiment:
-          return t('Experiment');
-      }
-    },
-    [t]
-  );
-
-  const columns: ColumnsType<Resource> = [
+  const columns: ColumnsType<ResourceLocator> = [
     {
       title: t('Kind'),
       render: (text, record) => getI18nKind(record.kind),
-      filters: allKinds.map((kind) => ({
+      filters: kinds?.map((kind) => ({
         text: getI18nKind(kind),
         value: kind,
       })),
       onFilter: (value, record) => record.kind === value,
-      sorter: (a, b) => allKinds.indexOf(a.kind) - allKinds.indexOf(b.kind),
+      sorter: kinds === undefined ? undefined : (a, b) => kinds.indexOf(a.kind) - kinds.indexOf(b.kind),
     },
     {
       title: t('Namespace'),
       dataIndex: 'namespace',
-      filters: [...new Set(data.map(({ namespace }) => namespace))].sort(sortNamespace).map((namespace) => ({
-        text: namespace,
-        value: namespace,
-      })),
+      filters:
+        resources === undefined
+          ? undefined
+          : [...new Set(resources.map(({ namespace }) => namespace))].sort(sortNamespace).map((namespace) => ({
+              text: namespace,
+              value: namespace,
+            })),
       onFilter: (value, record) => record.namespace === value,
       sorter: (a, b) => sortNamespace(a.namespace, b.namespace),
       defaultSortOrder: 'ascend',
@@ -227,10 +165,10 @@ const ExportPanel: React.FC = () => {
   ];
 
   return (
-    <Spin spinning={isLoading}>
+    <Spin spinning={isListKindsLoading || isListResourcesLoading}>
       <Table
         size="middle"
-        dataSource={data}
+        dataSource={resources}
         rowKey={getRowKey}
         columns={columns}
         rowSelection={{
@@ -253,7 +191,7 @@ const ExportPanel: React.FC = () => {
         onClick={() => {
           const form = document.createElement('form');
           form.method = 'POST';
-          form.action = `${apiBasePath}/export`;
+          form.action = `${apiBasePath}/resources/export`;
           form.style.display = 'none';
 
           const element = document.createElement('input');

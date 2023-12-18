@@ -8,7 +8,7 @@ import { MutationDefinition, QueryDefinition } from '@reduxjs/toolkit/query';
 import { App, Breadcrumb, Form, FormInstance } from 'antd';
 import { useEffectOnce, useUpdateEffect } from 'usehooks-ts';
 
-import { defaultNamespace } from '@/constants/base';
+import { defaultNamespace } from '@/constants/resourceManager';
 import { AxiosBaseQueryFn } from '@/services/baseApi';
 import { RootState } from '@/store';
 import { getErrMsg } from '@/utils/getErrMsg';

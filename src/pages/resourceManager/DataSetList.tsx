@@ -7,7 +7,8 @@ import { App, Badge, Button, List, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 
 import BaseResourceList from '@/components/resourceManager/BaseResourceList';
-import { apiBasePath } from '@/constants/base';
+import { apiBasePath } from '@/constants';
+import { autoRefreshInterval } from '@/constants/resourceManager';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeleteDataSetMutation, useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
 import {
@@ -98,7 +99,7 @@ const DataSetList: React.FC = () => {
   const { data, isLoading, isFetching, refetch } = useResourceList({
     resourceKind: t('DataSet'),
     listHook: useListDataSetsQuery,
-    pollingInterval: 10000,
+    pollingInterval: autoRefreshInterval,
   });
 
   const columns: ColumnsType<DataSetDTO> = [
@@ -200,7 +201,7 @@ const DataSetList: React.FC = () => {
           icon={<FontAwesomeIcon icon={faDownload} />}
           onClick={async () => {
             window.open(
-              `${apiBasePath}/datasets/${record.metadata.namespace}/${record.metadata.name}/sample`,
+              `${apiBasePath}/datasets/sample/${record.metadata.namespace}/${record.metadata.name}`,
               '_blank'
             );
           }}

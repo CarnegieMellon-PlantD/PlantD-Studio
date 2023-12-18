@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ColumnsType } from 'antd/es/table';
 
 import BaseResourceList from '@/components/resourceManager/BaseResourceList';
-import { defaultNamespace } from '@/constants/base';
+import { defaultNamespace } from '@/constants/resourceManager';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeleteNamespaceMutation, useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
 import { NamespaceDTO } from '@/types/resourceManager/namespace';

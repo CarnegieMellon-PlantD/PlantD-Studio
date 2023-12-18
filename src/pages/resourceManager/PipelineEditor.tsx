@@ -2,15 +2,16 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { faAdd, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faBolt, faCheck, faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Checkbox, Form, Input, Radio, Select, Spin } from 'antd';
+import { App, Button, Card, Checkbox, Form, Input, Radio, Select, Spin } from 'antd';
+import { useUpdateEffect } from 'usehooks-ts';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
-import { defaultNamespace } from '@/constants/base';
-import { formStyle } from '@/constants/formStyles';
-import { rfc1123RegExp } from '@/constants/regExps';
+import { defaultNamespace } from '@/constants/resourceManager';
 import { getDefaultEndpoint, getDefaultPipelineForm } from '@/constants/resourceManager/defaultForm/pipeline';
+import { formStyle } from '@/constants/resourceManager/formStyles';
+import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
 import { useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
@@ -19,8 +20,10 @@ import {
   useLazyGetPipelineQuery,
   useUpdatePipelineMutation,
 } from '@/services/resourceManager/pipelineApi';
+import { useCheckHTTPHealthMutation } from '@/services/resourceManager/utilApi';
 import { RootState } from '@/store';
 import { EndpointVO, PipelineVO } from '@/types/resourceManager/pipeline';
+import { getErrMsg } from '@/utils/getErrMsg';
 import { getPipelineDTO, getPipelineVO } from '@/utils/resourceManager/convertPipeline';
 
 const KeyValuePair: React.FC<{ name: Array<string | number> }> = ({ name }) => {
@@ -235,6 +238,65 @@ const EndpointCard: React.FC<{
   );
 };
 
+const HealthCheckEndpointCard: React.FC<{
+  relFormPath: Array<string | number>;
+  absFormPath: Array<string | number>;
+}> = ({ relFormPath, absFormPath }) => {
+  const { t } = useTranslation();
+  const { message } = App.useApp();
+  const form = Form.useFormInstance();
+  const url = Form.useWatch(absFormPath, form);
+
+  const [checkHTTPHealth, { isLoading, isSuccess, isError, error, reset }] = useCheckHTTPHealthMutation();
+
+  // Show error message on errors
+  useUpdateEffect(() => {
+    if (isError && error !== undefined) {
+      message.error(t('Failed to check health: {error}', { error: getErrMsg(error) }));
+    }
+  }, [isError, error]);
+
+  // Reset state on URL changes
+  useUpdateEffect(() => {
+    reset();
+  }, [url]);
+
+  return (
+    <div className="w-full flex gap-1">
+      <Form.Item
+        className="w-full mb-2"
+        name={relFormPath}
+        rules={[
+          { required: true, message: t('URL is required') },
+          { type: 'url', message: t('Must be a valid URL') },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Button
+        loading={isLoading}
+        icon={
+          isSuccess ? (
+            <FontAwesomeIcon icon={faCheck} />
+          ) : isError ? (
+            <FontAwesomeIcon icon={faXmark} />
+          ) : (
+            <FontAwesomeIcon icon={faBolt} />
+          )
+        }
+        className={isSuccess ? 'text-green-500' : isError ? 'text-red-500' : undefined}
+        onClick={() => {
+          checkHTTPHealth({
+            url,
+          });
+        }}
+      >
+        {isSuccess ? t('Succeeded') : isError ? t('Failed') : t('Check')}
+      </Button>
+    </div>
+  );
+};
+
 const PipelineEditor: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
@@ -357,17 +419,11 @@ const PipelineEditor: React.FC = () => {
                 {(fields, { add, remove }, { errors }) => (
                   <>
                     {fields.map(({ name: endpointIndex }) => (
-                      <div key={endpointIndex} className="flex items-center gap-1">
-                        <Form.Item
-                          className="w-full mb-2"
-                          name={[endpointIndex]}
-                          rules={[
-                            { required: true, message: t('URL is required') },
-                            { type: 'url', message: t('Must be a valid URL') },
-                          ]}
-                        >
-                          <Input />
-                        </Form.Item>
+                      <div key={endpointIndex} className="flex gap-1">
+                        <HealthCheckEndpointCard
+                          relFormPath={[endpointIndex]}
+                          absFormPath={['healthCheckEndpoints', endpointIndex]}
+                        />
                         <Form.Item className="mb-2">
                           <Button
                             type="text"

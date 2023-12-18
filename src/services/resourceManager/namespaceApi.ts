@@ -1,5 +1,5 @@
-import { apiBasePath } from '@/constants/base';
-import { namespaceNoReservedKeywordRegExp } from '@/constants/regExps';
+import { apiBasePath } from '@/constants';
+import { namespaceNoReservedKeywordRegExp } from '@/constants/resourceManager/regExps';
 import { baseApi } from '@/services/baseApi';
 import { NamespaceDTO } from '@/types/resourceManager/namespace';
 
