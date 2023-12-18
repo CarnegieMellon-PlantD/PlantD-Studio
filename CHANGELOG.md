@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.3.1...v1.4.0) (2023-12-18)
+
+### Features
+
+- add redis raw data api ([7d6ed8e](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/7d6ed8e6d76db520d074b131e4806ff93069af97))
+
+### Bug Fixes
+
+- various fixes and improvements ([9bd89fe](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/9bd89fed7d4a7dde777d49fe6223c8894c7c7846))
+
 ### [1.3.1](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.3.0...v1.3.1) (2023-12-02)
 
 ### Features
