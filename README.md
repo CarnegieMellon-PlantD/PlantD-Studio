@@ -79,6 +79,18 @@ yarn lint:fix
 
 Note that linters will run automatically before committing. Errors that are not auto-fixable will abort the commit process.
 
+### Internationalization (i18n)
+
+This project uses [react-i18next](https://react.i18next.com/) and [ICU message syntax](https://github.com/i18next/i18next-icu) for internationalization. See [`src/i18n/index.ts`](src/i18n/index.ts) for more details.
+
+To extract messages from source code, run
+
+```shell
+yarn scan-i18n
+```
+
+This command will extract messages from source code and generate a JSON file in `public/locales/<lang>/translation.json` for each language.
+
 ### Commit Message Convention
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit messages and enforces it using [commitlint](https://commitlint.js.org/). To make sure your commit messages are valid, run
@@ -91,7 +103,7 @@ to commit your changes. It will launch a CLI wizard driven by [commitizen](https
 
 ### Release
 
-We use GitHub Actions as our CI/CD pipeline and to release Docker images to GitHub Container Registry. See [`.github/workflows/release-ghcr.yaml`](.github/workflows/release-ghcr.yaml) for more details.
+This project uses GitHub Actions as our CI/CD pipeline and to release Docker images to GitHub Container Registry. See [`.github/workflows/release-ghcr.yaml`](.github/workflows/release-ghcr.yaml) for more details.
 
 To release a new version, run the following command:
 
@@ -106,3 +118,10 @@ yarn release --release-as=<major|minor|patch>
 This command will run [standard-version](https://github.com/conventional-changelog/standard-version) to bump the version number, generate a changelog, and create a git tag.
 
 Then, follow the instructions to push the git tag and the workflow will be triggered automatically. The output Docker image will be tagged with the same version number as the git tag.
+
+### References
+
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Ant Design](https://ant.design/)
+- [AntV](https://ant-design-charts.antgroup.com/en)
