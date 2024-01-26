@@ -15,9 +15,11 @@ import LineChart from '@/components/dashboard/widgets/LineChart';
 import PieChart from '@/components/dashboard/widgets/PieChart';
 import ScatterChart from '@/components/dashboard/widgets/ScatterChart';
 import { DashboardProps } from '@/types/dashboard/dashboardProps';
+import LineChartRedis from './widgets/LineChartRedis';
 
 const Dashboard: React.FC<DashboardProps> = ({
   breadcrumbs = [],
+  yField,
   timeRange,
   setTimeRange,
   defaultTimeRange,
@@ -90,7 +92,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     return () => {
       window.clearInterval(id);
     };
-  }, [mergedRefreshInterval]);
+  }, []);
 
   const timeRangePresets = useMemo<RangePickerProps['presets']>(
     () => [
@@ -139,6 +141,13 @@ const Dashboard: React.FC<DashboardProps> = ({
                   return;
                 }
                 mergedSetTimeRange([value[0], value[1]]);
+                // Update the widget props
+                widgets.forEach((widget) => {
+                  if (widget.__type === 'line_redis' && widget.display) {
+                    widget.display.xAxisMin = value[0]?.valueOf();
+                    widget.display.xAxisMax = value[1]?.valueOf();
+                  }
+                });
                 refetchData();
               }}
             />
@@ -193,6 +202,8 @@ const Dashboard: React.FC<DashboardProps> = ({
               <AreaChart key={index} {...widget} />
             ) : widget.__type === 'scatter' ? (
               <ScatterChart key={index} {...widget} />
+            ) : widget.__type === 'line_redis' ? (
+              <LineChartRedis key={index} yField={yField} {...widget} />
             ) : null
           )}
         </div>

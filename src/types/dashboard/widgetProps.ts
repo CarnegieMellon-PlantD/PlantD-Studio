@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { BiChannelDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
+import { BiChannelDataRequest, RedisRawDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
 
 /** Common props for all widgets */
 type BaseWidgetProps = {
@@ -69,6 +69,39 @@ export interface BarChartProps extends BaseWidgetProps {
 export interface LineChartProps extends BaseWidgetProps {
   /** Data request for the widget */
   request: TriChannelDataRequest;
+  /** Display options for the widget */
+  display: {
+    /** Width of the graph, in px */
+    width?: number;
+    /** Height of the graph, in px */
+    height?: number;
+    /**
+     * Type of the X-axis
+     * - `default`: keep the original X-axis data
+     * - `time`: convert the X-axis data to time
+     */
+    xAxisType?: 'default' | 'time';
+    /** Minimum value of the X-axis */
+    xAxisMin?: number;
+    /** Maximum value of the X-axis */
+    xAxisMax?: number;
+    /** Title of the X-axis */
+    xAxisTitle?: string;
+    /** Minimum value of the Y-axis */
+    yAxisMin?: number;
+    /** Maximum value of the Y-axis */
+    yAxisMax?: number;
+    /** Title of the Y-axis */
+    yAxisTitle?: string;
+  };
+}
+
+export interface LineChartRedisProps extends BaseWidgetProps {
+  /** Data request for the widget */
+  request: RedisRawDataRequest;
+  /** Data type for y-axis */
+  yField?: string;
+
   /** Display options for the widget */
   display: {
     /** Width of the graph, in px */
