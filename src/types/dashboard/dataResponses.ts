@@ -15,3 +15,6 @@ export type TriChannelData = Array<{
   /** Group name */
   series: string;
 }>;
+
+// @ts-ignore
+export type RedisRawData = Array<any>;
