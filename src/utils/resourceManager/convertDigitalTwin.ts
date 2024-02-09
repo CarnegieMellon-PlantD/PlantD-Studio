@@ -11,7 +11,6 @@ export const getDigitalTwinVO = (digitalTwinDTO: DigitalTwinDTO): DigitalTwinVO 
     name: digitalTwinDTO.metadata.name,
     loadPatterns:
       digitalTwinDTO.spec.loadPatterns?.map((loadPattern) => ({
-        endpointName: loadPattern.endpointName ?? '',
         loadPatternRef: {
           namespace: loadPattern.loadPatternRef?.namespace ?? '',
           name: loadPattern.loadPatternRef?.name ?? '',
@@ -19,7 +18,6 @@ export const getDigitalTwinVO = (digitalTwinDTO: DigitalTwinDTO): DigitalTwinVO 
       })) ?? [],
     experiments:
       digitalTwinDTO.spec.experiments?.map((experiment) => ({
-        endpointName: experiment.endpointName ?? '',
         experimentRef: {
           namespace: experiment.experimentRef?.namespace ?? '',
           name: experiment.experimentRef?.name ?? '',

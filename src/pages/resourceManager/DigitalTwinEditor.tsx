@@ -7,6 +7,7 @@ import { Button, Card, Form, Input, Spin } from 'antd';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
 import ModelTypeSelect from '@/components/resourceManager/ModelTypeSelect';
+import { defaultNamespace } from '@/constants/resourceManager';
 import { getDefaultDigitalTwinForm } from '@/constants/resourceManager/defaultForm/digitalTwin';
 import { formStyle } from '@/constants/resourceManager/formStyles';
 import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
@@ -47,6 +48,8 @@ const DigitalTwinEditor: React.FC = () => {
             form={form}
             initialValues={getDefaultDigitalTwinForm('')}
             onFinish={() => {
+              console.log(form.getFieldsValue());
+
               createOrUpdateResource();
             }}
           >
@@ -116,7 +119,11 @@ const DigitalTwinEditor: React.FC = () => {
                                   name={[loadPatternIdx, 'loadPatternRef', 'namespace']}
                                   rules={[{ required: true, message: t('Namespace is required') }]}
                                 >
-                                  <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
+                                  <BaseResourceSelect
+                                    defaultValue={defaultNamespace}
+                                    resourceKind={t('Namespace')}
+                                    listHook={useListNamespacesQuery}
+                                  />
                                 </Form.Item>
                                 <Form.Item
                                   noStyle
@@ -167,7 +174,6 @@ const DigitalTwinEditor: React.FC = () => {
                       icon={<FontAwesomeIcon icon={faAdd} />}
                       onClick={() => {
                         const newLoadPattern: DigitalTwinVO['loadPatterns'][number] = {
-                          endpointName: '',
                           loadPatternRef: {
                             namespace: '',
                             name: '',
@@ -209,7 +215,11 @@ const DigitalTwinEditor: React.FC = () => {
                                   name={[experimentIdx, 'experimentRef', 'namespace']}
                                   rules={[{ required: true, message: t('Namespace is required') }]}
                                 >
-                                  <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
+                                  <BaseResourceSelect
+                                    defaultValue={'default'}
+                                    resourceKind={t('Namespace')}
+                                    listHook={useListNamespacesQuery}
+                                  />
                                 </Form.Item>
                                 <Form.Item
                                   noStyle
@@ -260,7 +270,6 @@ const DigitalTwinEditor: React.FC = () => {
                       icon={<FontAwesomeIcon icon={faAdd} />}
                       onClick={() => {
                         const newExperiment: DigitalTwinVO['experiments'][number] = {
-                          endpointName: '',
                           experimentRef: {
                             namespace: '',
                             name: '',
