@@ -27,12 +27,3 @@ export type TrafficModelVO = {
   name: string;
   // Replace with the view object of a TrafficModel
 };
-
-/** Enums of `status.trafficModelState` */
-export enum TrafficModelState {}
-// Replace with the states of a TrafficModel
-
-/** All `status.trafficModelState` for enumerating and sorting */
-export const allTrafficModelStates: TrafficModelState[] = [
-  // Replace with the states of a TrafficModel
-];

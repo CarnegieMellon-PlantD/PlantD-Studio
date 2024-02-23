@@ -158,7 +158,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'Simulation',
+        path: 'simulation',
         children: [
           {
             index: true,

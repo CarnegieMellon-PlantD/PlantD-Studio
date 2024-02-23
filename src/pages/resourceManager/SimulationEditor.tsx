@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Card, Form, Input, Spin } from 'antd';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
-import { getDefaultSimulationForm } from '@/constants/resourceManager/defaultForm/simulation'; // Replace with your actual function
+import { getDefaultSimulationForm } from '@/constants/resourceManager/defaultForm/simulation';
 import { formStyle } from '@/constants/resourceManager/formStyles';
 import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
@@ -16,10 +16,8 @@ import {
   useUpdateSimulationMutation,
 } from '@/services/resourceManager/simulationApi';
 import { useListTrafficModelsQuery } from '@/services/resourceManager/trafficModelApi';
-import { SimulationVO } from '@/types/resourceManager/simulation'; // Replace with your actual type
-import { getSimulationDTO, getSimulationVO } from '@/utils/resourceManager/convertSimulation'; // Replace with your actual functions
-
-// Replace with your actual API
+import { SimulationVO } from '@/types/resourceManager/simulation';
+import { getSimulationDTO, getSimulationVO } from '@/utils/resourceManager/convertSimulation';
 
 const SimulationEditor: React.FC = () => {
   const params = useParams();
@@ -58,7 +56,6 @@ const SimulationEditor: React.FC = () => {
               <BaseResourceSelect
                 resourceKind={t('Namespace')}
                 listHook={useListNamespacesQuery}
-                // Disable metadata fields if action is `edit`
                 disabled={params.action === 'edit'}
               />
             </Form.Item>
@@ -73,10 +70,7 @@ const SimulationEditor: React.FC = () => {
                 },
               ]}
             >
-              <Input
-                // Disable metadata fields if action is `edit`
-                disabled={params.action === 'edit'}
-              />
+              <Input disabled={params.action === 'edit'} />
             </Form.Item>
 
             <Form.Item className="mb-0" label={t('DigitalTwin')} required>
@@ -103,7 +97,6 @@ const SimulationEditor: React.FC = () => {
                       <BaseResourceSelect
                         resourceKind={t('DigitalTwin')}
                         listHook={useListDigitalTwinsQuery}
-                        // Disable metadata fields if action is `edit`
                         disabled={params.action === 'edit'}
                       />
                     </Form.Item>
@@ -136,7 +129,6 @@ const SimulationEditor: React.FC = () => {
                       <BaseResourceSelect
                         resourceKind={t('trafficModel')}
                         listHook={useListTrafficModelsQuery}
-                        // Disable metadata fields if action is `edit`
                         disabled={params.action === 'edit'}
                       />
                     </Form.Item>
@@ -153,7 +145,6 @@ const SimulationEditor: React.FC = () => {
                 <Button
                   htmlType="button"
                   onClick={() => {
-                    // Go back
                     navigate(-1);
                   }}
                 >

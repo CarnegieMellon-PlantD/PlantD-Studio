@@ -17,8 +17,6 @@ const dataSetApi = baseApi.injectEndpoints({
       transformResponse: async (response: { result: string }): Promise<RedisRawData> => {
         try {
           const parsedResult = JSON.parse(response.result);
-          console.log(parsedResult);
-          // Combine column names and data into an array of objects
           const data = parsedResult.index.map((row: unknown[], rowIndex: number) => {
             const obj: Record<string, unknown> = {};
             parsedResult.columns.forEach((column: string, columnIndex: number) => {
@@ -26,22 +24,6 @@ const dataSetApi = baseApi.injectEndpoints({
             });
             return obj;
           });
-          console.log(data);
-          const numericData = data.map(
-            (item: { date: string | number | Date; latency_fifo: string; throughput: string; queue_len: string }) => {
-              // Convert 'time' to a JavaScript Date object
-              const time = new Date(item.date);
-              return {
-                ...item,
-                latency_fifo: parseFloat(item.latency_fifo),
-                throughput: parseFloat(item.throughput),
-                time: time, // Use the converted time here
-                queue_len: parseFloat(item.queue_len),
-                // Add similar lines for other fields that should be numeric
-              };
-            }
-          );
-          console.log(numericData);
 
           return data;
         } catch (error) {

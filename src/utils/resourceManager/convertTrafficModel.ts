@@ -23,10 +23,6 @@ export const getTrafficModelDTO = (trafficModelVO: TrafficModelVO): Pick<Traffic
       namespace: trafficModelVO.namespace,
       name: trafficModelVO.name,
     },
-    spec: {
-      //   pipelineRef: trafficModelVO.pipelineRef,
-      //   loadPatterns: trafficModelVO.loadPatterns,
-      //   scheduledTime: !trafficModelVO.hasScheduledTime ? undefined : trafficModelVO.scheduledTime,
-    },
+    spec: {},
   };
 };
