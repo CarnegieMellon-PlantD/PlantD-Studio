@@ -7,5 +7,3 @@ export const longDateTimeFormat = 'YYYY-MM-DD HH:mm:ss';
 export const defaultExperimentDuration = 30;
 /** Default auto refresh interval, in seconds */
 export const defaultRefreshInterval = 5;
-/** Default duration of Simulation, in minutes */
-export const defaultSimulationDuration = 30;
