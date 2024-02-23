@@ -92,7 +92,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     return () => {
       window.clearInterval(id);
     };
-  }, []);
+  }, [mergedRefreshInterval]);
 
   const timeRangePresets = useMemo<RangePickerProps['presets']>(
     () => [
