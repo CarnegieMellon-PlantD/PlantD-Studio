@@ -15,7 +15,6 @@ import LineChart from '@/components/dashboard/widgets/LineChart';
 import PieChart from '@/components/dashboard/widgets/PieChart';
 import ScatterChart from '@/components/dashboard/widgets/ScatterChart';
 import { DashboardProps } from '@/types/dashboard/dashboardProps';
-import LineChartRedis from './widgets/LineChartRedis';
 
 const Dashboard: React.FC<DashboardProps> = ({
   breadcrumbs = [],
@@ -91,7 +90,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     return () => {
       window.clearInterval(id);
     };
-  }, [mergedRefreshInterval]);
+  }, [mergedRefreshInterval, mergedSetTimeRange, refetchData]);
 
   const timeRangePresets = useMemo<RangePickerProps['presets']>(
     () => [
@@ -201,8 +200,6 @@ const Dashboard: React.FC<DashboardProps> = ({
               <AreaChart key={index} {...widget} />
             ) : widget.__type === 'scatter' ? (
               <ScatterChart key={index} {...widget} />
-            ) : widget.__type === 'line_redis' ? (
-              <LineChartRedis key={index} {...widget} />
             ) : null
           )}
         </div>

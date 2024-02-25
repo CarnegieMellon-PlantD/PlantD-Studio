@@ -1,13 +1,13 @@
 import { dataBasePath } from '@/constants';
 import { baseApi } from '@/services/baseApi';
-import { BiChannelDataRequest, RedisRawDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
+import { BiChannelDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
 import { BiChannelData, RedisRawData, TriChannelData } from '@/types/dashboard/dataResponses';
 
 const dataSetApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getRedisRawData: build.query<RedisRawData, RedisRawDataRequest>({
-      query: (data) => ({
-        url: `${dataBasePath}/raw/redis`,
+    getRedisRawData: build.query<TriChannelData, TriChannelDataRequest>({
+      query: ({ __source, ...data }) => ({
+        url: `${dataBasePath}/raw/${__source}`,
         method: 'POST',
         headers: {
           'X-HTTP-Method-Override': 'GET',

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { BiChannelDataRequest, RedisRawDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
+import { BiChannelDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
 
 /** Common props for all widgets */
 type BaseWidgetProps = {
@@ -93,15 +93,14 @@ export interface LineChartProps extends BaseWidgetProps {
     yAxisMax?: number;
     /** Title of the Y-axis */
     yAxisTitle?: string;
+    /** Data type for y-axis */
+    yField?: string;
   };
 }
 
 export interface LineChartRedisProps extends BaseWidgetProps {
   /** Data request for the widget */
-  request: RedisRawDataRequest;
-  /** Data type for y-axis */
-  yField?: string;
-
+  request: TriChannelDataRequest;
   /** Display options for the widget */
   display: {
     /** Width of the graph, in px */
@@ -126,6 +125,8 @@ export interface LineChartRedisProps extends BaseWidgetProps {
     yAxisMax?: number;
     /** Title of the Y-axis */
     yAxisTitle?: string;
+    /** Data type for y-axis */
+    yField?: string;
   };
 }
 
