@@ -7,11 +7,8 @@ export type DigitalTwinMetadata = {
 /** Type definition for the spec of a DigitalTwin */
 export type DigitalTwinSpec = {
   experiments?: Array<{
-    endpointName?: string;
-    experimentRef?: {
-      namespace?: string;
-      name?: string;
-    };
+    namespace?: string;
+    name?: string;
   }>;
   modelType?: string;
 };
@@ -36,11 +33,8 @@ export type DigitalTwinVO = {
   name: string;
   modelType: string;
   experiments: Array<{
-    endpointName: string;
-    experimentRef: {
-      namespace: string;
-      name: string;
-    };
+    namespace: string;
+    name: string;
   }>;
 };
 

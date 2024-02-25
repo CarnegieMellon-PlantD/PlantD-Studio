@@ -6,16 +6,14 @@ import { DigitalTwinDTO, DigitalTwinVO } from '@/types/resourceManager/digitalTw
  * @returns The view object of a DigitalTwin
  */
 export const getDigitalTwinVO = (digitalTwinDTO: DigitalTwinDTO): DigitalTwinVO => {
+  console.log(digitalTwinDTO.spec);
   return {
     namespace: digitalTwinDTO.metadata.namespace,
     name: digitalTwinDTO.metadata.name,
     experiments:
       digitalTwinDTO.spec.experiments?.map((experiment) => ({
-        endpointName: experiment.endpointName ?? '',
-        experimentRef: {
-          namespace: experiment.experimentRef?.namespace ?? '',
-          name: experiment.experimentRef?.name ?? '',
-        },
+        namespace: experiment.namespace ?? '',
+        name: experiment.name ?? '',
       })) ?? [],
     modelType: digitalTwinDTO.spec.modelType ?? '',
   };
