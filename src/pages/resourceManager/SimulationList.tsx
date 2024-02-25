@@ -1,17 +1,16 @@
 import * as React from 'react';
-
-import { useDeleteSimulationMutation, useListSimulationsQuery } from '@/services/resourceManager/simulationApi';
-
-import BaseResourceList from '@/components/resourceManager/BaseResourceList';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
+import { faGauge } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SimulationDTO } from '@/types/resourceManager/simulation';
-import { faGauge } from '@fortawesome/free-solid-svg-icons';
-import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
-import { useNavigate } from 'react-router';
+
+import BaseResourceList from '@/components/resourceManager/BaseResourceList';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
-import { useTranslation } from 'react-i18next';
+import { useDeleteSimulationMutation, useListSimulationsQuery } from '@/services/resourceManager/simulationApi';
+import { SimulationDTO } from '@/types/resourceManager/simulation';
+import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const SimulationsList: React.FC = () => {
   const navigate = useNavigate();
@@ -81,7 +80,7 @@ const SimulationsList: React.FC = () => {
       allowClone
       allowEdit
       resourceKind={t('Simulation')}
-      resourceKindUrl="Simulation"
+      resourceKindUrl="simulation"
       data={data}
       isLoading={isLoading}
       isFetching={isFetching}
