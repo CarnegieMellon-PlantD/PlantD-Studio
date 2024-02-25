@@ -6,7 +6,6 @@ import { DigitalTwinDTO, DigitalTwinVO } from '@/types/resourceManager/digitalTw
  * @returns The view object of a DigitalTwin
  */
 export const getDigitalTwinVO = (digitalTwinDTO: DigitalTwinDTO): DigitalTwinVO => {
-  console.log(digitalTwinDTO.spec);
   return {
     namespace: digitalTwinDTO.metadata.namespace,
     name: digitalTwinDTO.metadata.name,

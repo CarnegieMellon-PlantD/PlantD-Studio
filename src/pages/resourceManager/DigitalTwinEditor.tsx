@@ -119,7 +119,7 @@ const DigitalTwinEditor: React.FC = () => {
                               <div className="flex gap-1">
                                 <Form.Item
                                   className="w-64 flex-auto"
-                                  name={[experimentIdx, 'experimentRef', 'namespace']}
+                                  name={[experimentIdx, 'namespace']}
                                   rules={[{ required: true, message: t('Namespace is required') }]}
                                 >
                                   <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
@@ -134,7 +134,7 @@ const DigitalTwinEditor: React.FC = () => {
                                   {() => (
                                     <Form.Item
                                       className="w-64 flex-auto"
-                                      name={[experimentIdx, 'experimentRef', 'name']}
+                                      name={[experimentIdx, 'name']}
                                       rules={[{ required: true, message: t('Name is required') }]}
                                     >
                                       <BaseResourceSelect
