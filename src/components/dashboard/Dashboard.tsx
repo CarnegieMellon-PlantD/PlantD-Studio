@@ -19,7 +19,6 @@ import LineChartRedis from './widgets/LineChartRedis';
 
 const Dashboard: React.FC<DashboardProps> = ({
   breadcrumbs = [],
-  yField,
   timeRange,
   setTimeRange,
   defaultTimeRange,
@@ -203,7 +202,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             ) : widget.__type === 'scatter' ? (
               <ScatterChart key={index} {...widget} />
             ) : widget.__type === 'line_redis' ? (
-              <LineChartRedis key={index} yField={yField} {...widget} />
+              <LineChartRedis key={index} {...widget} />
             ) : null
           )}
         </div>
