@@ -88,6 +88,9 @@ const SimulationsList: React.FC = () => {
       deleteHook={useDeleteSimulationMutation}
       columns={columns}
       scroll={{ x: 850 }}
+      caption={t(
+        "Simulations are the result of running a Traffic model (representing a projection of what data a business will receive in some year) on a digital twin (a mathematical representation of a pipeline's behavior and cost) to produce projections of a pipeline's performance and cost over a year.  Run simulations with different pipelines under the same conditions to inform a business choice about two candidate pipelines, or simulate the same pipeline with different traffic models to understand how sensitive the cost and performance predictions are to differing guesses about your business' needs."
+      )}
     />
   );
 };

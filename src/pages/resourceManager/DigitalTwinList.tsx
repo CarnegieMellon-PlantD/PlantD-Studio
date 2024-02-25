@@ -44,6 +44,9 @@ const DigitalTwinList: React.FC = () => {
       deleteHook={useDeleteDigitalTwinMutation}
       columns={columns}
       scroll={{ x: 850 }}
+      caption={t(
+        'Digital Twins are mathematical models that attempt to mimic your data pipeline.  When fed data from a traffic model, they will calculate approximate pipeline performance and cost without actually running your data pipeline.'
+      )}
     />
   );
 };
