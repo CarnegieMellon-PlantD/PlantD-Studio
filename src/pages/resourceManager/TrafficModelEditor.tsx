@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Card, Form, Input, Spin } from 'antd';
+import { InfoCircleOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Card, Form, Input, message, Spin, Tooltip, Upload } from 'antd';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
 import { getDefaultTrafficModelForm } from '@/constants/resourceManager/defaultForm/trafficModel';
@@ -31,6 +32,21 @@ const TrafficModelEditor: React.FC = () => {
     getVO: getTrafficModelVO,
     getDTO: getTrafficModelDTO,
   });
+
+  const beforeUpload = (file: { type: string }) => {
+    const isCsv = file.type === 'text/csv';
+    if (!isCsv) {
+      message.error('You can only upload CSV file!');
+    }
+    return isCsv;
+  };
+
+  const normFile = (e: { fileList: unknown }) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
 
   return (
     <div className="p-6">
@@ -69,10 +85,38 @@ const TrafficModelEditor: React.FC = () => {
                 },
               ]}
             >
-              <Input
-                // Disable metadata fields if action is `edit`
-                disabled={params.action === 'edit'}
-              />
+              <Input disabled={params.action === 'edit'} />
+            </Form.Item>
+
+            <Form.Item label={t('Download CSV')} name={['download_csv']}>
+              <div className="flex">
+                <Tooltip
+                  title={t(
+                    'This traffic model lets you describe one forecast of the data your business expects to see as input to your pipeline, over the course of a full year.  To change it, you will have to download this model, edit the parameters, and re-upload it.'
+                  )}
+                >
+                  <InfoCircleOutlined className="text-slate-400 dark:text-slate-600 mr-2" />
+                </Tooltip>
+                <a href="/utils/traffic_model.csv" download>
+                  <Button type="primary">{t('Download CSV')}</Button>
+                </a>
+              </div>
+            </Form.Item>
+
+            <Form.Item
+              label={t('Upload CSV')}
+              name={['csv']}
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+              rules={[{ required: true, message: t('CSV file is required') }]}
+            >
+              <Upload.Dragger name="file" action="/upload.do" beforeUpload={beforeUpload}>
+                <p className="ant-upload-drag-icon">
+                  <UploadOutlined />
+                </p>
+                <p className="ant-upload-text">{t('Click or drag file to this area to upload')}</p>
+                <p className="ant-upload-hint">{t('Support for a single or bulk upload.')}</p>
+              </Upload.Dragger>
             </Form.Item>
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">
