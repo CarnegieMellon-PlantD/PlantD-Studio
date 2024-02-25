@@ -19,11 +19,14 @@ const LineChart: React.FC<LineChartProps> = ({ request, display, ...props }) => 
   const { dataGeneration } = useContext(DashboardContext);
   const redisDataResult = useGetRedisRawDataQuery(request);
   const triChannelDataResult = useGetTriChannelDataQuery(request);
-
+  let xFieldValue: string = 'x';
+  let yFieldValue: string = 'y';
   let data: unknown, error, isSuccess, isError, isFetching, refetch: () => void;
 
   if ((request as RedisRawDataRequest).__source === 'redis') {
     ({ data, error, isSuccess, isError, isFetching, refetch } = redisDataResult);
+    xFieldValue = 'date';
+    yFieldValue = display.yField!;
   } else {
     ({ data, error, isSuccess, isError, isFetching, refetch } = triChannelDataResult);
   }
@@ -35,11 +38,9 @@ const LineChart: React.FC<LineChartProps> = ({ request, display, ...props }) => 
     () => ({
       theme: isDarkMode ? 'dark' : 'light',
       data: Array.isArray(data) ? data : [],
-      // xField: 'x',
-      xField: 'date',
-      // yField: 'y',
-      yField: display.yField,
-      // seriesField: 'series',
+      xField: xFieldValue,
+      yField: yFieldValue,
+      seriesField: 'series',
       width: display.width,
       height: display.height,
       meta: {
