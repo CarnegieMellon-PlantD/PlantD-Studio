@@ -98,6 +98,13 @@ const SimulationEditor: React.FC = () => {
                         resourceKind={t('DigitalTwin')}
                         listHook={useListDigitalTwinsQuery}
                         disabled={params.action === 'edit'}
+                        filter={(item) =>
+                          item.metadata.namespace ===
+                          (form.getFieldValue([
+                            'digitalTwinRef',
+                            'namespace',
+                          ]) as SimulationVO['digitalTwinRef']['namespace'])
+                        }
                       />
                     </Form.Item>
                   )}
@@ -130,6 +137,13 @@ const SimulationEditor: React.FC = () => {
                         resourceKind={t('trafficModel')}
                         listHook={useListTrafficModelsQuery}
                         disabled={params.action === 'edit'}
+                        filter={(item) =>
+                          item.metadata.namespace ===
+                          (form.getFieldValue([
+                            'trafficModelRef',
+                            'namespace',
+                          ]) as SimulationVO['trafficModelRef']['namespace'])
+                        }
                       />
                     </Form.Item>
                   )}
