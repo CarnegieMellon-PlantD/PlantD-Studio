@@ -17,7 +17,6 @@ import {
   useUpdateDigitalTwinMutation,
 } from '@/services/resourceManager/digitalTwinApi';
 import { useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
-import { useListLoadPatternsQuery } from '@/services/resourceManager/loadPatternApi';
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
 import { DigitalTwinVO } from '@/types/resourceManager/digitalTwin';
 import { getDigitalTwinDTO, getDigitalTwinVO } from '@/utils/resourceManager/convertDigitalTwin';
@@ -90,99 +89,7 @@ const DigitalTwinEditor: React.FC = () => {
               // disabled={params.action === 'edit'}
               />
             </Form.Item>
-            <Form.Item label={t('LoadPatterns')} required>
-              <Form.List
-                name={['loadPatterns']}
-                rules={[
-                  {
-                    validator: async (rule, value) => {
-                      if (value.length === 0) {
-                        throw new Error(t('At least one LoadPattern is required'));
-                      }
-                    },
-                  },
-                ]}
-              >
-                {(fields, { add, remove }, { errors }) => (
-                  <>
-                    {fields.map(({ name: loadPatternIdx }) => (
-                      <div key={loadPatternIdx} className="flex items-center gap-1">
-                        <Form.Item className="w-full mb-2">
-                          <Card>
-                            <Form.Item className="mb-0" label={t('LoadPattern')} required>
-                              <div className="flex gap-1">
-                                <Form.Item
-                                  className="w-64 flex-auto"
-                                  name={[loadPatternIdx, 'loadPatternRef', 'namespace']}
-                                  rules={[{ required: true, message: t('Namespace is required') }]}
-                                >
-                                  <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
-                                </Form.Item>
-                                <Form.Item
-                                  noStyle
-                                  shouldUpdate={(prev: DigitalTwinVO, next: DigitalTwinVO) =>
-                                    prev.loadPatterns[loadPatternIdx].loadPatternRef.namespace !==
-                                    next.loadPatterns[loadPatternIdx]?.loadPatternRef.namespace
-                                  }
-                                >
-                                  {() => (
-                                    <Form.Item
-                                      className="w-64 flex-auto"
-                                      name={[loadPatternIdx, 'loadPatternRef', 'name']}
-                                      rules={[{ required: true, message: t('Name is required') }]}
-                                    >
-                                      <BaseResourceSelect
-                                        resourceKind={t('LoadPattern')}
-                                        listHook={useListLoadPatternsQuery}
-                                        filter={(item) =>
-                                          item.metadata.namespace ===
-                                          (form.getFieldValue([
-                                            'loadPatterns',
-                                            loadPatternIdx,
-                                            'loadPatternRef',
-                                            'namespace',
-                                          ]) as DigitalTwinVO['loadPatterns'][number]['loadPatternRef']['namespace'])
-                                        }
-                                      />
-                                    </Form.Item>
-                                  )}
-                                </Form.Item>
-                              </div>
-                            </Form.Item>
-                          </Card>
-                        </Form.Item>
-                        <Form.Item className="mb-2">
-                          <Button
-                            type="text"
-                            size="small"
-                            icon={<FontAwesomeIcon icon={faTrash} />}
-                            onClick={() => {
-                              remove(loadPatternIdx);
-                            }}
-                          />
-                        </Form.Item>
-                      </div>
-                    ))}
-                    <Button
-                      icon={<FontAwesomeIcon icon={faAdd} />}
-                      onClick={() => {
-                        const newLoadPattern: DigitalTwinVO['loadPatterns'][number] = {
-                          endpointName: '',
-                          loadPatternRef: {
-                            namespace: '',
-                            name: '',
-                          },
-                        };
-                        add(newLoadPattern);
-                      }}
-                    >
-                      {t('Add')}
-                    </Button>
-                    <Form.ErrorList errors={errors} />
-                  </>
-                )}
-              </Form.List>
-            </Form.Item>
+
             <Form.Item label={t('Experiments')} required>
               <Form.List
                 name={['experiments']}

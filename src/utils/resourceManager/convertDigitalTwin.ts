@@ -9,14 +9,6 @@ export const getDigitalTwinVO = (digitalTwinDTO: DigitalTwinDTO): DigitalTwinVO 
   return {
     namespace: digitalTwinDTO.metadata.namespace,
     name: digitalTwinDTO.metadata.name,
-    loadPatterns:
-      digitalTwinDTO.spec.loadPatterns?.map((loadPattern) => ({
-        endpointName: loadPattern.endpointName ?? '',
-        loadPatternRef: {
-          namespace: loadPattern.loadPatternRef?.namespace ?? '',
-          name: loadPattern.loadPatternRef?.name ?? '',
-        },
-      })) ?? [],
     experiments:
       digitalTwinDTO.spec.experiments?.map((experiment) => ({
         endpointName: experiment.endpointName ?? '',
@@ -41,7 +33,6 @@ export const getDigitalTwinDTO = (digitalTwinVO: DigitalTwinVO): Pick<DigitalTwi
       name: digitalTwinVO.name,
     },
     spec: {
-      loadPatterns: digitalTwinVO.loadPatterns,
       experiments: digitalTwinVO.experiments,
       modelType: digitalTwinVO.modelType,
     },
