@@ -5,7 +5,7 @@ import { ColumnsType } from 'antd/es/table';
 import BaseResourceList from '@/components/resourceManager/BaseResourceList';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeleteTrafficModelMutation, useListTrafficModelsQuery } from '@/services/resourceManager/trafficModelApi';
-import { LoadPatternDTO } from '@/types/resourceManager/loadPattern';
+import { TrafficModelDTO } from '@/types/resourceManager/trafficModel';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const TrafficModelList: React.FC = () => {
@@ -15,7 +15,7 @@ const TrafficModelList: React.FC = () => {
     listHook: useListTrafficModelsQuery,
   });
 
-  const columns: ColumnsType<LoadPatternDTO> = [
+  const columns: ColumnsType<TrafficModelDTO> = [
     {
       title: t('Name'),
       dataIndex: ['metadata', 'name'],

@@ -20,11 +20,9 @@ export type DigitalTwinStatus = {
 
 /** Type definition for the data transfer object of a DigitalTwin */
 export type DigitalTwinDTO = {
-  // experiments: { endpointName: string; experimentRef: { namespace: string; name: string; }; }[];
   metadata: DigitalTwinMetadata;
   spec: DigitalTwinSpec;
   status: DigitalTwinStatus | undefined;
-  // modelType: string;
 };
 
 /** Type definition for the view object of a DigitalTwin */

@@ -6,7 +6,7 @@ export type TrafficModelMetadata = {
 
 /** Type definition for the spec of a TrafficModel */
 export type TrafficModelSpec = {
-  // Replace with the spec of a TrafficModel
+  config: string;
 };
 
 /** Type definition for the status of a TrafficModel */
@@ -25,5 +25,5 @@ export type TrafficModelDTO = {
 export type TrafficModelVO = {
   namespace: string;
   name: string;
-  // Replace with the view object of a TrafficModel
+  config: string;
 };

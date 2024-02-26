@@ -34,20 +34,32 @@ const TrafficModelEditor: React.FC = () => {
   });
 
   const beforeUpload = (file: { type: string }) => {
-    const isCsv = file.type === 'text/csv';
-    if (!isCsv) {
-      message.error('You can only upload CSV file!');
+    const isJson = file.type === 'application/json';
+    if (!isJson) {
+      message.error('You can only upload JSON file!');
     }
-    return isCsv;
+    return isJson;
   };
+  interface FileObject {
+    originFileObj: Blob;
+    jsonString?: string;
+  }
 
-  const normFile = (e: { fileList: unknown }) => {
+  const normFile = (e: { fileList: FileObject[] }) => {
     if (Array.isArray(e)) {
       return e;
     }
+    const file = e.fileList[0];
+    const reader = new FileReader();
+    reader.onload = (event: ProgressEvent<FileReader>) => {
+      if (event.target) {
+        file.jsonString = event.target.result as string;
+        form.setFieldsValue({ config: file.jsonString });
+      }
+    };
+    reader.readAsText(file.originFileObj as Blob);
     return e && e.fileList;
   };
-
   return (
     <div className="p-6">
       {React.cloneElement(breadcrumb, { className: 'mb-6' })}
@@ -88,7 +100,7 @@ const TrafficModelEditor: React.FC = () => {
               <Input disabled={params.action === 'edit'} />
             </Form.Item>
 
-            <Form.Item label={t('Download CSV')} name={['download_csv']}>
+            <Form.Item label={t('Download JSON')} name={['download_json']}>
               <div className="flex">
                 <Tooltip
                   title={t(
@@ -97,20 +109,15 @@ const TrafficModelEditor: React.FC = () => {
                 >
                   <InfoCircleOutlined className="text-slate-400 dark:text-slate-600 mr-2" />
                 </Tooltip>
-                <a href="/utils/traffic_model.csv" download>
-                  <Button type="primary">{t('Download CSV')}</Button>
+                <a href="/utils/traffic_model.json" download>
+                  <Button type="primary">{t('Download JSON')}</Button>
                 </a>
               </div>
             </Form.Item>
 
-            <Form.Item
-              label={t('Upload CSV')}
-              name={['csv']}
-              valuePropName="fileList"
-              getValueFromEvent={normFile}
-              rules={[{ required: true, message: t('CSV file is required') }]}
-            >
-              <Upload.Dragger name="file" action="/upload.do" beforeUpload={beforeUpload}>
+            <Form.Item label={t('Upload JSON')} name={['json']} valuePropName="fileList" getValueFromEvent={normFile}>
+              <Upload.Dragger name="json" beforeUpload={beforeUpload}>
+                {' '}
                 <p className="ant-upload-drag-icon">
                   <UploadOutlined />
                 </p>

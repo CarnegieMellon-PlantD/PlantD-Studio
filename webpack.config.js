@@ -139,9 +139,6 @@ const config = {
       BUILD_LOCAL_TIME: JSON.stringify(new Date().toString()),
       BUILD_ISO_TIME: JSON.stringify(new Date().toISOString()),
     }),
-    new CopyWebpackPlugin({
-      patterns: [{ from: 'src/utils/traffic_model.csv', to: 'utils' }],
-    }), // TODO: Remove  after integrating traffic model download with API
   ],
   resolve: {
     alias: {

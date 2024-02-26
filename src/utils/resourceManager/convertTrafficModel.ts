@@ -9,6 +9,7 @@ export const getTrafficModelVO = (trafficModelDTO: TrafficModelDTO): TrafficMode
   return {
     namespace: trafficModelDTO.metadata.namespace,
     name: trafficModelDTO.metadata.name,
+    config: trafficModelDTO.spec.config,
   };
 };
 
@@ -23,6 +24,6 @@ export const getTrafficModelDTO = (trafficModelVO: TrafficModelVO): Pick<Traffic
       namespace: trafficModelVO.namespace,
       name: trafficModelVO.name,
     },
-    spec: {},
+    spec: { config: trafficModelVO.config },
   };
 };
