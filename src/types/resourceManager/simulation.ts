@@ -39,7 +39,7 @@ export type SimulationVO = {
 };
 
 /** Enums of `status.experimentState` */
-export enum SimulationState {
+export enum SimulationJobStatus {
   Pending = 'Pending',
   Initializing = 'Initializing',
   WaitingForPipelineReady = 'WaitingForPipelineReady',
@@ -49,13 +49,13 @@ export enum SimulationState {
   Error = 'Error',
 }
 
-/** All `status.experimentState` for enumerating and sorting */
-export const allExperimentExperimentStates: SimulationState[] = [
-  SimulationState.Pending,
-  SimulationState.Initializing,
-  SimulationState.WaitingForPipelineReady,
-  SimulationState.Ready,
-  SimulationState.Running,
-  SimulationState.Finished,
-  SimulationState.Error,
+/** All `status.simulationJobStatus` for enumerating and sorting */
+export const allSimulationSimulationJobStatus: SimulationJobStatus[] = [
+  SimulationJobStatus.Pending,
+  SimulationJobStatus.Initializing,
+  SimulationJobStatus.WaitingForPipelineReady,
+  SimulationJobStatus.Ready,
+  SimulationJobStatus.Running,
+  SimulationJobStatus.Finished,
+  SimulationJobStatus.Error,
 ];
