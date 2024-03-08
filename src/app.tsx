@@ -12,6 +12,8 @@ import AppError from '@/components/AppError';
 import AppHelmet from '@/components/AppHelmet';
 import AppLayout from '@/components/AppLayout';
 import { store } from '@/store';
+import NetworkAndStorageList from './pages/resourceManager/NetworkAndStorageList';
+import ProjectedUploadList from './pages/resourceManager/ProjectedUploadList';
 
 import 'dayjs/locale/en';
 import '@/i18n';
@@ -128,6 +130,24 @@ const router = createBrowserRouter([
           {
             path: ':action/:namespace?/:name?',
             element: <ExperimentEditor />,
+          },
+        ],
+      },
+      {
+        path: 'projectedUploads',
+        children: [
+          {
+            index: true,
+            element: <ProjectedUploadList />,
+          },
+        ],
+      },
+      {
+        path: 'networkAndStorage',
+        children: [
+          {
+            index: true,
+            element: <NetworkAndStorageList />,
           },
         ],
       },

@@ -18,10 +18,12 @@ import {
   faHome,
   faLanguage,
   faMoon,
+  faNetworkWired,
   faPlay,
   faServer,
   faSun,
   faTableColumns,
+  faUpload,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -121,6 +123,16 @@ const AppLayout: React.FC = () => {
         label: t('Business Analysis'),
         children: [
           {
+            key: 'projectedUploads',
+            icon: <FontAwesomeIcon icon={faUpload} />,
+            label: t('Projected Uploads'),
+          },
+          {
+            key: 'networkAndStorage',
+            icon: <FontAwesomeIcon icon={faNetworkWired} />,
+            label: t('Network and Storage'),
+          },
+          {
             key: 'trafficModel',
             icon: <FontAwesomeIcon icon={faCar} />,
             label: t('Traffic Model'),
@@ -194,6 +206,16 @@ const AppLayout: React.FC = () => {
         key: 'experiment',
         match: /^\/experiment(\/.*)?$/,
         target: '/experiment',
+      },
+      {
+        key: 'projectedUploads',
+        match: /^\/projectedUploads(\/.*)?$/,
+        target: '/projectedUploads',
+      },
+      {
+        key: 'networkAndStorage',
+        match: /^\/networkAndStorage(\/.*)?$/,
+        target: '/networkAndStorage',
       },
       {
         key: 'trafficModel',
