@@ -58,7 +58,6 @@ const DigitalTwinEditor: React.FC = () => {
               <BaseResourceSelect
                 resourceKind={t('Namespace')}
                 listHook={useListNamespacesQuery}
-                // Disable metadata fields if action is `edit`
                 disabled={params.action === 'edit'}
               />
             </Form.Item>

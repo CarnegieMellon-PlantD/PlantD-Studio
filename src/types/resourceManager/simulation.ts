@@ -8,10 +8,6 @@ export type SimulationMetadata = {
 export type SimulationSpec = {
   digitalTwinRef?: { name?: string; namespace?: string };
   trafficModelRef?: { name?: string; namespace?: string };
-  loadForecast?: string;
-  slas?: Array<string>;
-  records?: number;
-  slaCount?: number;
 };
 
 /** Type definition for the status of a Simulation */

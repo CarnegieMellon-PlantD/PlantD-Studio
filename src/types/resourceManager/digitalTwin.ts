@@ -13,16 +13,11 @@ export type DigitalTwinSpec = {
   modelType?: string;
 };
 
-/** Type definition for the status of a DigitalTwin */
-export type DigitalTwinStatus = {
-  // Replace with the status of a DigitalTwin
-};
-
 /** Type definition for the data transfer object of a DigitalTwin */
 export type DigitalTwinDTO = {
   metadata: DigitalTwinMetadata;
   spec: DigitalTwinSpec;
-  status: DigitalTwinStatus | undefined;
+  status: Record<string, never>;
 };
 
 /** Type definition for the view object of a DigitalTwin */
@@ -35,12 +30,3 @@ export type DigitalTwinVO = {
     name: string;
   }>;
 };
-
-/** Enums of `status.digitalTwinState` */
-export enum DigitalTwinState {}
-// Replace with the states of a DigitalTwin
-
-/** All `status.digitalTwinState` for enumerating and sorting */
-export const allDigitalTwinStates: DigitalTwinState[] = [
-  // Replace with the states of a DigitalTwin
-];

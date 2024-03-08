@@ -9,16 +9,11 @@ export type TrafficModelSpec = {
   config: string;
 };
 
-/** Type definition for the status of a TrafficModel */
-export type TrafficModelStatus = {
-  // Replace with the status of a TrafficModel
-};
-
 /** Type definition for the data transfer object of a TrafficModel */
 export type TrafficModelDTO = {
   metadata: TrafficModelMetadata;
   spec: TrafficModelSpec;
-  status: TrafficModelStatus | undefined;
+  status: Record<string, never>;
 };
 
 /** Type definition for the view object of a TrafficModel */

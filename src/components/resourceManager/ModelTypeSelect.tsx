@@ -4,13 +4,16 @@ import { Select, SelectProps } from 'antd';
 interface ModelTypeSelectProps extends Omit<SelectProps, 'showSearch' | 'options'> {}
 
 const ModelTypeSelect: React.FC<ModelTypeSelectProps> = (props) => {
-  const options = ['quickscaling', 'simple'];
+  const options = [
+    { type: 'quickscaling', value: 'Quick Scaling' },
+    { type: 'simple', value: 'Simple' },
+  ];
 
   return (
     <Select showSearch {...props}>
       {options.map((option) => (
-        <Select.Option key={option} value={option}>
-          {option}
+        <Select.Option key={option.type} value={option.type}>
+          {option.value}
         </Select.Option>
       ))}
     </Select>
