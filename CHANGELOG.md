@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.4.0...v1.5.0) (2024-03-12)
+
+### Features
+
+- add helper text and resource captions ([6ab86f5](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/6ab86f559ceb98598d645120a862da02c9af6250))
+- **business-analysis:** add create, edit, and tables for business analysis resources ([0daacb6](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/0daacb62ad7b7824e39690125a0546173e0d3c41))
+- download traffic model ([0916021](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/09160218c2ea81a504c7645e6236842e5b3d8eb9))
+
+### Bug Fixes
+
+- add dependency between namespace and names for resources in simulation create ([3fd4254](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/3fd4254d479b7f2c2eee1db601258eba956f684f))
+- bring back missing hook dependency ([9026a9c](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/9026a9c41df9b405003cb7cb568f0ad33873884c))
+- change trafficmodel to JSON ([300bb9a](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/300bb9ad335d30a0faceb36ff8db19c05a0598ad))
+- conditional xField and yField ([00c26dd](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/00c26dda88d4de9d60d919d61d0b96d5daee1327))
+- digitalTwin edit experiment namespace and name are rendering ([4cc3fe1](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/4cc3fe186c95705a1332b5bbe8ff026da4914953))
+- digitalTwin endpoint changes ([1f5b049](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/1f5b049d9b76ad92fa31d62c6c2f77d59a736ab6))
+- lowercase url ([ffaa080](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/ffaa080cf889bb93ad27f943df0e56db71fdc393))
+- remove commented code and empty strings ([8c3565d](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/8c3565da37703967b415e11004a6e6672fe05df9))
+- remove empty file ([204ffa5](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/204ffa598dc0c9c0e812cdd08bc3e9f28582c8b8))
+- remove load patterns from Digital Twin Editor ([169b0d9](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/169b0d9787b63c526e1662691f8f2ef0fb953390))
+- remove unused dependency ([014d247](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/014d247d870d4e3cf98b924db8477b414f01f799))
+- remove unused variable ([8dfe8f7](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/8dfe8f759374ca2bb20f32e011209970881094c7))
+- remove unused yfield ([70b45f8](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/70b45f83472136d374f1a0524ff5d9153800eb4a))
+- replace any type and remove ts-ignore ([4311c14](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/4311c14c82754734b8140205685e301a5d0495f8))
+- simulation job status not simulationstate ([f896f84](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/f896f840e95a790506f78b6376d81e04dde18635))
+- various fixes ([04d9c46](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/04d9c46ecfa734978873e4d526be4100e822f045))
+
 ## [1.4.0](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.3.1...v1.4.0) (2023-12-18)
 
 ### Features
