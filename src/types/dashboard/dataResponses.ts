@@ -16,5 +16,4 @@ export type TriChannelData = Array<{
   series: string;
 }>;
 
-// @ts-ignore
-export type RedisRawData = Array<any>;
+export type RedisRawData = Array<never>;
