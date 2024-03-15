@@ -6,6 +6,7 @@ import {
   BarChartProps,
   GaugeChartProps,
   LineChartProps,
+  LineChartRedisProps,
   PieChartProps,
   ScatterChartProps,
 } from '@/types/dashboard/widgetProps';
@@ -16,6 +17,7 @@ type WidgetManifest =
   | ({ __type: 'pie' } & PieChartProps)
   | ({ __type: 'bar' } & BarChartProps)
   | ({ __type: 'line' } & LineChartProps)
+  | ({ __type: 'line_redis' } & LineChartRedisProps)
   | ({ __type: 'area' } & AreaChartProps)
   | ({ __type: 'scatter' } & ScatterChartProps);
 
@@ -23,6 +25,8 @@ type WidgetManifest =
 export interface DashboardProps {
   /** Breadcrumbs of page */
   breadcrumbs?: React.ReactNode[];
+  /** Data type for y-axis */
+  yField?: string;
   /** Time range of dashboard */
   timeRange?: [Dayjs, Dayjs];
   /** Function to set time range of dashboard */

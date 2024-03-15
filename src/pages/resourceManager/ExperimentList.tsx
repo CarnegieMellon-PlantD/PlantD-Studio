@@ -18,7 +18,7 @@ import {
 } from '@/types/resourceManager/experiment';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
-const ErrorTooltip: React.FC<{ record: ExperimentDTO }> = ({ record }) => {
+export const ErrorTooltip: React.FC<{ record: ExperimentDTO }> = ({ record }) => {
   return (
     <>
       {' '}

@@ -1,6 +1,7 @@
 /** Request for raw data from Redis */
 export type RedisRawDataRequest = {
   key: string;
+  __source: 'redis';
 };
 
 /** Request for BiChannelData from Prometheus */
@@ -33,12 +34,16 @@ export type PrometheusTriChannelDataRequest = {
 
 /** Request for TriChannelData from Redis Time Series */
 export type RedisTSTriChannelDataRequest = {
-  __source: 'redis-ts';
-  start: number;
-  end: number;
-  filters: string[];
-  labelSelector: string[];
+  __source: 'redis-ts' | 'redis';
+  start?: number;
+  end?: number;
+  key?: string;
+  filters?: string[];
+  labelSelector?: string[];
 };
 
 /** Request for TriChannelData */
-export type TriChannelDataRequest = PrometheusTriChannelDataRequest | RedisTSTriChannelDataRequest;
+export type TriChannelDataRequest =
+  | PrometheusTriChannelDataRequest
+  | RedisTSTriChannelDataRequest
+  | RedisRawDataRequest;

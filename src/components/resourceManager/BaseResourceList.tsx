@@ -34,6 +34,8 @@ interface BaseResourceListProps<DTO_R, DTO_L> extends Omit<TableProps<DTO_R>, 'l
   resourceKindUrl: string;
   /** List of resources */
   data: DTO_R[] | undefined;
+  /** Caption or subheader text to explain the resource */
+  caption?: string;
   /** Is resource list loading for the first time */
   isLoading: boolean;
   /** Is resource list fetching, previous data may exist */
@@ -55,6 +57,7 @@ const BaseResourceList = <
   resourceKind,
   resourceKindUrl,
   data,
+  caption,
   isLoading,
   isFetching,
   refetch,
@@ -192,6 +195,8 @@ const BaseResourceList = <
         items={[{ title: 'PlantD Studio' }, { title: t('Resources') }, { title: resourceKind }]}
         className="mb-6"
       />
+      {caption && <div className=" mb-4">{t(caption)}</div>}
+
       {showNamespaceSelect && (
         <Card bordered={false} className="mb-6">
           <Form {...formStyle}>

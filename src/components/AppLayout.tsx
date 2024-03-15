@@ -2,7 +2,10 @@ import * as React from 'react';
 import { Suspense, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { faWindowRestore } from '@fortawesome/free-regular-svg-icons';
 import {
+  faBullseye,
+  faCar,
   faChartArea,
   faChevronLeft,
   faChevronRight,
@@ -15,9 +18,12 @@ import {
   faHome,
   faLanguage,
   faMoon,
+  faNetworkWired,
+  faPlay,
   faServer,
   faSun,
   faTableColumns,
+  faUpload,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -112,6 +118,38 @@ const AppLayout: React.FC = () => {
         ],
       },
       {
+        key: 'businessAnalysis',
+        icon: <FontAwesomeIcon icon={faBullseye} />,
+        label: t('Business Analysis'),
+        children: [
+          {
+            key: 'scenario',
+            icon: <FontAwesomeIcon icon={faUpload} />,
+            label: t('Scenario'),
+          },
+          {
+            key: 'networkAndStorage',
+            icon: <FontAwesomeIcon icon={faNetworkWired} />,
+            label: t('Network and Storage'),
+          },
+          {
+            key: 'trafficModel',
+            icon: <FontAwesomeIcon icon={faCar} />,
+            label: t('Traffic Model'),
+          },
+          {
+            key: 'digitalTwin',
+            icon: <FontAwesomeIcon icon={faWindowRestore} />,
+            label: t('Digital Twin'),
+          },
+          {
+            key: 'simulation',
+            icon: <FontAwesomeIcon icon={faPlay} />,
+            label: t('Simulation'),
+          },
+        ],
+      },
+      {
         key: 'tools',
         icon: <FontAwesomeIcon icon={faWrench} />,
         label: t('Tools'),
@@ -131,7 +169,7 @@ const AppLayout: React.FC = () => {
     ],
     [t]
   );
-  const sideMenuDefaultOpenKeys = useMemo<string[]>(() => ['resources', 'tools'], []);
+  const sideMenuDefaultOpenKeys = useMemo<string[]>(() => ['resources', 'businessAnalysis', 'tools'], []);
   const sideMenuItemRules = useMemo<MenuItemRule[]>(
     () => [
       {
@@ -168,6 +206,31 @@ const AppLayout: React.FC = () => {
         key: 'experiment',
         match: /^\/experiment(\/.*)?$/,
         target: '/experiment',
+      },
+      {
+        key: 'scenario',
+        match: /^\/scenario(\/.*)?$/,
+        target: '/scenario',
+      },
+      {
+        key: 'networkAndStorage',
+        match: /^\/networkAndStorage(\/.*)?$/,
+        target: '/networkAndStorage',
+      },
+      {
+        key: 'trafficModel',
+        match: /^\/trafficModel(\/.*)?$/,
+        target: '/trafficModel',
+      },
+      {
+        key: 'digitalTwin',
+        match: /^\/digitalTwin(\/.*)?$/,
+        target: '/digitalTwin',
+      },
+      {
+        key: 'simulation',
+        match: /^\/simulation(\/.*)?$/,
+        target: '/simulation',
       },
       {
         key: 'importExport',
