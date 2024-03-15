@@ -44,6 +44,7 @@ export const baseApi = createApi({
     'TrafficModel',
     'DigitalTwin',
     'Simulation',
+    'Scenario',
   ],
   endpoints: () => ({}),
   refetchOnMountOrArgChange: true,

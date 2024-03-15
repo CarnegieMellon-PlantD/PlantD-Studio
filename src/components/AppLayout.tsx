@@ -123,9 +123,9 @@ const AppLayout: React.FC = () => {
         label: t('Business Analysis'),
         children: [
           {
-            key: 'projectedUploads',
+            key: 'scenario',
             icon: <FontAwesomeIcon icon={faUpload} />,
-            label: t('Projected Uploads'),
+            label: t('Scenario'),
           },
           {
             key: 'networkAndStorage',
@@ -208,9 +208,9 @@ const AppLayout: React.FC = () => {
         target: '/experiment',
       },
       {
-        key: 'projectedUploads',
-        match: /^\/projectedUploads(\/.*)?$/,
-        target: '/projectedUploads',
+        key: 'scenario',
+        match: /^\/scenario(\/.*)?$/,
+        target: '/scenario',
       },
       {
         key: 'networkAndStorage',

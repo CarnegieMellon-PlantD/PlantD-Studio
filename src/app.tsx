@@ -13,7 +13,6 @@ import AppHelmet from '@/components/AppHelmet';
 import AppLayout from '@/components/AppLayout';
 import { store } from '@/store';
 import NetworkAndStorageList from './pages/resourceManager/NetworkAndStorageList';
-import ProjectedUploadList from './pages/resourceManager/ProjectedUploadList';
 
 import 'dayjs/locale/en';
 import '@/i18n';
@@ -41,7 +40,8 @@ const DigitalTwinEditor = lazy(() => import('@/pages/resourceManager/DigitalTwin
 const SimulationList = lazy(() => import('@/pages/resourceManager/SimulationList'));
 const SimulationEditor = lazy(() => import('@/pages/resourceManager/SimulationEditor'));
 const SimulationReportDashboard = lazy(() => import('@/pages/dashboard/SimulationReportDashboard'));
-
+const ScenarioList = lazy(() => import('@/pages/resourceManager/ScenarioList'));
+const ScenarioEditor = lazy(() => import('@/pages/resourceManager/ScenarioEditor'));
 const ImportExport = lazy(() => import('@/pages/ImportExport'));
 const About = lazy(() => import('@/pages/About'));
 
@@ -134,11 +134,15 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'projectedUploads',
+        path: 'scenario',
         children: [
           {
             index: true,
-            element: <ProjectedUploadList />,
+            element: <ScenarioList />,
+          },
+          {
+            path: ':action/:namespace?/:name?',
+            element: <ScenarioEditor />,
           },
         ],
       },
