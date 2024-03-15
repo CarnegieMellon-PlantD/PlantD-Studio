@@ -1,3 +1,5 @@
+import { nanoid } from '@reduxjs/toolkit';
+
 import { ScenarioDTO, ScenarioVO } from '@/types/resourceManager/scenario';
 
 /**
@@ -11,7 +13,10 @@ export const getScenarioVO = (scenarioDTO: ScenarioDTO): ScenarioVO => {
     name: scenarioDTO.metadata.name,
     dataSetConfig: scenarioDTO.spec.dataSetConfig,
     pipelineRef: scenarioDTO.spec.pipelineRef,
-    tasks: scenarioDTO.spec.tasks,
+    tasks: scenarioDTO.spec.tasks.map((task) => ({
+      id: nanoid(),
+      ...task,
+    })),
   };
 };
 
@@ -29,7 +34,7 @@ export const getScenarioDTO = (scenarioVO: ScenarioVO): Pick<ScenarioDTO, 'metad
     spec: {
       dataSetConfig: scenarioVO.dataSetConfig,
       pipelineRef: scenarioVO.pipelineRef,
-      tasks: scenarioVO.tasks,
+      tasks: scenarioVO.tasks.map(({ id, ...task }) => task),
     },
   };
 };
