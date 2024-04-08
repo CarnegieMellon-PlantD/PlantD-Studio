@@ -90,7 +90,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     return () => {
       window.clearInterval(id);
     };
-  }, [mergedRefreshInterval]);
+  }, [mergedRefreshInterval, mergedSetTimeRange, refetchData]);
 
   const timeRangePresets = useMemo<RangePickerProps['presets']>(
     () => [
@@ -139,6 +139,13 @@ const Dashboard: React.FC<DashboardProps> = ({
                   return;
                 }
                 mergedSetTimeRange([value[0], value[1]]);
+                // Update the widget props
+                widgets.forEach((widget) => {
+                  if (widget.__type === 'line_redis' && widget.display) {
+                    widget.display.xAxisMin = value[0]?.valueOf();
+                    widget.display.xAxisMax = value[1]?.valueOf();
+                  }
+                });
                 refetchData();
               }}
             />

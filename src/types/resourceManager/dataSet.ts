@@ -6,21 +6,21 @@ export type DataSetMetadata = {
 
 /** Type definition for the spec of a DataSet */
 export type DataSetSpec = {
-  path?: string;
-  fileFormat?: string;
+  image?: string;
+  parallelism?: number;
+  fileFormat: string;
   compressedFileFormat?: string;
   compressPerSchema?: boolean;
-  numFiles?: number;
-  parallelJobs?: number;
-  schemas?: Array<{
-    name?: string;
-    numRecords?: {
-      min?: number;
-      max?: number;
+  numFiles: number;
+  schemas: Array<{
+    name: string;
+    numRecords: {
+      min: number;
+      max: number;
     };
     numFilesPerCompressedFile?: {
-      min?: number;
-      max?: number;
+      min: number;
+      max: number;
     };
   }>;
 };
@@ -77,26 +77,22 @@ export type DataSetVO = {
 
 /** Enums of `status.jobStatus` */
 export enum DataSetJobStatus {
-  Creating = 'Creating',
-  Generating = 'Generating',
+  Running = 'Running',
   Success = 'Success',
   Failed = 'Failed',
-  Unknown = 'Unknown',
 }
 
 /** All `status.jobStatus` for enumerating and sorting */
 export const allDataSetJobStatuses: DataSetJobStatus[] = [
-  DataSetJobStatus.Creating,
-  DataSetJobStatus.Generating,
+  DataSetJobStatus.Running,
   DataSetJobStatus.Success,
   DataSetJobStatus.Failed,
-  DataSetJobStatus.Unknown,
 ];
 
 /** Enums of keys of `status.errors` */
 export enum DataSetErrorType {
-  Container = 'container',
-  Pod = 'pod',
+  Controller = 'controller',
+  Job = 'job',
 }
 
 /** Enums of `status.pvcStatus */

@@ -11,18 +11,15 @@ import BaseResourceList from '@/components/resourceManager/BaseResourceList';
 import { autoRefreshInterval } from '@/constants/resourceManager';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeleteExperimentMutation, useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
-import {
-  allExperimentExperimentStates,
-  ExperimentDTO,
-  ExperimentExperimentState,
-} from '@/types/resourceManager/experiment';
+import { allExperimentJobStatuses, ExperimentDTO, ExperimentJobStatus } from '@/types/resourceManager/experiment';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
+import dayjs from 'dayjs';
 
-const ErrorTooltip: React.FC<{ record: ExperimentDTO }> = ({ record }) => {
+export const ErrorTooltip: React.FC<{ record: ExperimentDTO }> = ({ record }) => {
   return (
     <>
       {' '}
-      <Tooltip title={record.status?.experimentState}>
+      <Tooltip title={record.status?.error}>
         <InfoCircleOutlined className="cursor-pointer" />
       </Tooltip>
     </>
@@ -53,16 +50,69 @@ const ExperimentList: React.FC = () => {
       defaultSortOrder: 'ascend',
     },
     {
-      title: t('Duration'),
+      title: t('Durations'),
       width: 150,
       render: (text, record) =>
-        Object.entries(record.status?.duration ?? {})
+        Object.entries(record.status?.durations ?? {})
           .map(([key, value]) => `${key}: ${value}`)
           .join(', '),
     },
     {
-      title: t('Dashboards'),
+      title: t('Status'),
       width: 150,
+      render: (text, record) =>
+        record.status?.jobStatus === ExperimentJobStatus.Scheduled ? (
+          <Badge status="warning" text={t('Scheduled')} />
+        ) : record.status?.jobStatus === ExperimentJobStatus.WaitingDataSet ? (
+          <Badge status="warning" text={t('Waiting for DataSet')} />
+        ) : record.status?.jobStatus === ExperimentJobStatus.WaitingPipeline ? (
+          <Badge status="warning" text={t('Waiting for Pipeline')} />
+        ) : record.status?.jobStatus === ExperimentJobStatus.Initializing ? (
+          <Badge status="warning" text={t('Initializing')} />
+        ) : record.status?.jobStatus === ExperimentJobStatus.Running ? (
+          <Badge status="processing" text={t('Running')} />
+        ) : record.status?.jobStatus === ExperimentJobStatus.Completed ? (
+          <Badge status="success" text={t('Completed')} />
+        ) : record.status?.jobStatus === ExperimentJobStatus.Failed ? (
+          <Badge
+            status="error"
+            text={
+              <span>
+                {t('Failed')}
+                <ErrorTooltip record={record} />
+              </span>
+            }
+          />
+        ) : (
+          <Badge status="default" text={record.status?.jobStatus ?? '-'} />
+        ),
+      filters: [
+        { text: t('Scheduled'), value: ExperimentJobStatus.Scheduled },
+        { text: t('Waiting for DataSet'), value: ExperimentJobStatus.WaitingDataSet },
+        { text: t('Waiting for Pipeline'), value: ExperimentJobStatus.WaitingPipeline },
+        { text: t('Initializing'), value: ExperimentJobStatus.Initializing },
+        { text: t('Running'), value: ExperimentJobStatus.Running },
+        { text: t('Completed'), value: ExperimentJobStatus.Completed },
+        { text: t('Failed'), value: ExperimentJobStatus.Failed },
+      ],
+      onFilter: (value, record) => record.status?.jobStatus === value,
+      sorter: (a, b) =>
+        allExperimentJobStatuses.indexOf(a.status?.jobStatus as ExperimentJobStatus) -
+        allExperimentJobStatuses.indexOf(b.status?.jobStatus as ExperimentJobStatus),
+    },
+    {
+      title: t('Start Time'),
+      width: 200,
+      render: (text, record) => record.status?.startTime ? dayjs(record.status?.startTime).format('YYYY-MM-DD HH:mm:ss') : '-',
+    },
+    {
+      title: t('Completion Time'),
+      width: 200,
+      render: (text, record) => record.status?.completionTime ? dayjs(record.status?.completionTime).format('YYYY-MM-DD HH:mm:ss') : '-',
+    },
+    {
+      title: t('Dashboards'),
+      width: 400,
       render: (text, record) => (
         <div className="flex gap-2">
           <Button
@@ -88,53 +138,6 @@ const ExperimentList: React.FC = () => {
         </div>
       ),
     },
-    {
-      title: t('Status'),
-      width: 150,
-      render: (text, record) =>
-        record.status?.experimentState === ExperimentExperimentState.Pending ? (
-          <Badge status="warning" text={t('Pending')} />
-        ) : record.status?.experimentState === ExperimentExperimentState.Initializing ? (
-          <Badge status="warning" text={t('Initializing')} />
-        ) : record.status?.experimentState === ExperimentExperimentState.WaitingForPipelineReady ? (
-          <Badge status="warning" text={t('Waiting For Pipeline')} />
-        ) : record.status?.experimentState === ExperimentExperimentState.Ready ? (
-          <Badge status="success" text={t('Ready')} />
-        ) : record.status?.experimentState === ExperimentExperimentState.Running ? (
-          <Badge status="processing" text={t('Running')} />
-        ) : record.status?.experimentState === ExperimentExperimentState.Finished ? (
-          <Badge status="success" text={t('Finished')} />
-        ) : record.status?.experimentState?.startsWith(ExperimentExperimentState.Error) ? (
-          <Badge
-            status="error"
-            text={
-              <span>
-                {t('Failed')}
-                <ErrorTooltip record={record} />
-              </span>
-            }
-          />
-        ) : (
-          <Badge status="default" text={record.status?.experimentState ?? '-'} />
-        ),
-      filters: [
-        { text: t('Pending'), value: ExperimentExperimentState.Pending },
-        { text: t('Initializing'), value: ExperimentExperimentState.Initializing },
-        {
-          text: t('Waiting For Pipeline'),
-          value: ExperimentExperimentState.WaitingForPipelineReady,
-        },
-        { text: t('Ready'), value: ExperimentExperimentState.Ready },
-        { text: t('Running'), value: ExperimentExperimentState.Running },
-        { text: t('Finished'), value: ExperimentExperimentState.Finished },
-        { text: t('Failed'), value: ExperimentExperimentState.Error },
-      ],
-      onFilter: (value, record) =>
-        record.status?.experimentState?.startsWith(value as ExperimentExperimentState) ?? false,
-      sorter: (a, b) =>
-        allExperimentExperimentStates.indexOf(a.status?.experimentState as never) -
-        allExperimentExperimentStates.indexOf(b.status?.experimentState as never),
-    },
   ];
 
   return (
@@ -150,7 +153,7 @@ const ExperimentList: React.FC = () => {
       refetch={refetch}
       deleteHook={useDeleteExperimentMutation}
       columns={columns}
-      scroll={{ x: 1000 }}
+      scroll={{ x: 1800 }}
     />
   );
 };

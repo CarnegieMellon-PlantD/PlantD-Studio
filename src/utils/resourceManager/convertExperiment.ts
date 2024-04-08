@@ -13,15 +13,26 @@ export const getExperimentVO = (experimentDTO: ExperimentDTO): ExperimentVO => {
       namespace: experimentDTO.spec.pipelineRef?.namespace ?? '',
       name: experimentDTO.spec.pipelineRef?.name ?? '',
     },
-    loadPatterns:
-      experimentDTO.spec.loadPatterns?.map((loadPattern) => ({
-        endpointName: loadPattern.endpointName ?? '',
+    endpointSpecs:
+      experimentDTO.spec.endpointSpecs?.map((endpointSpec) => ({
+        endpointName: endpointSpec.endpointName ?? '',
+        dataSpec: {
+          option:
+            endpointSpec.dataSpec.dataSetRef?.namespace !== '' && endpointSpec.dataSpec.dataSetRef?.name !== ''
+              ? 'dataSet'
+              : 'plainText',
+          plainText: endpointSpec.dataSpec.plainText ?? '',
+          dataSetRef: {
+            namespace: endpointSpec.dataSpec.dataSetRef?.namespace ?? '',
+            name: endpointSpec.dataSpec.dataSetRef?.name ?? '',
+          },
+        },
         loadPatternRef: {
-          namespace: loadPattern.loadPatternRef?.namespace ?? '',
-          name: loadPattern.loadPatternRef?.name ?? '',
+          namespace: endpointSpec.loadPatternRef?.namespace ?? '',
+          name: endpointSpec.loadPatternRef?.name ?? '',
         },
       })) ?? [],
-    hasScheduledTime: experimentDTO.spec.scheduledTime !== undefined && experimentDTO.spec.scheduledTime !== null,
+    hasScheduledTime: Boolean(experimentDTO.spec.scheduledTime),
     scheduledTime: experimentDTO.spec.scheduledTime ?? '',
   };
 };
@@ -39,7 +50,20 @@ export const getExperimentDTO = (experimentVO: ExperimentVO): Pick<ExperimentDTO
     },
     spec: {
       pipelineRef: experimentVO.pipelineRef,
-      loadPatterns: experimentVO.loadPatterns,
+      endpointSpecs: experimentVO.endpointSpecs.map((endpointSpec) => ({
+        endpointName: endpointSpec.endpointName,
+        dataSpec: {
+          plainText: endpointSpec.dataSpec.option === 'plainText' ? endpointSpec.dataSpec.plainText : undefined,
+          dataSetRef:
+            endpointSpec.dataSpec.option === 'dataSet'
+              ? {
+                  namespace: endpointSpec.dataSpec.dataSetRef.namespace,
+                  name: endpointSpec.dataSpec.dataSetRef.name,
+                }
+              : undefined,
+        },
+        loadPatternRef: endpointSpec.loadPatternRef,
+      })),
       scheduledTime: !experimentVO.hasScheduledTime ? undefined : experimentVO.scheduledTime,
     },
   };

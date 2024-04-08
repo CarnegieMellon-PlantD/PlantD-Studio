@@ -12,6 +12,7 @@ import AppError from '@/components/AppError';
 import AppHelmet from '@/components/AppHelmet';
 import AppLayout from '@/components/AppLayout';
 import { store } from '@/store';
+import NetworkAndStorageList from './pages/resourceManager/NetworkAndStorageList';
 
 import 'dayjs/locale/en';
 import '@/i18n';
@@ -32,6 +33,15 @@ const ExperimentList = lazy(() => import('@/pages/resourceManager/ExperimentList
 const ExperimentEditor = lazy(() => import('@/pages/resourceManager/ExperimentEditor'));
 const ExperimentDetailDashboard = lazy(() => import('@/pages/dashboard/ExperimentDetailDashboard'));
 const LoadGeneratorDashboard = lazy(() => import('@/pages/dashboard/LoadGeneratorDashboard'));
+const TrafficModelList = lazy(() => import('@/pages/resourceManager/TrafficModelList'));
+const TrafficModelEditor = lazy(() => import('@/pages/resourceManager/TrafficModelEditor'));
+const DigitalTwinList = lazy(() => import('@/pages/resourceManager/DigitalTwinList'));
+const DigitalTwinEditor = lazy(() => import('@/pages/resourceManager/DigitalTwinEditor'));
+const SimulationList = lazy(() => import('@/pages/resourceManager/SimulationList'));
+const SimulationEditor = lazy(() => import('@/pages/resourceManager/SimulationEditor'));
+const SimulationReportDashboard = lazy(() => import('@/pages/dashboard/SimulationReportDashboard'));
+const ScenarioList = lazy(() => import('@/pages/resourceManager/ScenarioList'));
+const ScenarioEditor = lazy(() => import('@/pages/resourceManager/ScenarioEditor'));
 const ImportExport = lazy(() => import('@/pages/ImportExport'));
 const About = lazy(() => import('@/pages/About'));
 
@@ -124,6 +134,67 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: 'scenario',
+        children: [
+          {
+            index: true,
+            element: <ScenarioList />,
+          },
+          {
+            path: ':action/:namespace?/:name?',
+            element: <ScenarioEditor />,
+          },
+        ],
+      },
+      {
+        path: 'networkAndStorage',
+        children: [
+          {
+            index: true,
+            element: <NetworkAndStorageList />,
+          },
+        ],
+      },
+      {
+        path: 'trafficModel',
+        children: [
+          {
+            index: true,
+            element: <TrafficModelList />,
+          },
+          {
+            path: ':action/:namespace?/:name?',
+            element: <TrafficModelEditor />,
+          },
+        ],
+      },
+      {
+        path: 'digitalTwin',
+        children: [
+          {
+            index: true,
+            element: <DigitalTwinList />,
+          },
+          {
+            path: ':action/:namespace?/:name?',
+            element: <DigitalTwinEditor />,
+          },
+        ],
+      },
+      {
+        path: 'simulation',
+        children: [
+          {
+            index: true,
+            element: <SimulationList />,
+          },
+          {
+            path: ':action/:namespace?/:name?',
+            element: <SimulationEditor />,
+          },
+        ],
+      },
+      {
         path: 'dashboard',
         children: [
           {
@@ -133,6 +204,10 @@ const router = createBrowserRouter([
           {
             path: 'loadGenerator/:namespace/:name',
             element: <LoadGeneratorDashboard />,
+          },
+          {
+            path: 'simulationReport/:namespace/:name',
+            element: <SimulationReportDashboard />,
           },
         ],
       },

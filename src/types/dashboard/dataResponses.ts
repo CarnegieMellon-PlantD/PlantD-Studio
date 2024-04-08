@@ -15,3 +15,5 @@ export type TriChannelData = Array<{
   /** Group name */
   series: string;
 }>;
+
+export type RedisRawData = Array<never>;

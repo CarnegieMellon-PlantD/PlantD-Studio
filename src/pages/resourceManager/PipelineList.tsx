@@ -7,13 +7,7 @@ import BaseResourceList from '@/components/resourceManager/BaseResourceList';
 import { autoRefreshInterval } from '@/constants/resourceManager';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeletePipelineMutation, useListPipelinesQuery } from '@/services/resourceManager/pipelineApi';
-import {
-  allPipelinePipelineStates,
-  allPipelineStatusChecks,
-  PipelineDTO,
-  PipelinePipelineState,
-  PipelineStatusCheck,
-} from '@/types/resourceManager/pipeline';
+import { allPipelineAvailabilities, PipelineDTO, PipelineAvailability } from '@/types/resourceManager/pipeline';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const PipelineList: React.FC = () => {
@@ -38,47 +32,24 @@ const PipelineList: React.FC = () => {
       defaultSortOrder: 'ascend',
     },
     {
-      title: t('Status'),
+      title: t('Availability'),
       width: 150,
       render: (text, record) =>
-        record.status?.pipelineState == PipelinePipelineState.Initializing ? (
-          <Badge status="warning" text={t('Initializing')} />
-        ) : record.status?.pipelineState == PipelinePipelineState.Available ? (
-          <Badge status="success" text={t('Available')} />
-        ) : record.status?.pipelineState == PipelinePipelineState.Engaged ? (
-          <Badge status="processing" text={t('Engaged')} />
+        record.status?.availability == PipelineAvailability.Ready ? (
+          <Badge status="success" text={t('Ready')} />
+        ) : record.status?.availability == PipelineAvailability.InUse ? (
+          <Badge status="processing" text={t('In-Use')} />
         ) : (
-          <Badge status="default" text={record.status?.pipelineState ?? '-'} />
+          <Badge status="default" text={record.status?.availability ?? '-'} />
         ),
       filters: [
-        { text: t('Initializing'), value: PipelinePipelineState.Initializing },
-        { text: t('Available'), value: PipelinePipelineState.Available },
-        { text: t('Engaged'), value: PipelinePipelineState.Engaged },
+        { text: t('Ready'), value: PipelineAvailability.Ready },
+        { text: t('In-Use'), value: PipelineAvailability.InUse },
       ],
-      onFilter: (value, record) => record.status?.pipelineState === value,
+      onFilter: (value, record) => record.status?.availability === value,
       sorter: (a, b) =>
-        allPipelinePipelineStates.indexOf(a.status?.pipelineState as never) -
-        allPipelinePipelineStates.indexOf(b.status?.pipelineState as never),
-    },
-    {
-      title: t('Health Check'),
-      width: 150,
-      render: (text, record) =>
-        record.status?.statusCheck === PipelineStatusCheck.OK ? (
-          <Badge status="success" text={t('Succeeded')} />
-        ) : record.status?.statusCheck === PipelineStatusCheck.Failed ? (
-          <Badge status="error" text={t('Failed')} />
-        ) : (
-          <Badge status="default" text={record.status?.statusCheck ?? '-'} />
-        ),
-      filters: [
-        { text: t('Succeeded'), value: PipelineStatusCheck.OK },
-        { text: t('Failed'), value: PipelineStatusCheck.Failed },
-      ],
-      onFilter: (value, record) => record.status?.statusCheck === value,
-      sorter: (a, b) =>
-        allPipelineStatusChecks.indexOf(a.status?.statusCheck as never) -
-        allPipelineStatusChecks.indexOf(b.status?.statusCheck as never),
+        allPipelineAvailabilities.indexOf(a.status?.availability as PipelineAvailability) -
+        allPipelineAvailabilities.indexOf(b.status?.availability as PipelineAvailability),
     },
   ];
   return (
@@ -94,7 +65,7 @@ const PipelineList: React.FC = () => {
       refetch={refetch}
       deleteHook={useDeletePipelineMutation}
       columns={columns}
-      scroll={{ x: 1000 }}
+      scroll={{ x: 850 }}
     />
   );
 };

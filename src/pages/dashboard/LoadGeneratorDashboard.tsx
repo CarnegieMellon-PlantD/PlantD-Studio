@@ -10,7 +10,7 @@ import Dashboard from '@/components/dashboard/Dashboard';
 import { defaultExperimentDuration, defaultRefreshInterval } from '@/constants/dashboard';
 import { useGetExperimentQuery } from '@/services/resourceManager/experimentApi';
 import { DashboardProps } from '@/types/dashboard/dashboardProps';
-import { ExperimentExperimentState } from '@/types/resourceManager/experiment';
+import { ExperimentJobStatus } from '@/types/resourceManager/experiment';
 import { byteBinUnitValueFormatter, prefixSuffixValueFormatter } from '@/utils/dashboard/gaugeChartValueFormatters';
 import { getStep } from '@/utils/dashboard/getStep';
 import { getErrMsg } from '@/utils/getErrMsg';
@@ -69,8 +69,8 @@ const LoadGeneratorDashboard: React.FC = () => {
     if (data !== undefined) {
       if (
         data?.status?.startTime === undefined ||
-        (data?.status?.experimentState !== ExperimentExperimentState.Finished &&
-          data?.status?.experimentState !== ExperimentExperimentState.Error)
+        (data?.status?.jobStatus !== ExperimentJobStatus.Completed &&
+          data?.status?.jobStatus !== ExperimentJobStatus.Failed)
       ) {
         return;
       }

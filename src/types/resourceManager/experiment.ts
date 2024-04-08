@@ -6,13 +6,20 @@ export type ExperimentMetadata = {
 
 /** Type definition for the spec of an Experiment */
 export type ExperimentSpec = {
-  pipelineRef?: {
+  pipelineRef: {
     namespace?: string;
     name?: string;
   };
-  loadPatterns?: Array<{
-    endpointName?: string;
-    loadPatternRef?: {
+  endpointSpecs: Array<{
+    endpointName: string;
+    dataSpec: {
+      plainText?: string;
+      dataSetRef?: {
+        namespace?: string;
+        name?: string;
+      };
+    };
+    loadPatternRef: {
       namespace?: string;
       name?: string;
     };
@@ -22,9 +29,11 @@ export type ExperimentSpec = {
 
 /** Type definition for the status of an Experiment */
 export type ExperimentStatus = {
-  experimentState?: ExperimentExperimentState | string;
-  duration?: Record<string, string>;
+  durations?: Record<string, string>;
+  jobStatus?: ExperimentJobStatus | string;
   startTime?: string;
+  completionTime?: string;
+  error?: string;
 };
 
 /** Type definition for the data transfer object of an Experiment */
@@ -42,36 +51,43 @@ export type ExperimentVO = {
     namespace: string;
     name: string;
   };
-  loadPatterns: Array<{
+  endpointSpecs: Array<{
     endpointName: string;
+    dataSpec: {
+      option: 'plainText' | 'dataSet';
+      plainText: string;
+      dataSetRef: {
+        namespace: string;
+        name: string;
+      };
+    };
     loadPatternRef: {
       namespace: string;
       name: string;
     };
   }>;
-
   hasScheduledTime: boolean;
   scheduledTime: string;
 };
 
-/** Enums of `status.experimentState` */
-export enum ExperimentExperimentState {
-  Pending = 'Pending',
+/** Enums of `status.jobStatus` */
+export enum ExperimentJobStatus {
+  Scheduled = 'Scheduled',
+  WaitingDataSet = 'Waiting for DataSet',
+  WaitingPipeline = 'Waiting for Pipeline',
   Initializing = 'Initializing',
-  WaitingForPipelineReady = 'WaitingForPipelineReady',
-  Ready = 'Ready',
   Running = 'Running',
-  Finished = 'Finished',
-  Error = 'Error',
+  Completed = 'Completed',
+  Failed = 'Failed',
 }
 
 /** All `status.experimentState` for enumerating and sorting */
-export const allExperimentExperimentStates: ExperimentExperimentState[] = [
-  ExperimentExperimentState.Pending,
-  ExperimentExperimentState.Initializing,
-  ExperimentExperimentState.WaitingForPipelineReady,
-  ExperimentExperimentState.Ready,
-  ExperimentExperimentState.Running,
-  ExperimentExperimentState.Finished,
-  ExperimentExperimentState.Error,
+export const allExperimentJobStatuses: ExperimentJobStatus[] = [
+  ExperimentJobStatus.Scheduled,
+  ExperimentJobStatus.WaitingDataSet,
+  ExperimentJobStatus.WaitingPipeline,
+  ExperimentJobStatus.Initializing,
+  ExperimentJobStatus.Running,
+  ExperimentJobStatus.Completed,
+  ExperimentJobStatus.Failed,
 ];

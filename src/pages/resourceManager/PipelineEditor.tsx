@@ -22,7 +22,7 @@ import {
 } from '@/services/resourceManager/pipelineApi';
 import { useCheckHTTPHealthMutation } from '@/services/resourceManager/utilApi';
 import { RootState } from '@/store';
-import { EndpointVO, PipelineVO } from '@/types/resourceManager/pipeline';
+import { PipelineVO } from '@/types/resourceManager/pipeline';
 import { getErrMsg } from '@/utils/getErrMsg';
 import { getPipelineDTO, getPipelineVO } from '@/utils/resourceManager/convertPipeline';
 
@@ -78,20 +78,17 @@ const KeyValuePair: React.FC<{ name: Array<string | number> }> = ({ name }) => {
   );
 };
 
-const EndpointCard: React.FC<{
+const PipelineEndpointCard: React.FC<{
   relFormPath: Array<string | number>;
   absFormPath: Array<string | number>;
-  isMetricsEndpoint: boolean;
-}> = ({ relFormPath, absFormPath, isMetricsEndpoint }) => {
+}> = ({ relFormPath, absFormPath }) => {
   const { t } = useTranslation();
   const form = Form.useFormInstance();
-  const inCluster = form.getFieldValue(['inCluster']) as PipelineVO['inCluster'];
-  const endpointType = form.getFieldValue([...absFormPath, 'type']) as EndpointVO['type'];
-  const bodyType = form.getFieldValue([...absFormPath, 'http', 'body', 'type']) as EndpointVO['http']['body']['type'];
+  const protocol = form.getFieldValue([...absFormPath, 'protocol']) as PipelineVO['pipelineEndpoints'][0]['protocol'];
 
   return (
     <Card>
-      {!isMetricsEndpoint && (
+      {
         <Form.Item
           name={[...relFormPath, 'name']}
           label={t('Name')}
@@ -99,25 +96,19 @@ const EndpointCard: React.FC<{
         >
           <Input />
         </Form.Item>
-      )}
-      {!(isMetricsEndpoint && inCluster) && (
+      }
+      {
         <Form.Item
-          name={[...relFormPath, 'type']}
+          name={[...relFormPath, 'protocol']}
           label={t('Protocol')}
           rules={[{ required: true, message: t('Protocol is required') }]}
         >
           <Radio.Group>
             <Radio value="http">{t('HTTP')}</Radio>
-            {/* <Radio value="websocket" disabled>
-              {t('WebSocket')}
-            </Radio>
-            <Radio value="grpc" disabled>
-              {t('gRPC')}
-            </Radio> */}
           </Radio.Group>
         </Form.Item>
-      )}
-      {!(isMetricsEndpoint && inCluster) && endpointType === 'http' && (
+      }
+      {protocol === 'http' && (
         <>
           <Form.Item
             name={[...relFormPath, 'http', 'url']}
@@ -129,111 +120,76 @@ const EndpointCard: React.FC<{
           >
             <Input />
           </Form.Item>
-          {!isMetricsEndpoint && (
-            <>
-              <Form.Item
-                name={[...relFormPath, 'http', 'method']}
-                label={t('Method')}
-                rules={[{ required: true, message: t('Method is required') }]}
-              >
-                <Select
-                  options={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'].map((method) => ({
-                    label: method,
-                    value: method,
-                  }))}
-                />
-              </Form.Item>
-              <Form.Item label={t('Headers')}>
-                <KeyValuePair name={[...relFormPath, 'http', 'headers']} />
-              </Form.Item>
-              <Form.Item
-                name={[...relFormPath, 'http', 'body', 'type']}
-                label={t('Body Source')}
-                rules={[{ required: true, message: t('Body source is required') }]}
-              >
-                <Radio.Group>
-                  <Radio value="data">{t('Manual Input')}</Radio>
-                  <Radio value="dataSetRef">{t('DataSet')}</Radio>
-                </Radio.Group>
-              </Form.Item>
-              {bodyType === 'data' && (
-                <Form.Item
-                  name={[...relFormPath, 'http', 'body', 'data']}
-                  label={t('Body')}
-                  rules={[{ required: true, message: t('Body is required') }]}
-                >
-                  <Input.TextArea />
-                </Form.Item>
-              )}
-              {bodyType === 'dataSetRef' && (
-                <>
-                  <Form.Item className="mb-0" label={t('DataSet')} required>
-                    <div className="flex gap-1">
-                      <Form.Item
-                        className="w-full"
-                        name={[...relFormPath, 'http', 'body', 'dataSetRef', 'namespace']}
-                        rules={[{ required: true, message: t('Namespace is required') }]}
-                      >
-                        <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
-                      </Form.Item>
 
-                      <Form.Item
-                        className="w-full"
-                        name={[...relFormPath, 'http', 'body', 'dataSetRef', 'name']}
-                        rules={[{ required: true, message: t('Name is required') }]}
-                      >
-                        <BaseResourceSelect
-                          resourceKind={t('DataSet')}
-                          listHook={useListDataSetsQuery}
-                          filter={(item) =>
-                            item.metadata.namespace ===
-                            (form.getFieldValue([
-                              ...absFormPath,
-                              'http',
-                              'body',
-                              'dataSetRef',
-                              'namespace',
-                            ]) as EndpointVO['http']['body']['dataSetRef']['namespace'])
-                          }
-                        />
-                      </Form.Item>
-                    </div>
-                  </Form.Item>
-                </>
-              )}
-            </>
-          )}
-        </>
-      )}
-      {isMetricsEndpoint && inCluster && (
-        <>
-          <Form.Item className="mb-0" label={t('Service')} required>
-            <div className="flex gap-1">
-              <Form.Item
-                className="w-full"
-                name={['metricsEndpoint', 'serviceRef', 'namespace']}
-                rules={[{ required: true, message: t('Namespace is required') }]}
-              >
-                <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
-              </Form.Item>
-              <Form.Item
-                className="w-full"
-                name={['metricsEndpoint', 'serviceRef', 'name']}
-                rules={[{ required: true, message: t('Name is required') }]}
-              >
-                <Input placeholder={t('Service Name')} />
-              </Form.Item>
-            </div>
-          </Form.Item>
           <Form.Item
-            label={t('Port')}
-            name={['metricsEndpoint', 'port']}
-            rules={[{ required: true, message: t('Port is required') }]}
+            name={[...relFormPath, 'http', 'method']}
+            label={t('Method')}
+            rules={[{ required: true, message: t('Method is required') }]}
           >
-            <Input />
+            <Select
+              options={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'].map((method) => ({
+                label: method,
+                value: method,
+              }))}
+            />
+          </Form.Item>
+          <Form.Item label={t('Headers')}>
+            <KeyValuePair name={[...relFormPath, 'http', 'headers']} />
           </Form.Item>
         </>
       )}
+    </Card>
+  );
+};
+
+const MetricsEndpointCard: React.FC<{
+  relFormPath: Array<string | number>;
+  absFormPath: Array<string | number>;
+}> = ({ relFormPath, absFormPath }) => {
+  const { t } = useTranslation();
+  const form = Form.useFormInstance();
+  const inCluster = form.getFieldValue(['inCluster']) as PipelineVO['inCluster'];
+
+  return (
+    <Card>
+      {!inCluster && (
+        <Form.Item
+          name={[...relFormPath, 'http', 'url']}
+          label={t('URL')}
+          rules={[
+            { required: true, message: t('URL is required') },
+            { type: 'url', message: t('Must be a valid URL') },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+      )}
+      {inCluster && (
+        <Form.Item className="mb-0" label={t('Service')} required>
+          <Form.Item
+            name={[...relFormPath, 'serviceRef', 'name']}
+            rules={[{ required: true, message: t('Name is required') }]}
+          >
+            <Input placeholder={t('Service Name')} />
+          </Form.Item>
+        </Form.Item>
+      )}
+      {inCluster && (
+        <Form.Item
+          label={t('Port')}
+          name={[...relFormPath, 'port']}
+          rules={[{ required: true, message: t('Port is required') }]}
+        >
+          <Input />
+        </Form.Item>
+      )}
+      <Form.Item
+        label={t('Path')}
+        name={[...relFormPath, 'path']}
+        rules={[{ required: true, message: t('Path is required') }]}
+      >
+        <Input />
+      </Form.Item>
     </Card>
   );
 };
@@ -382,10 +338,9 @@ const PipelineEditor: React.FC = () => {
                           }
                         >
                           {() => (
-                            <EndpointCard
+                            <PipelineEndpointCard
                               relFormPath={[endpointIdx]}
                               absFormPath={['pipelineEndpoints', endpointIdx]}
-                              isMetricsEndpoint={false}
                             />
                           )}
                         </Form.Item>
@@ -413,6 +368,15 @@ const PipelineEditor: React.FC = () => {
                   </>
                 )}
               </Form.List>
+            </Form.Item>
+            <Form.Item label={t('Metrics Endpoint')}>
+              <Form.Item
+                shouldUpdate={(prev: PipelineVO, next: PipelineVO) =>
+                  prev.inCluster !== next.inCluster || prev.metricsEndpoint !== next.metricsEndpoint
+                }
+              >
+                {() => <MetricsEndpointCard relFormPath={['metricsEndpoint']} absFormPath={['metricsEndpoint']} />}
+              </Form.Item>
             </Form.Item>
             <Form.Item label={t('Health Check Endpoints')}>
               <Form.List name={['healthCheckEndpoints']}>
@@ -443,17 +407,6 @@ const PipelineEditor: React.FC = () => {
                   </>
                 )}
               </Form.List>
-            </Form.Item>
-            <Form.Item label={t('Metrics Endpoint')}>
-              <Form.Item
-                shouldUpdate={(prev: PipelineVO, next: PipelineVO) =>
-                  prev.inCluster !== next.inCluster || prev.metricsEndpoint !== next.metricsEndpoint
-                }
-              >
-                {() => (
-                  <EndpointCard relFormPath={['metricsEndpoint']} absFormPath={['metricsEndpoint']} isMetricsEndpoint />
-                )}
-              </Form.Item>
             </Form.Item>
             <Form.Item label={t('Tags')}>
               <KeyValuePair name={['extraMetrics', 'system', 'tags']} />

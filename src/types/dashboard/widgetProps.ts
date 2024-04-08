@@ -93,6 +93,40 @@ export interface LineChartProps extends BaseWidgetProps {
     yAxisMax?: number;
     /** Title of the Y-axis */
     yAxisTitle?: string;
+    /** Data type for y-axis */
+    yField?: string;
+  };
+}
+
+export interface LineChartRedisProps extends BaseWidgetProps {
+  /** Data request for the widget */
+  request: TriChannelDataRequest;
+  /** Display options for the widget */
+  display: {
+    /** Width of the graph, in px */
+    width?: number;
+    /** Height of the graph, in px */
+    height?: number;
+    /**
+     * Type of the X-axis
+     * - `default`: keep the original X-axis data
+     * - `time`: convert the X-axis data to time
+     */
+    xAxisType?: 'default' | 'time';
+    /** Minimum value of the X-axis */
+    xAxisMin?: number;
+    /** Maximum value of the X-axis */
+    xAxisMax?: number;
+    /** Title of the X-axis */
+    xAxisTitle?: string;
+    /** Minimum value of the Y-axis */
+    yAxisMin?: number;
+    /** Maximum value of the Y-axis */
+    yAxisMax?: number;
+    /** Title of the Y-axis */
+    yAxisTitle?: string;
+    /** Data type for y-axis */
+    yField?: string;
   };
 }
 

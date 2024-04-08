@@ -1,19 +1,36 @@
 import { dataBasePath } from '@/constants';
 import { baseApi } from '@/services/baseApi';
-import { BiChannelDataRequest, RedisRawDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
-import { BiChannelData, TriChannelData } from '@/types/dashboard/dataResponses';
+import { BiChannelDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
+import { BiChannelData, RedisRawData, TriChannelData } from '@/types/dashboard/dataResponses';
 
 const dataSetApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getRedisRawData: build.query<string, RedisRawDataRequest>({
-      query: (data) => ({
-        url: `${dataBasePath}/raw/redis`,
+    getRedisRawData: build.query<TriChannelData, TriChannelDataRequest>({
+      query: ({ __source, ...data }) => ({
+        url: `${dataBasePath}/raw/${__source}`,
         method: 'POST',
         headers: {
           'X-HTTP-Method-Override': 'GET',
         },
         data,
       }),
+      transformResponse: async (response: { result: string }): Promise<RedisRawData> => {
+        try {
+          const parsedResult = JSON.parse(response.result);
+          const data = parsedResult.index.map((row: unknown[], rowIndex: number) => {
+            const obj: Record<string, unknown> = {};
+            parsedResult.columns.forEach((column: string, columnIndex: number) => {
+              obj[column] = parsedResult.data[rowIndex][columnIndex];
+            });
+            return obj;
+          });
+
+          return data;
+        } catch (error) {
+          console.error('Error parsing JSON:', error);
+          throw error;
+        }
+      },
     }),
     getBiChannelData: build.query<BiChannelData, BiChannelDataRequest>({
       query: ({ __source, ...data }) => ({

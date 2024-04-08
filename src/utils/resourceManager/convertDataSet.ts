@@ -50,12 +50,10 @@ export const getDataSetDTO = (dataSetVO: DataSetVO): Pick<DataSetDTO, 'metadata'
       name: dataSetVO.name,
     },
     spec: {
-      path: '/test',
       fileFormat: dataSetVO.fileFormat,
       compressedFileFormat: dataSetVO.useCompression ? dataSetVO.compressedFileFormat : undefined,
       compressPerSchema: dataSetVO.useCompression && dataSetVO.compressPerSchema ? true : undefined,
       numFiles: dataSetVO.numFiles,
-      parallelJobs: 1,
       schemas: dataSetVO.schemas.map((schema) => ({
         name: schema.name,
         numRecords: schema.numRecords,

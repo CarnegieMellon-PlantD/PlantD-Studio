@@ -22,7 +22,7 @@ import {
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const getTagColorFromCategory = (category: string) => {
-  return category === DataSetErrorType.Pod ? 'red' : category === DataSetErrorType.Container ? 'yellow' : 'purple';
+  return category === DataSetErrorType.Controller ? 'yellow' : category === DataSetErrorType.Job ? 'red' : '';
 };
 
 const ErrorDetail: React.FC<{ record: DataSetDTO }> = ({ record }) => {
@@ -125,12 +125,10 @@ const DataSetList: React.FC = () => {
       title: t('Job Status'),
       width: 150,
       render: (text, record) =>
-        record.status?.jobStatus === DataSetJobStatus.Creating ? (
-          <Badge status="processing" text={t('Creating')} />
-        ) : record.status?.jobStatus === DataSetJobStatus.Generating ? (
-          <Badge status="processing" text={t('Generating')} />
+        record.status?.jobStatus === DataSetJobStatus.Running ? (
+          <Badge status="processing" text={t('Running')} />
         ) : record.status?.jobStatus === DataSetJobStatus.Success ? (
-          <Badge status="success" text={t('Succeeded')} />
+          <Badge status="success" text={t('Success')} />
         ) : record.status?.jobStatus === DataSetJobStatus.Failed ? (
           <Badge
             status="error"
@@ -141,17 +139,13 @@ const DataSetList: React.FC = () => {
               </span>
             }
           />
-        ) : record.status?.jobStatus === DataSetJobStatus.Unknown ? (
-          <Badge status="warning" text={t('Unknown')} />
         ) : (
           <Badge status="default" text={record.status?.jobStatus ?? '-'} />
         ),
       filters: [
-        { text: t('Creating'), value: DataSetJobStatus.Creating },
-        { text: t('Generating'), value: DataSetJobStatus.Generating },
-        { text: t('Succeeded'), value: DataSetJobStatus.Success },
+        { text: t('Running'), value: DataSetJobStatus.Running },
+        { text: t('Success'), value: DataSetJobStatus.Success },
         { text: t('Failed'), value: DataSetJobStatus.Failed },
-        { text: t('Unknown'), value: DataSetJobStatus.Unknown },
       ],
       onFilter: (value, record) => record.status?.jobStatus === value,
       sorter: (a, b) =>
