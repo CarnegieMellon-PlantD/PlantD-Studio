@@ -18,7 +18,7 @@ export const getSchemaVO = (schemaDTO: SchemaDTO): SchemaVO => {
         ? []
         : schemaDTO.spec.columns.map((column) => ({
             id: nanoid(),
-            name: column.name ?? '',
+            name: column.name,
             type: column.type ?? '',
             params: getSchemaColumnParams(column.type ?? '', column.params),
             formula: column.formula?.name ?? '',

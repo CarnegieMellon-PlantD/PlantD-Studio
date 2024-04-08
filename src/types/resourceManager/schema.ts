@@ -10,11 +10,11 @@ export type SchemaMetadata = {
 /** Type definition for the spec of a Schema */
 export type SchemaSpec = {
   columns?: Array<{
-    name?: string;
+    name: string;
     type?: string;
     params?: Record<string, string>;
     formula?: {
-      name?: string;
+      name: string;
       args?: string[];
     };
   }>;

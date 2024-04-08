@@ -6,14 +6,14 @@ export type LoadPatternMetadata = {
 
 /** Type definition for the spec of a LoadPattern */
 export type LoadPatternSpec = {
-  stages?: Array<{
-    target?: number;
-    duration?: string;
+  stages: Array<{
+    target: number;
+    duration: string;
   }>;
   preAllocatedVUs?: number;
-  startRate?: number;
-  maxVUs?: number;
+  startRate: number;
   timeUnit?: string;
+  maxVUs?: number;
 };
 
 /** Type definition for the status of a LoadPattern */
