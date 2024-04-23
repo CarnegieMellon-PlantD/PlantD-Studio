@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { useContext, useEffect, useMemo } from 'react';
 import { Line, LineConfig } from '@ant-design/plots';
-import { Badge, Card, Spin, Tooltip } from 'antd';
+import { Badge, Card, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import { useDarkMode } from 'usehooks-ts';
 
 import DashboardContext from '@/components/dashboard/DashboardContext';
 import { NoData } from '@/components/dashboard/widgets/NoData';
 import { longDateTimeFormat, shortDateTimeFormat } from '@/constants/dashboard';
-import { useGetRedisRawDataQuery, useGetTriChannelDataQuery } from '@/services/dashboard/dataApi';
-import { RedisRawDataRequest } from '@/types/dashboard/dataRequests';
+import { useGetTriChannelDataQuery } from '@/services/dashboard/dataApi';
 import { LineChartProps } from '@/types/dashboard/widgetProps';
 import { getWidgetClsName } from '@/utils/dashboard/getWidgetClsName';
 import { getErrMsg } from '@/utils/getErrMsg';
@@ -17,19 +16,8 @@ import { getErrMsg } from '@/utils/getErrMsg';
 const LineChart: React.FC<LineChartProps> = ({ request, display, ...props }) => {
   const { isDarkMode } = useDarkMode();
   const { dataGeneration } = useContext(DashboardContext);
-  const redisDataResult = useGetRedisRawDataQuery(request);
-  const triChannelDataResult = useGetTriChannelDataQuery(request);
-  let xFieldValue: string = 'x';
-  let yFieldValue: string = 'y';
-  let data: unknown, error, isSuccess, isError, isFetching, refetch: () => void;
+  const { data, error, isSuccess, isError, isFetching, refetch } = useGetTriChannelDataQuery(request);
 
-  if ((request as RedisRawDataRequest).__source === 'redis') {
-    ({ data, error, isSuccess, isError, isFetching, refetch } = redisDataResult);
-    xFieldValue = 'date';
-    yFieldValue = display.yField!;
-  } else {
-    ({ data, error, isSuccess, isError, isFetching, refetch } = triChannelDataResult);
-  }
   useEffect(() => {
     refetch();
   }, [dataGeneration, refetch]);
@@ -37,9 +25,9 @@ const LineChart: React.FC<LineChartProps> = ({ request, display, ...props }) => 
   const config = useMemo<LineConfig>(
     () => ({
       theme: isDarkMode ? 'dark' : 'light',
-      data: Array.isArray(data) ? data : [],
-      xField: xFieldValue,
-      yField: yFieldValue,
+      data: data ?? [],
+      xField: 'x',
+      yField: 'y',
       seriesField: 'series',
       width: display.width,
       height: display.height,
@@ -109,7 +97,7 @@ const LineChart: React.FC<LineChartProps> = ({ request, display, ...props }) => 
       bodyStyle={{ padding: '5px' }}
       className={getWidgetClsName(props.gridWidth ?? 1, props.gridHeight ?? 1)}
     >
-      {isFetching ? <Spin tip="Loading..." /> : data !== undefined ? <Line {...config} /> : <NoData />}
+      {data !== undefined ? <Line {...config} /> : <NoData />}
     </Card>
   );
 };

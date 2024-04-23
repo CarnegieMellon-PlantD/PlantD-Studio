@@ -20,6 +20,8 @@ import { concatInPath } from '@/utils/concatInPath';
 import { getErrMsg } from '@/utils/getErrMsg';
 
 interface BaseResourceListProps<DTO_R, DTO_L> extends Omit<TableProps<DTO_R>, 'loading' | 'dataSource' | 'rowKey'> {
+  /** Caption or subheader text to explain the resource */
+  caption?: string;
   /** Show Namespace select */
   showNamespaceSelect?: boolean;
   /** Allow clone */
@@ -34,8 +36,6 @@ interface BaseResourceListProps<DTO_R, DTO_L> extends Omit<TableProps<DTO_R>, 'l
   resourceKindUrl: string;
   /** List of resources */
   data: DTO_R[] | undefined;
-  /** Caption or subheader text to explain the resource */
-  caption?: string;
   /** Is resource list loading for the first time */
   isLoading: boolean;
   /** Is resource list fetching, previous data may exist */
@@ -50,6 +50,7 @@ const BaseResourceList = <
   DTO_R extends { metadata: { namespace?: string; name: string }; spec: unknown; status: unknown },
   DTO_L extends { metadata: { namespace?: string; name: string } },
 >({
+  caption,
   showNamespaceSelect = false,
   allowClone = false,
   allowEdit = false,
@@ -57,7 +58,6 @@ const BaseResourceList = <
   resourceKind,
   resourceKindUrl,
   data,
-  caption,
   isLoading,
   isFetching,
   refetch,
@@ -195,8 +195,11 @@ const BaseResourceList = <
         items={[{ title: 'PlantD Studio' }, { title: t('Resources') }, { title: resourceKind }]}
         className="mb-6"
       />
-      {caption && <div className=" mb-4">{t(caption)}</div>}
-
+      {caption !== undefined && (
+        <Card bordered={false} className="mb-6">
+          <span>{caption}</span>
+        </Card>
+      )}
       {showNamespaceSelect && (
         <Card bordered={false} className="mb-6">
           <Form {...formStyle}>

@@ -4,6 +4,15 @@ import { PlantDCoreDTO } from '@/types/resourceManager/plantDCore';
 
 const plantDCoreApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
+    listPlantDCore: build.query<PlantDCoreDTO[], void>({
+      query: () => ({
+        url: `${apiBasePath}/plantdcores`,
+        method: 'GET',
+      }),
+      // Unwrap the response object
+      transformResponse: ({ items }: { items: PlantDCoreDTO[] }) => items,
+      providesTags: ['PlantDCore'],
+    }),
     getPlantDCore: build.query<PlantDCoreDTO, Pick<PlantDCoreDTO, 'metadata'>>({
       query: ({ metadata }) => ({
         url: `${apiBasePath}/plantdcores/${metadata.namespace}/${metadata.name}`,
@@ -24,4 +33,5 @@ const plantDCoreApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetPlantDCoreQuery, useLazyGetPlantDCoreQuery, useUpdatePlantDCoreMutation } = plantDCoreApi;
+export const { useListPlantDCoreQuery, useGetPlantDCoreQuery, useLazyGetPlantDCoreQuery, useUpdatePlantDCoreMutation } =
+  plantDCoreApi;

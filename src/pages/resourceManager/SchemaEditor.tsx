@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { nanoid } from '@reduxjs/toolkit';
 import { Button, Card, Form, Input, InputNumber, Spin } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { PartialDeep } from 'type-fest';
@@ -11,7 +10,6 @@ import ColumnSelect from '@/components/resourceManager/ColumnSelect';
 import FormulaSelect from '@/components/resourceManager/FormulaSelect';
 import SortableTable from '@/components/resourceManager/SortableTable';
 import TypeSelect from '@/components/resourceManager/TypeSelect';
-import { getDefaultSchemaForm } from '@/constants/resourceManager/defaultForm/schema';
 import { formStyle } from '@/constants/resourceManager/formStyles';
 import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
@@ -23,6 +21,7 @@ import {
 } from '@/services/resourceManager/schemaApi';
 import { SchemaVO } from '@/types/resourceManager/schema';
 import { getSchemaDTO, getSchemaVO } from '@/utils/resourceManager/convertSchema';
+import { getDefaultSchema, getDefaultSchemaColumn } from '@/utils/resourceManager/defaultSchema';
 import { getSchemaColumnArgs } from '@/utils/resourceManager/getSchemaColumnArgs';
 import { getSchemaColumnParams } from '@/utils/resourceManager/getSchemaColumnParams';
 
@@ -33,7 +32,7 @@ const SchemaEditor: React.FC = () => {
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
     resourceKind: t('Schema'),
-    getDefaultForm: getDefaultSchemaForm,
+    getDefaultForm: getDefaultSchema,
     lazyGetHook: useLazyGetSchemaQuery,
     createHook: useCreateSchemaMutation,
     updateHook: useUpdateSchemaMutation,
@@ -130,8 +129,6 @@ const SchemaEditor: React.FC = () => {
         <Form.Item
           noStyle
           shouldUpdate={(prev: SchemaVO, next: SchemaVO) =>
-            prev['columns'][index]['args']['info'] !== next['columns'][index]?.['args']['info'] ||
-            prev['columns'][index]['name'] !== next['columns'][index]?.['name'] ||
             prev['namespace'] !== next['namespace'] ||
             prev['name'] !== next['name'] ||
             prev['columns'] !== next['columns']
@@ -292,7 +289,7 @@ const SchemaEditor: React.FC = () => {
           <Form
             {...formStyle}
             form={form}
-            initialValues={getDefaultSchemaForm('')}
+            initialValues={getDefaultSchema('')}
             onValuesChange={(changedValues: PartialDeep<SchemaVO, { recurseIntoArrays: true }>) => {
               // When columns are not changed
               if (changedValues.columns == undefined) {
@@ -351,6 +348,7 @@ const SchemaEditor: React.FC = () => {
               name={['name']}
               rules={[
                 { required: true, message: t('Name is required') },
+                { max: 63, message: t('Name cannot exceed 63 characters') },
                 {
                   pattern: rfc1123RegExp,
                   message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
@@ -393,19 +391,7 @@ const SchemaEditor: React.FC = () => {
                           move(activeIndex, overIndex);
                         }}
                         onCreateRow={() => {
-                          // Do manual type checking here
-                          const newRow: SchemaVO['columns'][number] = {
-                            id: nanoid(),
-                            name: '',
-                            type: '',
-                            params: [],
-                            formula: '',
-                            args: {
-                              info: 'null',
-                              value: [],
-                            },
-                          };
-                          add(newRow);
+                          add(getDefaultSchemaColumn());
                         }}
                         onDeleteRow={(rowKey) => {
                           const index = (form.getFieldValue(['columns']) as SchemaVO['columns']).findIndex(

@@ -4,14 +4,20 @@ export type PipelineMetadata = {
   name: string;
 };
 
+export type HTTPOptions = {
+  url?: string;
+  method?: string;
+  headers?: Record<string, string>;
+};
+
 /** Type definition for the spec of a Pipeline */
 export type PipelineSpec = {
   inCluster?: boolean;
-  pipelineEndpoints: Array<{
-    name: string;
+  pipelineEndpoints?: Array<{
+    name?: string;
     http?: HTTPOptions;
   }>;
-  metricsEndpoint: {
+  metricsEndpoint?: {
     http?: HTTPOptions;
     serviceRef?: {
       name: string;
@@ -20,14 +26,14 @@ export type PipelineSpec = {
     path?: string;
   };
   healthCheckURLs?: string[];
+  enableCostCalculation?: boolean;
   cloudProvider?: string;
   tags?: Record<string, string>;
-  enableCostCalculation?: boolean;
 };
 
 /** Type definition for the status of a Pipeline */
 export type PipelineStatus = {
-  availability?: PipelineAvailability;
+  availability?: string;
 };
 
 /** Type definition for the data transfer object of a Pipeline */
@@ -39,12 +45,13 @@ export type PipelineDTO = {
 
 /** Type definition for the view object of a Pipeline */
 export type PipelineVO = {
+  originalObject: PipelineSpec;
   namespace: string;
   name: string;
   inCluster: boolean;
   pipelineEndpoints: Array<{
     name: string;
-    protocol: string;
+    protocol: 'http';
     http: {
       url: string;
       method: string;
@@ -65,19 +72,12 @@ export type PipelineVO = {
     path: string;
   };
   healthCheckURLs: string[];
+  enableCostCalculation: boolean;
   cloudProvider: string;
   tags: Array<{
     key: string;
     value: string;
   }>;
-  enableCostCalculation: boolean;
-};
-
-/** Type definition for the HTTP protocol options */
-export type HTTPOptions = {
-  url: string;
-  method?: string;
-  headers?: Record<string, string>;
 };
 
 /** Enums of `status.pipelineAvailability` */

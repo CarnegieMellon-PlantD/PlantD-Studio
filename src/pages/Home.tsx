@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { App, Badge, Breadcrumb, Card, Statistic, Table } from 'antd';
 import { useUpdateEffect } from 'usehooks-ts';
 
-import { plantDCoreMetadata } from '@/constants';
+import { plantDCoreName, plantDCoreNamespace } from '@/constants/resourceManager';
 import { useGetI18nKind } from '@/hooks/resourceManager/useGetI18nKind';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useListCostExportersQuery } from '@/services/resourceManager/costExporterApi';
@@ -28,7 +28,10 @@ const Home: React.FC = () => {
     isError: isGetPlantDCoreError,
     error: getPlantDCoreError,
   } = useGetPlantDCoreQuery({
-    metadata: plantDCoreMetadata,
+    metadata: {
+      namespace: plantDCoreNamespace,
+      name: plantDCoreName,
+    },
   });
   const { data: namespaces, isSuccess: isListNamespacesSuccess } = useResourceList({
     resourceKind: t('Namespace'),
@@ -66,10 +69,14 @@ const Home: React.FC = () => {
 
   const isAllRunning = useMemo(
     () =>
-      plantDCore?.status?.kubeProxyReady &&
-      plantDCore?.status?.studioReady &&
-      plantDCore?.status?.prometheusReady &&
-      plantDCore?.status?.redisReady,
+      plantDCore?.status?.proxyStatus?.numReady == plantDCore?.status?.proxyStatus?.numDesired &&
+      plantDCore?.status?.studioStatus?.numReady == plantDCore?.status?.studioStatus?.numDesired &&
+      plantDCore?.status?.prometheusStatus?.numReady == plantDCore?.status?.prometheusStatus?.numDesired &&
+      plantDCore?.status?.thanosStoreStatus?.numReady == plantDCore?.status?.thanosStoreStatus?.numDesired &&
+      plantDCore?.status?.thanosCompactorStatus?.numReady == plantDCore?.status?.thanosCompactorStatus?.numDesired &&
+      plantDCore?.status?.thanosQuerierStatus?.numReady == plantDCore?.status?.thanosQuerierStatus?.numDesired &&
+      plantDCore?.status?.redisStatus?.numReady == plantDCore?.status?.redisStatus?.numDesired &&
+      plantDCore?.status?.opencostStatus?.numReady == plantDCore?.status?.opencostStatus?.numDesired,
     [plantDCore]
   );
 
@@ -91,25 +98,79 @@ const Home: React.FC = () => {
         </Card>
         <Card bordered={false} className="col-span-2" loading={!isGetPlantDCoreSuccess}>
           <div className="grid grid-cols-2 gap-1">
-            <span className="text-gray-500">PlantD Proxy:</span>
+            <span className="text-gray-500">{t('PlantD Proxy:')}</span>
             <Badge
-              status={plantDCore?.status?.kubeProxyReady ? 'success' : 'warning'}
-              text={plantDCore?.status?.kubeProxyStatus ?? t('Unknown')}
+              status={
+                plantDCore?.status?.proxyStatus?.numReady === plantDCore?.status?.proxyStatus?.numDesired
+                  ? 'success'
+                  : 'warning'
+              }
+              text={plantDCore?.status?.proxyStatus?.text ?? t('Unknown')}
             />
-            <span className="text-gray-500">PlantD Studio:</span>
+            <span className="text-gray-500">{t('PlantD Studio:')}</span>
             <Badge
-              status={plantDCore?.status?.studioReady ? 'success' : 'warning'}
-              text={plantDCore?.status?.studioStatus ?? t('Unknown')}
+              status={
+                plantDCore?.status?.studioStatus?.numReady === plantDCore?.status?.studioStatus?.numDesired
+                  ? 'success'
+                  : 'warning'
+              }
+              text={plantDCore?.status?.studioStatus?.text ?? t('Unknown')}
             />
-            <span className="text-gray-500">Prometheus:</span>
+            <span className="text-gray-500">{t('Prometheus:')}</span>
             <Badge
-              status={plantDCore?.status?.prometheusReady ? 'success' : 'warning'}
-              text={plantDCore?.status?.prometheusStatus ?? t('Unknown')}
+              status={
+                plantDCore?.status?.prometheusStatus?.numReady === plantDCore?.status?.prometheusStatus?.numDesired
+                  ? 'success'
+                  : 'warning'
+              }
+              text={plantDCore?.status?.prometheusStatus?.text ?? t('Unknown')}
             />
-            <span className="text-gray-500">Redis:</span>
+            <span className="text-gray-500">{t('Thanos Store:')}</span>
             <Badge
-              status={plantDCore?.status?.redisReady ? 'success' : 'warning'}
-              text={plantDCore?.status?.redisStatus ?? t('Unknown')}
+              status={
+                plantDCore?.status?.thanosStoreStatus?.numReady === plantDCore?.status?.thanosStoreStatus?.numDesired
+                  ? 'success'
+                  : 'warning'
+              }
+              text={plantDCore?.status?.thanosStoreStatus?.text ?? t('Unknown')}
+            />
+            <span className="text-gray-500">{t('Thanos Compactor:')}</span>
+            <Badge
+              status={
+                plantDCore?.status?.thanosCompactorStatus?.numReady ===
+                plantDCore?.status?.thanosCompactorStatus?.numDesired
+                  ? 'success'
+                  : 'warning'
+              }
+              text={plantDCore?.status?.thanosCompactorStatus?.text ?? t('Unknown')}
+            />
+            <span className="text-gray-500">{t('Thanos Querier:')}</span>
+            <Badge
+              status={
+                plantDCore?.status?.thanosQuerierStatus?.numReady ===
+                plantDCore?.status?.thanosQuerierStatus?.numDesired
+                  ? 'success'
+                  : 'warning'
+              }
+              text={plantDCore?.status?.thanosQuerierStatus?.text ?? t('Unknown')}
+            />
+            <span className="text-gray-500">{t('Redis:')}</span>
+            <Badge
+              status={
+                plantDCore?.status?.redisStatus?.numReady === plantDCore?.status?.redisStatus?.numDesired
+                  ? 'success'
+                  : 'warning'
+              }
+              text={plantDCore?.status?.redisStatus?.text ?? t('Unknown')}
+            />
+            <span className="text-gray-500">{t('OpenCost:')}</span>
+            <Badge
+              status={
+                plantDCore?.status?.opencostStatus?.numReady === plantDCore?.status?.opencostStatus?.numDesired
+                  ? 'success'
+                  : 'warning'
+              }
+              text={plantDCore?.status?.opencostStatus?.text ?? t('Unknown')}
             />
           </div>
         </Card>
@@ -142,9 +203,9 @@ const Home: React.FC = () => {
                 render: (_, record) => record.metadata.namespace ?? '-',
               },
               {
-                key: 'lastExecutionTime',
-                title: t('Last Execution Time'),
-                render: (_, record) => record.status?.jobCompletionTime ?? '-',
+                key: 'lastSuccess',
+                title: t('Last Successful Run'),
+                render: (_, record) => record.status?.lastSuccess ?? '-',
               },
             ]}
           />

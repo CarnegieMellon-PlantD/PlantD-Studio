@@ -6,27 +6,18 @@ export type ScenarioMetadata = {
 
 /** Type definition for the spec of a Scenario */
 export type ScenarioSpec = {
-  dataSetConfig: {
-    compressPerSchema: boolean;
-    compressedFileFormat: string;
-    fileFormat: string;
-  };
-  pipelineRef: {
-    namespace: string;
-    name: string;
-  };
-  tasks: Array<{
-    monthsRelevant: number[];
-    name: string;
-    pushFrequencyPerMonth: {
-      max: number;
-      min: number;
+  tasks?: Array<{
+    name?: string;
+    size?: string;
+    sendingDevices?: {
+      min?: number;
+      max?: number;
     };
-    sendingDevices: {
-      max: number;
-      min: number;
+    pushFrequencyPerMonth?: {
+      min?: number;
+      max?: number;
     };
-    size: string;
+    monthsRelevant?: number[];
   }>;
 };
 
@@ -42,29 +33,21 @@ export type ScenarioDTO = {
 
 /** Type definition for the view object of a Scenario */
 export type ScenarioVO = {
+  originalObject: ScenarioSpec;
   namespace: string;
   name: string;
-  dataSetConfig: {
-    compressPerSchema: boolean;
-    compressedFileFormat: string;
-    fileFormat: string;
-  };
-  pipelineRef: {
-    namespace: string;
-    name: string;
-  };
   tasks: Array<{
     id: string | number;
-    monthsRelevant: number[];
     name: string;
-    pushFrequencyPerMonth: {
-      max: number;
-      min: number;
-    };
-    sendingDevices: {
-      max: number;
-      min: number;
-    };
     size: string;
+    sendingDevices: {
+      min: number;
+      max: number;
+    };
+    pushFrequencyPerMonth: {
+      min: number;
+      max: number;
+    };
+    monthsRelevant: number[];
   }>;
 };

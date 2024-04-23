@@ -6,12 +6,30 @@ export type SimulationMetadata = {
 
 /** Type definition for the spec of a Simulation */
 export type SimulationSpec = {
-  digitalTwinRef?: { name?: string; namespace?: string };
-  trafficModelRef?: { name?: string; namespace?: string };
+  image?: string;
+  digitalTwinRef?: {
+    namespace?: string;
+    name?: string;
+  };
+  trafficModelRef?: {
+    namespace?: string;
+    name?: string;
+  };
+  netCostRef?: {
+    namespace?: string;
+    name?: string;
+  };
+  scenarioRef?: {
+    namespace?: string;
+    name?: string;
+  };
 };
 
 /** Type definition for the status of a Simulation */
-export type SimulationStatus = Record<string, never>;
+export type SimulationStatus = {
+  jobStatus?: string;
+  error?: string;
+};
 
 /** Type definition for the data transfer object of a Simulation */
 export type SimulationDTO = {
@@ -22,6 +40,7 @@ export type SimulationDTO = {
 
 /** Type definition for the view object of a Simulation */
 export type SimulationVO = {
+  originalObject: SimulationSpec;
   namespace: string;
   name: string;
   digitalTwinRef: {
@@ -32,26 +51,26 @@ export type SimulationVO = {
     name: string;
     namespace: string;
   };
+  netCostRef: {
+    name: string;
+    namespace: string;
+  };
+  scenarioRef: {
+    name: string;
+    namespace: string;
+  };
 };
 
-/** Enums of `status.experimentState` */
+/** Enums of `status.jobStatus` */
 export enum SimulationJobStatus {
-  Pending = 'Pending',
-  Initializing = 'Initializing',
-  WaitingForPipelineReady = 'WaitingForPipelineReady',
-  Ready = 'Ready',
   Running = 'Running',
-  Finished = 'Finished',
-  Error = 'Error',
+  Completed = 'Completed',
+  Failed = 'Failed',
 }
 
-/** All `status.simulationJobStatus` for enumerating and sorting */
+/** All `status.jobStatus` for enumerating and sorting */
 export const allSimulationSimulationJobStatus: SimulationJobStatus[] = [
-  SimulationJobStatus.Pending,
-  SimulationJobStatus.Initializing,
-  SimulationJobStatus.WaitingForPipelineReady,
-  SimulationJobStatus.Ready,
   SimulationJobStatus.Running,
-  SimulationJobStatus.Finished,
-  SimulationJobStatus.Error,
+  SimulationJobStatus.Completed,
+  SimulationJobStatus.Failed,
 ];

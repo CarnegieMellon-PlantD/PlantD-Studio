@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { ColumnsType } from 'antd/es/table';
 
 import BaseResourceList from '@/components/resourceManager/BaseResourceList';
-import { autoRefreshInterval } from '@/constants/resourceManager';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeleteScenarioMutation, useListScenariosQuery } from '@/services/resourceManager/scenarioApi';
 import { ScenarioDTO } from '@/types/resourceManager/scenario';
@@ -14,7 +13,6 @@ const ScenarioList: React.FC = () => {
   const { data, isLoading, isFetching, refetch } = useResourceList({
     resourceKind: t('Scenario'),
     listHook: useListScenariosQuery,
-    pollingInterval: autoRefreshInterval,
   });
 
   const columns: ColumnsType<ScenarioDTO> = [
@@ -45,7 +43,7 @@ const ScenarioList: React.FC = () => {
       refetch={refetch}
       deleteHook={useDeleteScenarioMutation}
       columns={columns}
-      scroll={{ x: 1000 }}
+      scroll={{ x: 700 }}
     />
   );
 };

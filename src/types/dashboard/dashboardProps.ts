@@ -6,7 +6,6 @@ import {
   BarChartProps,
   GaugeChartProps,
   LineChartProps,
-  LineChartRedisProps,
   PieChartProps,
   ScatterChartProps,
 } from '@/types/dashboard/widgetProps';
@@ -17,7 +16,6 @@ type WidgetManifest =
   | ({ __type: 'pie' } & PieChartProps)
   | ({ __type: 'bar' } & BarChartProps)
   | ({ __type: 'line' } & LineChartProps)
-  | ({ __type: 'line_redis' } & LineChartRedisProps)
   | ({ __type: 'area' } & AreaChartProps)
   | ({ __type: 'scatter' } & ScatterChartProps);
 

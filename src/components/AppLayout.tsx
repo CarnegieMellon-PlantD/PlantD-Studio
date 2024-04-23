@@ -5,25 +5,26 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { faWindowRestore } from '@fortawesome/free-regular-svg-icons';
 import {
   faBullseye,
+  faCamera,
   faCar,
   faChartArea,
   faChevronLeft,
   faChevronRight,
   faCircleInfo,
+  faCoins,
   faCube,
   faDatabase,
+  faDiagramProject,
   faFileExport,
   faFlask,
   faGlobe,
   faHome,
   faLanguage,
   faMoon,
-  faNetworkWired,
   faPlay,
   faServer,
   faSun,
   faTableColumns,
-  faUpload,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -81,9 +82,9 @@ const AppLayout: React.FC = () => {
         label: t('System Overview'),
       },
       {
-        key: 'resources',
+        key: 'generalResources',
         icon: <FontAwesomeIcon icon={faCube} />,
-        label: t('Resources'),
+        label: t('General Resources'),
         children: [
           {
             key: 'namespace',
@@ -115,6 +116,11 @@ const AppLayout: React.FC = () => {
             icon: <FontAwesomeIcon icon={faFlask} />,
             label: t('Experiment'),
           },
+          {
+            key: 'costExporter',
+            icon: <FontAwesomeIcon icon={faCoins} />,
+            label: t('CostExporter'),
+          },
         ],
       },
       {
@@ -123,24 +129,24 @@ const AppLayout: React.FC = () => {
         label: t('Business Analysis'),
         children: [
           {
-            key: 'scenario',
-            icon: <FontAwesomeIcon icon={faUpload} />,
-            label: t('Scenario'),
-          },
-          {
-            key: 'networkAndStorage',
-            icon: <FontAwesomeIcon icon={faNetworkWired} />,
-            label: t('Network and Storage'),
+            key: 'digitalTwin',
+            icon: <FontAwesomeIcon icon={faWindowRestore} />,
+            label: t('DigitalTwin'),
           },
           {
             key: 'trafficModel',
             icon: <FontAwesomeIcon icon={faCar} />,
-            label: t('Traffic Model'),
+            label: t('TrafficModel'),
           },
           {
-            key: 'digitalTwin',
-            icon: <FontAwesomeIcon icon={faWindowRestore} />,
-            label: t('Digital Twin'),
+            key: 'netCost',
+            icon: <FontAwesomeIcon icon={faDiagramProject} />,
+            label: t('NetCost'),
+          },
+          {
+            key: 'scenario',
+            icon: <FontAwesomeIcon icon={faCamera} />,
+            label: t('Scenario'),
           },
           {
             key: 'simulation',
@@ -169,7 +175,7 @@ const AppLayout: React.FC = () => {
     ],
     [t]
   );
-  const sideMenuDefaultOpenKeys = useMemo<string[]>(() => ['resources', 'businessAnalysis', 'tools'], []);
+  const sideMenuDefaultOpenKeys = useMemo<string[]>(() => ['generalResources', 'businessAnalysis', 'tools'], []);
   const sideMenuItemRules = useMemo<MenuItemRule[]>(
     () => [
       {
@@ -204,23 +210,13 @@ const AppLayout: React.FC = () => {
       },
       {
         key: 'experiment',
-        match: /^\/experiment(\/.*)?$/,
+        match: /^\/(experiment|dashboard)(\/.*)?$/,
         target: '/experiment',
       },
       {
-        key: 'scenario',
-        match: /^\/scenario(\/.*)?$/,
-        target: '/scenario',
-      },
-      {
-        key: 'networkAndStorage',
-        match: /^\/networkAndStorage(\/.*)?$/,
-        target: '/networkAndStorage',
-      },
-      {
-        key: 'trafficModel',
-        match: /^\/trafficModel(\/.*)?$/,
-        target: '/trafficModel',
+        key: 'costExporter',
+        match: /^\/costExporter(\/.*)?$/,
+        target: '/costExporter',
       },
       {
         key: 'digitalTwin',
@@ -228,8 +224,23 @@ const AppLayout: React.FC = () => {
         target: '/digitalTwin',
       },
       {
+        key: 'trafficModel',
+        match: /^\/trafficModel(\/.*)?$/,
+        target: '/trafficModel',
+      },
+      {
+        key: 'netCost',
+        match: /^\/netCost(\/.*)?$/,
+        target: '/netCost',
+      },
+      {
+        key: 'scenario',
+        match: /^\/scenario(\/.*)?$/,
+        target: '/scenario',
+      },
+      {
         key: 'simulation',
-        match: /^\/simulation(\/.*)?$/,
+        match: /^\/(simulation|report)(\/.*)?$/,
         target: '/simulation',
       },
       {

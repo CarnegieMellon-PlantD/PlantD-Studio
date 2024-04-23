@@ -1,25 +1,23 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Card, Checkbox, Form, Input, Spin } from 'antd';
+import { Button, Card, Form, Input, Spin } from 'antd';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
 import SortableTable from '@/components/resourceManager/SortableTable';
-import { getDefaultScenarioForm } from '@/constants/resourceManager/defaultForm/scenario';
 import { formStyle } from '@/constants/resourceManager/formStyles';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
-import { useListPipelinesQuery } from '@/services/resourceManager/pipelineApi';
 import {
   useCreateScenarioMutation,
   useLazyGetScenarioQuery,
   useUpdateScenarioMutation,
 } from '@/services/resourceManager/scenarioApi';
-import { ExperimentVO } from '@/types/resourceManager/experiment';
+import { useListSchemasQuery } from '@/services/resourceManager/schemaApi';
 import { ScenarioVO } from '@/types/resourceManager/scenario';
 import { getScenarioDTO, getScenarioVO } from '@/utils/resourceManager/convertScenario';
+import { getDefaultScenario, getDefaultScenarioTask } from '@/utils/resourceManager/defaultScenario';
 
-import { nanoid } from '.store/@reduxjs-toolkit-virtual-7845f61885/package';
 import { InputNumber, Select } from '.store/antd-virtual-f50d7737d7/package';
 import { ColumnsType } from '.store/antd-virtual-f50d7737d7/package/es/table';
 
@@ -30,7 +28,7 @@ const ScenarioEditor: React.FC = () => {
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
     resourceKind: t('Scenario'),
-    getDefaultForm: getDefaultScenarioForm,
+    getDefaultForm: getDefaultScenario,
     lazyGetHook: useLazyGetScenarioQuery,
     createHook: useCreateScenarioMutation,
     updateHook: useUpdateScenarioMutation,
@@ -42,11 +40,34 @@ const ScenarioEditor: React.FC = () => {
     {
       title: t('Name'),
       render: (text, record, index) => (
-        <Form.Item name={[index, 'name']} className="mb-0">
+        <Form.Item noStyle shouldUpdate={(prev: ScenarioVO, next: ScenarioVO) => prev.namespace !== next.namespace}>
+          {() => (
+            <Form.Item
+              name={[index, 'name']}
+              className="mb-0"
+              rules={[{ required: true, message: t('Name is required') }]}
+            >
+              <BaseResourceSelect
+                resourceKind="Schema"
+                listHook={useListSchemasQuery}
+                filter={(schema) =>
+                  schema.metadata.namespace === (form.getFieldValue(['namespace']) as ScenarioVO['namespace'])
+                }
+              />
+            </Form.Item>
+          )}
+        </Form.Item>
+      ),
+    },
+    {
+      title: 'Size',
+      render: (text, record, index) => (
+        <Form.Item className="mb-0" name={[index, 'size']} rules={[]}>
           <Input />
         </Form.Item>
       ),
     },
+
     {
       title: t('Push Frequency Per Month'),
       width: 250,
@@ -113,29 +134,21 @@ const ScenarioEditor: React.FC = () => {
         <Form.Item className="mb-0" name={[index, 'monthsRelevant']}>
           <Select
             options={[
-              { label: 'January', value: 1 },
-              { label: 'February', value: 2 },
-              { label: 'March', value: 3 },
-              { label: 'April', value: 4 },
-              { label: 'May', value: 5 },
-              { label: 'June', value: 6 },
-              { label: 'July', value: 7 },
-              { label: 'August', value: 8 },
-              { label: 'September', value: 9 },
-              { label: 'October', value: 10 },
-              { label: 'November', value: 11 },
-              { label: 'December', value: 12 },
+              { label: t('January'), value: 1 },
+              { label: t('February'), value: 2 },
+              { label: t('March'), value: 3 },
+              { label: t('April'), value: 4 },
+              { label: t('May'), value: 5 },
+              { label: t('June'), value: 6 },
+              { label: t('July'), value: 7 },
+              { label: t('August'), value: 8 },
+              { label: t('September'), value: 9 },
+              { label: t('October'), value: 10 },
+              { label: t('November'), value: 11 },
+              { label: t('December'), value: 12 },
             ]}
             mode="multiple"
           />
-        </Form.Item>
-      ),
-    },
-    {
-      title: 'Size',
-      render: (text, record, index) => (
-        <Form.Item className="mb-0" name={[index, 'size']}>
-          <Input />
         </Form.Item>
       ),
     },
@@ -149,7 +162,7 @@ const ScenarioEditor: React.FC = () => {
           <Form
             {...formStyle}
             form={form}
-            initialValues={getDefaultScenarioForm('')}
+            initialValues={getDefaultScenario('')}
             onFinish={() => {
               createOrUpdateResource();
             }}
@@ -173,73 +186,6 @@ const ScenarioEditor: React.FC = () => {
                 disabled={params.action === 'edit'}
               />
             </Form.Item>
-
-            <Form.Item className="mb-0" label={t('Pipeline')} required>
-              <div className="flex gap-1">
-                <Form.Item
-                  className="w-64 flex-auto"
-                  name={['pipelineRef', 'namespace']}
-                  rules={[{ required: true, message: t('Namespace is required') }]}
-                >
-                  <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
-                </Form.Item>
-                <Form.Item
-                  noStyle
-                  shouldUpdate={(prev: ExperimentVO, next: ExperimentVO) =>
-                    prev.pipelineRef.namespace !== next.pipelineRef.namespace
-                  }
-                >
-                  {() => (
-                    <Form.Item
-                      className="w-64 flex-auto"
-                      name={['pipelineRef', 'name']}
-                      rules={[{ required: true, message: t('Name is required') }]}
-                    >
-                      <BaseResourceSelect
-                        resourceKind={t('Pipeline')}
-                        listHook={useListPipelinesQuery}
-                        filter={(item) =>
-                          item.metadata.namespace ===
-                          (form.getFieldValue(['pipelineRef', 'namespace']) as ExperimentVO['pipelineRef']['namespace'])
-                        }
-                      />
-                    </Form.Item>
-                  )}
-                </Form.Item>
-              </div>
-            </Form.Item>
-
-            <Form.Item
-              label={t('File Format')}
-              name={['dataSetConfig', 'fileFormat']}
-              rules={[{ required: true, message: t('File format is required') }]}
-            >
-              <Select
-                showSearch
-                options={[
-                  { label: '.CSV', value: 'csv' },
-                  { label: '.BIN', value: 'binary' },
-                ]}
-              />
-            </Form.Item>
-
-            <Form.Item
-              label={t('Compressed File Format')}
-              name={['dataSetConfig', 'compressedFileFormat']}
-              rules={[{ required: true, message: t('Compressed file format is required') }]}
-            >
-              <Select showSearch options={[{ label: '.ZIP', value: 'zip' }]} />
-            </Form.Item>
-
-            <Form.Item
-              label={t('Compress Per Schema')}
-              tooltip={t('Create a compressed file for each Schema instead of one for all Schemas in every repeat.')}
-              name={['dataSetConfig', 'compressPerSchema']}
-              valuePropName="checked"
-            >
-              <Checkbox />
-            </Form.Item>
-
             <Form.Item wrapperCol={{ span: 24 }}>
               <Card title={t('Tasks')}>
                 <Form.List
@@ -271,16 +217,7 @@ const ScenarioEditor: React.FC = () => {
                           move(activeIndex, overIndex);
                         }}
                         onCreateRow={() => {
-                          // Do manual type checking here
-                          const newRow: ScenarioVO['tasks'][number] = {
-                            id: nanoid(),
-                            name: '',
-                            monthsRelevant: [],
-                            pushFrequencyPerMonth: { min: 0, max: 0 },
-                            sendingDevices: { min: 0, max: 0 },
-                            size: '',
-                          };
-                          add(newRow);
+                          add(getDefaultScenarioTask());
                         }}
                         onDeleteRow={(rowKey) => {
                           const index = (form.getFieldValue(['tasks']) as ScenarioVO['tasks']).findIndex(

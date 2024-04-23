@@ -1,37 +1,83 @@
 import * as React from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Card, Form, Input, Spin } from 'antd';
+import { App, Button, Card, Form, Input, Spin } from 'antd';
+import { useUpdateEffect } from 'usehooks-ts';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
-import { getDefaultSimulationForm } from '@/constants/resourceManager/defaultForm/simulation';
 import { formStyle } from '@/constants/resourceManager/formStyles';
 import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
-import { useListDigitalTwinsQuery } from '@/services/resourceManager/digitalTwinApi';
+import { useLazyGetDigitalTwinQuery, useListDigitalTwinsQuery } from '@/services/resourceManager/digitalTwinApi';
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
+import { useListNetCostsQuery } from '@/services/resourceManager/netCostApi';
+import { useListScenariosQuery } from '@/services/resourceManager/scenarioApi';
 import {
   useCreateSimulationMutation,
   useLazyGetSimulationQuery,
   useUpdateSimulationMutation,
 } from '@/services/resourceManager/simulationApi';
 import { useListTrafficModelsQuery } from '@/services/resourceManager/trafficModelApi';
+import { DigitalTwinDTO } from '@/types/resourceManager/digitalTwin';
 import { SimulationVO } from '@/types/resourceManager/simulation';
+import { getErrMsg } from '@/utils/getErrMsg';
 import { getSimulationDTO, getSimulationVO } from '@/utils/resourceManager/convertSimulation';
+import { getDefaultSimulation } from '@/utils/resourceManager/defaultSimulation';
 
 const SimulationEditor: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { message } = App.useApp();
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
     resourceKind: t('Simulation'),
-    getDefaultForm: getDefaultSimulationForm,
+    getDefaultForm: getDefaultSimulation,
     lazyGetHook: useLazyGetSimulationQuery,
     createHook: useCreateSimulationMutation,
     updateHook: useUpdateSimulationMutation,
     getVO: getSimulationVO,
     getDTO: getSimulationDTO,
+  });
+
+  const digitalTwinNamespace = Form.useWatch(
+    ['digitalTwinRef', 'namespace'],
+    form
+  ) as SimulationVO['digitalTwinRef']['namespace'];
+  const digitalTwinName = Form.useWatch(['digitalTwinRef', 'name'], form) as DigitalTwinDTO['metadata']['name'];
+  const [
+    getDigitalTwin,
+    {
+      data: digitalTwin,
+      isSuccess: isGetDigitalTwinSuccess,
+      isError: isGetDigitalTwinError,
+      error: getDigitalTwinError,
+    },
+  ] = useLazyGetDigitalTwinQuery();
+  useEffect(() => {
+    if (digitalTwinNamespace && digitalTwinName) {
+      getDigitalTwin({
+        metadata: {
+          namespace: digitalTwinNamespace,
+          name: digitalTwinName,
+        },
+      });
+    }
+  }, [digitalTwinNamespace, digitalTwinName]);
+  const isDigitalTwinSchemaAware = useMemo<boolean>(
+    () => isGetDigitalTwinSuccess && digitalTwin !== undefined && digitalTwin.spec.digitalTwinType === 'schemaaware',
+    [isGetDigitalTwinSuccess, digitalTwin]
+  );
+  useUpdateEffect(() => {
+    if (isGetDigitalTwinError && getDigitalTwinError !== undefined) {
+      message.error(
+        t('Failed to get {kind} resource: {error}', {
+          kind: t('DigitalTwin'),
+          error: getErrMsg(getDigitalTwinError),
+        })
+      );
+    }
   });
 
   return (
@@ -42,10 +88,12 @@ const SimulationEditor: React.FC = () => {
           <Form
             {...formStyle}
             form={form}
-            initialValues={getDefaultSimulationForm('')}
+            initialValues={getDefaultSimulation('')}
             onFinish={() => {
               createOrUpdateResource();
             }}
+            // Disable entire form if `params.action` is `edit`
+            disabled={params.action === 'edit'}
           >
             <Form.Item
               label={t('Namespace')}
@@ -53,11 +101,7 @@ const SimulationEditor: React.FC = () => {
               normalize={(value) => (value !== undefined ? value : '')}
               rules={[{ required: true, message: t('Namespace is required') }]}
             >
-              <BaseResourceSelect
-                resourceKind={t('Namespace')}
-                listHook={useListNamespacesQuery}
-                disabled={params.action === 'edit'}
-              />
+              <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
             </Form.Item>
             <Form.Item
               label={t('Name')}
@@ -70,9 +114,8 @@ const SimulationEditor: React.FC = () => {
                 },
               ]}
             >
-              <Input disabled={params.action === 'edit'} />
+              <Input />
             </Form.Item>
-
             <Form.Item className="mb-0" label={t('DigitalTwin')} required>
               <div className="flex gap-1">
                 <Form.Item
@@ -97,7 +140,6 @@ const SimulationEditor: React.FC = () => {
                       <BaseResourceSelect
                         resourceKind={t('DigitalTwin')}
                         listHook={useListDigitalTwinsQuery}
-                        disabled={params.action === 'edit'}
                         filter={(item) =>
                           item.metadata.namespace ===
                           (form.getFieldValue([
@@ -111,7 +153,6 @@ const SimulationEditor: React.FC = () => {
                 </Form.Item>
               </div>
             </Form.Item>
-
             <Form.Item className="mb-0" label={t('TrafficModel')} required>
               <div className="flex gap-1">
                 <Form.Item
@@ -136,7 +177,6 @@ const SimulationEditor: React.FC = () => {
                       <BaseResourceSelect
                         resourceKind={t('trafficModel')}
                         listHook={useListTrafficModelsQuery}
-                        disabled={params.action === 'edit'}
                         filter={(item) =>
                           item.metadata.namespace ===
                           (form.getFieldValue([
@@ -150,7 +190,81 @@ const SimulationEditor: React.FC = () => {
                 </Form.Item>
               </div>
             </Form.Item>
-
+            {isDigitalTwinSchemaAware && (
+              <Form.Item className="mb-0" label={t('NetCost')}>
+                <div className="flex gap-1">
+                  <Form.Item
+                    className="w-64 flex-auto"
+                    name={['netCostRef', 'namespace']}
+                    rules={[{ required: true, message: t('Namespace is required') }]}
+                  >
+                    <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
+                  </Form.Item>
+                  <Form.Item
+                    noStyle
+                    shouldUpdate={(prev: SimulationVO, next: SimulationVO) =>
+                      prev?.netCostRef?.namespace !== next?.netCostRef?.namespace
+                    }
+                  >
+                    {() => (
+                      <Form.Item
+                        className="w-64 flex-auto"
+                        name={['netCostRef', 'name']}
+                        rules={[{ required: true, message: t('Name is required') }]}
+                      >
+                        <BaseResourceSelect
+                          resourceKind={t('NetCost')}
+                          listHook={useListNetCostsQuery}
+                          filter={(item) =>
+                            item.metadata.namespace ===
+                            (form.getFieldValue(['netCostRef', 'namespace']) as SimulationVO['netCostRef']['namespace'])
+                          }
+                        />
+                      </Form.Item>
+                    )}
+                  </Form.Item>
+                </div>
+              </Form.Item>
+            )}
+            {isDigitalTwinSchemaAware && (
+              <Form.Item className="mb-0" label={t('Scenario')} required>
+                <div className="flex gap-1">
+                  <Form.Item
+                    className="w-64 flex-auto"
+                    name={['scenarioRef', 'namespace']}
+                    rules={[{ required: true, message: t('Namespace is required') }]}
+                  >
+                    <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
+                  </Form.Item>
+                  <Form.Item
+                    noStyle
+                    shouldUpdate={(prev: SimulationVO, next: SimulationVO) =>
+                      prev?.scenarioRef?.namespace !== next?.scenarioRef?.namespace
+                    }
+                  >
+                    {() => (
+                      <Form.Item
+                        className="w-64 flex-auto"
+                        name={['scenarioRef', 'name']}
+                        rules={[{ required: true, message: t('Name is required') }]}
+                      >
+                        <BaseResourceSelect
+                          resourceKind={t('Scenario')}
+                          listHook={useListScenariosQuery}
+                          filter={(item) =>
+                            item.metadata.namespace ===
+                            (form.getFieldValue([
+                              'scenarioRef',
+                              'namespace',
+                            ]) as SimulationVO['scenarioRef']['namespace'])
+                          }
+                        />
+                      </Form.Item>
+                    )}
+                  </Form.Item>
+                </div>
+              </Form.Item>
+            )}
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">
                 <Button type="primary" htmlType="submit" loading={isCreatingOrUpdating}>

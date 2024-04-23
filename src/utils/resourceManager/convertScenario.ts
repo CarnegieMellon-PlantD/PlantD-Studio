@@ -4,37 +4,51 @@ import { ScenarioDTO, ScenarioVO } from '@/types/resourceManager/scenario';
 
 /**
  * Convert the data transfer object of a Scenario to the view object
- * @param scenarioDTO The data transfer object of a Scenario
+ * @param dto The data transfer object of a Scenario
  * @returns The view object of a Scenario
  */
-export const getScenarioVO = (scenarioDTO: ScenarioDTO): ScenarioVO => {
-  return {
-    namespace: scenarioDTO.metadata.namespace,
-    name: scenarioDTO.metadata.name,
-    dataSetConfig: scenarioDTO.spec.dataSetConfig,
-    pipelineRef: scenarioDTO.spec.pipelineRef,
-    tasks: scenarioDTO.spec.tasks.map((task) => ({
-      id: nanoid(),
-      ...task,
-    })),
+export const getScenarioVO = (dto: ScenarioDTO): ScenarioVO => {
+  const vo: ScenarioVO = {
+    originalObject: dto.spec,
+    namespace: dto.metadata.namespace,
+    name: dto.metadata.name,
+    tasks: [],
   };
+
+  if (dto.spec.tasks !== undefined) {
+    vo.tasks = dto.spec.tasks.map((task) => ({
+      id: nanoid(),
+      name: task.name ?? '',
+      size: task.size ?? '',
+      sendingDevices: {
+        min: task.sendingDevices?.min ?? 0,
+        max: task.sendingDevices?.max ?? 0,
+      },
+      pushFrequencyPerMonth: {
+        min: task.pushFrequencyPerMonth?.min ?? 0,
+        max: task.pushFrequencyPerMonth?.max ?? 0,
+      },
+      monthsRelevant: task.monthsRelevant ?? [],
+    }));
+  }
+
+  return vo;
 };
 
 /**
  * Convert the view object of a Scenario to the data transfer object
- * @param scenarioVO The view object of a Scenario
+ * @param vo The view object of a Scenario
  * @returns The data transfer object of a Scenario
  */
-export const getScenarioDTO = (scenarioVO: ScenarioVO): Pick<ScenarioDTO, 'metadata' | 'spec'> => {
+export const getScenarioDTO = (vo: ScenarioVO): Pick<ScenarioDTO, 'metadata' | 'spec'> => {
   return {
     metadata: {
-      namespace: scenarioVO.namespace,
-      name: scenarioVO.name,
+      namespace: vo.namespace,
+      name: vo.name,
     },
     spec: {
-      dataSetConfig: scenarioVO.dataSetConfig,
-      pipelineRef: scenarioVO.pipelineRef,
-      tasks: scenarioVO.tasks.map(({ id, ...task }) => task),
+      ...vo.originalObject,
+      tasks: vo.tasks.map(({ id, ...task }) => task),
     },
   };
 };

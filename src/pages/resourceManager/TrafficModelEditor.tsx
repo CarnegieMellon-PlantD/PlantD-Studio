@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { InfoCircleOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, message, Spin, Tooltip, Upload } from 'antd';
+import Editor from '@monaco-editor/react';
+import { Button, Card, Form, Input, Spin } from 'antd';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
-import { getDefaultTrafficModelForm } from '@/constants/resourceManager/defaultForm/trafficModel';
 import { formStyle } from '@/constants/resourceManager/formStyles';
 import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
@@ -16,6 +15,7 @@ import {
   useUpdateTrafficModelMutation,
 } from '@/services/resourceManager/trafficModelApi';
 import { getTrafficModelDTO, getTrafficModelVO } from '@/utils/resourceManager/convertTrafficModel';
+import { getDefaultTrafficModel } from '@/utils/resourceManager/defaultTrafficModel';
 
 const TrafficModelEditor: React.FC = () => {
   const params = useParams();
@@ -25,7 +25,7 @@ const TrafficModelEditor: React.FC = () => {
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
     resourceKind: t('TrafficModel'),
-    getDefaultForm: getDefaultTrafficModelForm,
+    getDefaultForm: getDefaultTrafficModel,
     lazyGetHook: useLazyGetTrafficModelQuery,
     createHook: useCreateTrafficModelMutation,
     updateHook: useUpdateTrafficModelMutation,
@@ -33,33 +33,6 @@ const TrafficModelEditor: React.FC = () => {
     getDTO: getTrafficModelDTO,
   });
 
-  const beforeUpload = (file: { type: string }) => {
-    const isJson = file.type === 'application/json';
-    if (!isJson) {
-      message.error('You can only upload JSON file!');
-    }
-    return isJson;
-  };
-  interface FileObject {
-    originFileObj: Blob;
-    jsonString?: string;
-  }
-
-  const normFile = (e: { fileList: FileObject[] }) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    const file = e.fileList[0];
-    const reader = new FileReader();
-    reader.onload = (event: ProgressEvent<FileReader>) => {
-      if (event.target) {
-        file.jsonString = event.target.result as string;
-        form.setFieldsValue({ config: file.jsonString });
-      }
-    };
-    reader.readAsText(file.originFileObj as Blob);
-    return e && e.fileList;
-  };
   return (
     <div className="p-6">
       {React.cloneElement(breadcrumb, { className: 'mb-6' })}
@@ -68,7 +41,7 @@ const TrafficModelEditor: React.FC = () => {
           <Form
             {...formStyle}
             form={form}
-            initialValues={getDefaultTrafficModelForm('')}
+            initialValues={getDefaultTrafficModel('')}
             onFinish={() => {
               createOrUpdateResource();
             }}
@@ -99,31 +72,8 @@ const TrafficModelEditor: React.FC = () => {
             >
               <Input disabled={params.action === 'edit'} />
             </Form.Item>
-
-            <Form.Item label={t('Download JSON')} name={['download_json']}>
-              <div className="flex">
-                <Tooltip
-                  title={t(
-                    'This traffic model lets you describe one forecast of the data your business expects to see as input to your pipeline, over the course of a full year.  To change it, you will have to download this model, edit the parameters, and re-upload it.'
-                  )}
-                >
-                  <InfoCircleOutlined className="text-slate-400 dark:text-slate-600 mr-2" />
-                </Tooltip>
-                <a href="/utils/traffic_model.json" download>
-                  <Button type="primary">{t('Download JSON')}</Button>
-                </a>
-              </div>
-            </Form.Item>
-
-            <Form.Item label={t('Upload JSON')} name={['json']} valuePropName="fileList" getValueFromEvent={normFile}>
-              <Upload.Dragger name="json" beforeUpload={beforeUpload}>
-                {' '}
-                <p className="ant-upload-drag-icon">
-                  <UploadOutlined />
-                </p>
-                <p className="ant-upload-text">{t('Click or drag file to this area to upload')}</p>
-                <p className="ant-upload-hint">{t('Support for a single or bulk upload.')}</p>
-              </Upload.Dragger>
+            <Form.Item name={['config']} wrapperCol={{ span: 24 }}>
+              <Editor height="600px" options={{ fontSize: 14, wordWrap: true }} language="json" theme="vs-dark" />
             </Form.Item>
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">

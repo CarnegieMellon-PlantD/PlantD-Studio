@@ -1,30 +1,19 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { InfoCircleOutlined } from '@ant-design/icons';
 import { faGauge } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Badge, Button, Tooltip } from 'antd';
+import { Badge, Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import dayjs from 'dayjs';
 
 import BaseResourceList from '@/components/resourceManager/BaseResourceList';
+import ErrorTooltip from '@/components/resourceManager/ErrorTooltip';
 import { autoRefreshInterval } from '@/constants/resourceManager';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeleteExperimentMutation, useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
 import { allExperimentJobStatuses, ExperimentDTO, ExperimentJobStatus } from '@/types/resourceManager/experiment';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
-import dayjs from 'dayjs';
-
-export const ErrorTooltip: React.FC<{ record: ExperimentDTO }> = ({ record }) => {
-  return (
-    <>
-      {' '}
-      <Tooltip title={record.status?.error}>
-        <InfoCircleOutlined className="cursor-pointer" />
-      </Tooltip>
-    </>
-  );
-};
 
 const ExperimentList: React.FC = () => {
   const navigate = useNavigate();
@@ -53,9 +42,11 @@ const ExperimentList: React.FC = () => {
       title: t('Durations'),
       width: 150,
       render: (text, record) =>
-        Object.entries(record.status?.durations ?? {})
-          .map(([key, value]) => `${key}: ${value}`)
-          .join(', '),
+        record.status?.durations !== undefined
+          ? Object.entries(record.status?.durations)
+              .map(([key, value]) => `${key}: ${value}`)
+              .join(', ')
+          : '-',
     },
     {
       title: t('Status'),
@@ -71,6 +62,8 @@ const ExperimentList: React.FC = () => {
           <Badge status="warning" text={t('Initializing')} />
         ) : record.status?.jobStatus === ExperimentJobStatus.Running ? (
           <Badge status="processing" text={t('Running')} />
+        ) : record.status?.jobStatus === ExperimentJobStatus.Draining ? (
+          <Badge status="processing" text={t('Draining')} />
         ) : record.status?.jobStatus === ExperimentJobStatus.Completed ? (
           <Badge status="success" text={t('Completed')} />
         ) : record.status?.jobStatus === ExperimentJobStatus.Failed ? (
@@ -92,6 +85,7 @@ const ExperimentList: React.FC = () => {
         { text: t('Waiting for Pipeline'), value: ExperimentJobStatus.WaitingPipeline },
         { text: t('Initializing'), value: ExperimentJobStatus.Initializing },
         { text: t('Running'), value: ExperimentJobStatus.Running },
+        { text: t('Draining'), value: ExperimentJobStatus.Draining },
         { text: t('Completed'), value: ExperimentJobStatus.Completed },
         { text: t('Failed'), value: ExperimentJobStatus.Failed },
       ],
@@ -103,16 +97,26 @@ const ExperimentList: React.FC = () => {
     {
       title: t('Start Time'),
       width: 200,
-      render: (text, record) => record.status?.startTime ? dayjs(record.status?.startTime).format('YYYY-MM-DD HH:mm:ss') : '-',
+      render: (text, record) =>
+        record.status?.startTime !== undefined ? dayjs(record.status?.startTime).format('YYYY-MM-DD HH:mm:ss') : '-',
+      sorter: (a, b) =>
+        (a.status?.startTime !== undefined ? dayjs(a.status?.startTime).unix() : 0) -
+        (b.status?.startTime !== undefined ? dayjs(b.status?.startTime).unix() : 0),
     },
     {
       title: t('Completion Time'),
       width: 200,
-      render: (text, record) => record.status?.completionTime ? dayjs(record.status?.completionTime).format('YYYY-MM-DD HH:mm:ss') : '-',
+      render: (text, record) =>
+        record.status?.completionTime !== undefined
+          ? dayjs(record.status?.completionTime).format('YYYY-MM-DD HH:mm:ss')
+          : '-',
+      sorter: (a, b) =>
+        (a.status?.completionTime !== undefined ? dayjs(a.status?.completionTime).unix() : 0) -
+        (b.status?.completionTime !== undefined ? dayjs(b.status?.completionTime).unix() : 0),
     },
     {
       title: t('Dashboards'),
-      width: 400,
+      width: 250,
       render: (text, record) => (
         <div className="flex gap-2">
           <Button
@@ -123,7 +127,7 @@ const ExperimentList: React.FC = () => {
               navigate(`/dashboard/experimentDetail/${record.metadata.namespace}/${record.metadata.name}`);
             }}
           >
-            {t('Experiment Detail')}
+            {t('Exp. Detail')}
           </Button>
           <Button
             type="text"
@@ -133,7 +137,7 @@ const ExperimentList: React.FC = () => {
               navigate(`/dashboard/loadGenerator/${record.metadata.namespace}/${record.metadata.name}`);
             }}
           >
-            {t('Load Generator')}
+            {t('Load Gen.')}
           </Button>
         </div>
       ),
@@ -153,7 +157,7 @@ const ExperimentList: React.FC = () => {
       refetch={refetch}
       deleteHook={useDeleteExperimentMutation}
       columns={columns}
-      scroll={{ x: 1800 }}
+      scroll={{ x: 1650 }}
     />
   );
 };

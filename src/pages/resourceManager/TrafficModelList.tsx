@@ -32,6 +32,9 @@ const TrafficModelList: React.FC = () => {
 
   return (
     <BaseResourceList
+      caption={t(
+        "Traffic models describe the data your business expects to see as input to your pipeline, over the course of a full year.  It's used as input for a simulation to extrapolate performance measured in an experiment to the real-world conditions you expect to see."
+      )}
       showNamespaceSelect
       allowClone
       allowEdit
@@ -43,10 +46,7 @@ const TrafficModelList: React.FC = () => {
       refetch={refetch}
       deleteHook={useDeleteTrafficModelMutation}
       columns={columns}
-      caption={t(
-        "Traffic models describe the data your business expects to see as input to your pipeline, over the course of a full year.  It's used as input for a simulation to extrapolate performance measured in an experiment to the real-world conditions you expect to see."
-      )}
-      scroll={{ x: 850 }}
+      scroll={{ x: 700 }}
     />
   );
 };

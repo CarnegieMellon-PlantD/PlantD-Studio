@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { nanoid } from '@reduxjs/toolkit';
 import { Button, Card, Checkbox, Form, Input, InputNumber, Select, Spin } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
 import SortableTable from '@/components/resourceManager/SortableTable';
-import { getDefaultDataSetForm } from '@/constants/resourceManager/defaultForm/dataSet';
 import { formStyle } from '@/constants/resourceManager/formStyles';
 import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
@@ -20,6 +18,7 @@ import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi'
 import { useListSchemasQuery } from '@/services/resourceManager/schemaApi';
 import { DataSetVO } from '@/types/resourceManager/dataSet';
 import { getDataSetDTO, getDataSetVO } from '@/utils/resourceManager/convertDataSet';
+import { getDefaultDataSet, getDefaultDataSetSchema } from '@/utils/resourceManager/defaultDataSet';
 
 const DataSetEditor: React.FC = () => {
   const params = useParams();
@@ -28,7 +27,7 @@ const DataSetEditor: React.FC = () => {
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
     resourceKind: t('DataSet'),
-    getDefaultForm: getDefaultDataSetForm,
+    getDefaultForm: getDefaultDataSet,
     lazyGetHook: useLazyGetDataSetQuery,
     createHook: useCreateDataSetMutation,
     updateHook: useUpdateDataSetMutation,
@@ -202,7 +201,7 @@ const DataSetEditor: React.FC = () => {
           <Form
             {...formStyle}
             form={form}
-            initialValues={getDefaultDataSetForm('')}
+            initialValues={getDefaultDataSet('')}
             onFinish={() => {
               createOrUpdateResource();
             }}
@@ -225,6 +224,7 @@ const DataSetEditor: React.FC = () => {
               name={['name']}
               rules={[
                 { required: true, message: t('Name is required') },
+                { max: 39, message: t('Name cannot exceed 39 characters') },
                 {
                   pattern: rfc1123RegExp,
                   message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
@@ -320,14 +320,7 @@ const DataSetEditor: React.FC = () => {
                           move(activeIndex, overIndex);
                         }}
                         onCreateRow={() => {
-                          // Do manual type checking here
-                          const newRow: DataSetVO['schemas'][number] = {
-                            id: nanoid(),
-                            name: '',
-                            numRecords: { min: 1, max: 1 },
-                            numFilesPerCompressedFile: { min: 1, max: 1 },
-                          };
-                          add(newRow);
+                          add(getDefaultDataSetSchema());
                         }}
                         onDeleteRow={(rowKey) => {
                           const index = (form.getFieldValue(['schemas']) as DataSetVO['schemas']).findIndex(

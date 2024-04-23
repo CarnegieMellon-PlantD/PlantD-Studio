@@ -8,10 +8,10 @@ import { Button, Card, Form, Input, Radio, Spin } from 'antd';
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
 import DateTimePicker from '@/components/resourceManager/DateTimePicker';
 import EndpointSelect from '@/components/resourceManager/EndpointSelect';
-import { getDefaultExperimentForm } from '@/constants/resourceManager/defaultForm/experiment';
 import { formStyle } from '@/constants/resourceManager/formStyles';
-import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
+import { durationRegExp, rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
+import { useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
 import {
   useCreateExperimentMutation,
   useLazyGetExperimentQuery,
@@ -22,7 +22,7 @@ import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi'
 import { useListPipelinesQuery } from '@/services/resourceManager/pipelineApi';
 import { ExperimentVO } from '@/types/resourceManager/experiment';
 import { getExperimentDTO, getExperimentVO } from '@/utils/resourceManager/convertExperiment';
-import { useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
+import { getDefaultExperiment, getDefaultExperimentEndpointSpec } from '@/utils/resourceManager/defaultExperiment';
 
 const EndpointSpecCard: React.FC<{
   index: number;
@@ -35,7 +35,7 @@ const EndpointSpecCard: React.FC<{
       <Form.Item
         noStyle
         shouldUpdate={(prev: ExperimentVO, next: ExperimentVO) =>
-          prev.pipelineRef.namespace !== next.pipelineRef.namespace || prev.pipelineRef.name !== next.pipelineRef.name
+          prev.namespace !== next.namespace || prev.pipelineRef.name !== next.pipelineRef.name
         }
       >
         {() => (
@@ -45,9 +45,7 @@ const EndpointSpecCard: React.FC<{
             rules={[{ required: true, message: t('Endpoint name is required') }]}
           >
             <EndpointSelect
-              pipelineNamespace={
-                form.getFieldValue(['pipelineRef', 'namespace']) as ExperimentVO['pipelineRef']['namespace']
-              }
+              pipelineNamespace={form.getFieldValue(['namespace']) as ExperimentVO['namespace']}
               pipelineName={form.getFieldValue(['pipelineRef', 'name']) as ExperimentVO['pipelineRef']['name']}
             />
           </Form.Item>
@@ -92,7 +90,7 @@ const EndpointSpecCard: React.FC<{
           </Form.Item>
         </div>
       </Form.Item>
-      <Form.Item name={[index,'dataSpec', 'option']} label={t('Data Option')} required>
+      <Form.Item name={[index, 'dataSpec', 'option']} label={t('Data Option')} required>
         <Radio.Group>
           <Radio value="plainText">{t('Plain Text')}</Radio>
           <Radio value="dataSet">{t('DataSet')}</Radio>
@@ -116,46 +114,25 @@ const EndpointSpecCard: React.FC<{
               </Form.Item>
             )}
             {form.getFieldValue(['endpointSpecs', index, 'dataSpec', 'option']) === 'dataSet' && (
-              <Form.Item label={t('DataSet')} className="mb-0" required>
-                <div className="flex gap-1">
+              <Form.Item
+                noStyle
+                shouldUpdate={(prev: ExperimentVO, next: ExperimentVO) => prev.namespace !== next.namespace}
+              >
+                {() => (
                   <Form.Item
-                    className="w-64 flex-auto"
-                    name={[index, 'dataSpec', 'dataSetRef', 'namespace']}
-                    rules={[{ required: true, message: t('Namespace is required') }]}
+                    label={t('DataSet')}
+                    name={[index, 'dataSpec', 'dataSetRef', 'name']}
+                    rules={[{ required: true, message: t('Name is required') }]}
                   >
-                    <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
+                    <BaseResourceSelect
+                      resourceKind={t('DataSet')}
+                      listHook={useListDataSetsQuery}
+                      filter={(item) =>
+                        item.metadata.namespace === (form.getFieldValue(['namespace']) as ExperimentVO['namespace'])
+                      }
+                    />
                   </Form.Item>
-                  <Form.Item
-                    noStyle
-                    shouldUpdate={(prev: ExperimentVO, next: ExperimentVO) =>
-                      prev.endpointSpecs[index].dataSpec.dataSetRef.namespace !==
-                      next.endpointSpecs[index]?.dataSpec.dataSetRef.namespace
-                    }
-                  >
-                    {() => (
-                      <Form.Item
-                        className="w-64 flex-auto"
-                        name={[index, 'dataSpec', 'dataSetRef', 'name']}
-                        rules={[{ required: true, message: t('Name is required') }]}
-                      >
-                        <BaseResourceSelect
-                          resourceKind={t('DataSet')}
-                          listHook={useListDataSetsQuery}
-                          filter={(item) =>
-                            item.metadata.namespace ===
-                            (form.getFieldValue([
-                              'endpointSpecs',
-                              index,
-                              'dataSpec',
-                              'dataSetRef',
-                              'namespace',
-                            ]) as ExperimentVO['endpointSpecs'][number]['dataSpec']['dataSetRef']['namespace'])
-                          }
-                        />
-                      </Form.Item>
-                    )}
-                  </Form.Item>
-                </div>
+                )}
               </Form.Item>
             )}
           </>
@@ -172,7 +149,7 @@ const ExperimentEditor: React.FC = () => {
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
     resourceKind: t('Experiment'),
-    getDefaultForm: getDefaultExperimentForm,
+    getDefaultForm: getDefaultExperiment,
     lazyGetHook: useLazyGetExperimentQuery,
     createHook: useCreateExperimentMutation,
     updateHook: useUpdateExperimentMutation,
@@ -188,10 +165,12 @@ const ExperimentEditor: React.FC = () => {
           <Form
             {...formStyle}
             form={form}
-            initialValues={getDefaultExperimentForm('')}
+            initialValues={getDefaultExperiment('')}
             onFinish={() => {
               createOrUpdateResource();
             }}
+            // Disable entire form if `params.action` is `edit`
+            disabled={params.action === 'edit'}
           >
             <Form.Item
               label={t('Namespace')}
@@ -199,62 +178,41 @@ const ExperimentEditor: React.FC = () => {
               normalize={(value) => (value !== undefined ? value : '')}
               rules={[{ required: true, message: t('Namespace is required') }]}
             >
-              <BaseResourceSelect
-                resourceKind={t('Namespace')}
-                listHook={useListNamespacesQuery}
-                // Disable metadata fields if `params.action` is `edit`
-                disabled={params.action === 'edit'}
-              />
+              <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
             </Form.Item>
             <Form.Item
               label={t('Name')}
               name={['name']}
               rules={[
                 { required: true, message: t('Name is required') },
+                { max: 32, message: t('Name cannot exceed 32 characters') },
                 {
                   pattern: rfc1123RegExp,
                   message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
                 },
               ]}
             >
-              <Input
-                // Disable metadata fields if `params.action` is `edit`
-                disabled={params.action === 'edit'}
-              />
+              <Input />
             </Form.Item>
-            <Form.Item className="mb-0" label={t('Pipeline')} required>
-              <div className="flex gap-1">
+            <Form.Item
+              noStyle
+              shouldUpdate={(prev: ExperimentVO, next: ExperimentVO) => prev.namespace !== next.namespace}
+            >
+              {() => (
                 <Form.Item
-                  className="w-64 flex-auto"
-                  name={['pipelineRef', 'namespace']}
-                  rules={[{ required: true, message: t('Namespace is required') }]}
+                  label={t('Pipeline')}
+                  name={['pipelineRef', 'name']}
+                  rules={[{ required: true, message: t('Name is required') }]}
                 >
-                  <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
+                  <BaseResourceSelect
+                    resourceKind={t('Pipeline')}
+                    listHook={useListPipelinesQuery}
+                    filter={(item) =>
+                      item.metadata.namespace === (form.getFieldValue(['namespace']) as ExperimentVO['namespace'])
+                    }
+                  />
                 </Form.Item>
-                <Form.Item
-                  noStyle
-                  shouldUpdate={(prev: ExperimentVO, next: ExperimentVO) =>
-                    prev.pipelineRef.namespace !== next.pipelineRef.namespace
-                  }
-                >
-                  {() => (
-                    <Form.Item
-                      className="w-64 flex-auto"
-                      name={['pipelineRef', 'name']}
-                      rules={[{ required: true, message: t('Name is required') }]}
-                    >
-                      <BaseResourceSelect
-                        resourceKind={t('Pipeline')}
-                        listHook={useListPipelinesQuery}
-                        filter={(item) =>
-                          item.metadata.namespace ===
-                          (form.getFieldValue(['pipelineRef', 'namespace']) as ExperimentVO['pipelineRef']['namespace'])
-                        }
-                      />
-                    </Form.Item>
-                  )}
-                </Form.Item>
-              </div>
+              )}
             </Form.Item>
             <Form.Item label={t('Endpoint Specs')} required>
               <Form.List
@@ -291,22 +249,11 @@ const ExperimentEditor: React.FC = () => {
                     <Button
                       icon={<FontAwesomeIcon icon={faAdd} />}
                       onClick={() => {
-                        const newEndpointSpec: ExperimentVO['endpointSpecs'][number] = {
-                          endpointName: '',
-                          dataSpec: {
-                            option: 'dataSet',
-                            plainText: '',
-                            dataSetRef: {
-                              namespace: '',
-                              name: '',
-                            },
-                          },
-                          loadPatternRef: {
-                            namespace: '',
-                            name: '',
-                          },
-                        };
-                        add(newEndpointSpec);
+                        add(
+                          getDefaultExperimentEndpointSpec(
+                            form.getFieldValue(['namespace']) as ExperimentVO['namespace']
+                          )
+                        );
                       }}
                     >
                       {t('Add')}
@@ -316,7 +263,7 @@ const ExperimentEditor: React.FC = () => {
                 )}
               </Form.List>
             </Form.Item>
-            <Form.Item name={['hasScheduledTime']} label={t('Scheduling Mode')} required>
+            <Form.Item name={['hasScheduledTime']} label={t('Scheduling Mode')}>
               <Radio.Group>
                 <Radio value={false}>{t('Immediate')}</Radio>
                 <Radio value={true}>{t('Scheduled')}</Radio>
@@ -334,6 +281,32 @@ const ExperimentEditor: React.FC = () => {
                     rules={[{ required: true, message: t('Scheduled time is required') }]}
                   >
                     <DateTimePicker />
+                  </Form.Item>
+                )
+              }
+            </Form.Item>
+            <Form.Item name={['drainingMode']} label={t('Draining Mode')}>
+              <Radio.Group>
+                <Radio value={'endDetection'}>{t('Auto Detect')}</Radio>
+                <Radio value={'time'}>{t('Manual')}</Radio>
+                <Radio value={'none'}>{t('None')}</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item
+              noStyle
+              shouldUpdate={(prev: ExperimentVO, next: ExperimentVO) => prev.drainingMode !== next.drainingMode}
+            >
+              {() =>
+                (form.getFieldValue('drainingMode') as ExperimentVO['drainingMode']) === 'time' && (
+                  <Form.Item
+                    label={t('Draining Time')}
+                    name={['drainingTime']}
+                    rules={[
+                      { required: true, message: t('Draining time is required') },
+                      { pattern: durationRegExp, message: t('Draining time must be in the format of "1h2m3s"') },
+                    ]}
+                  >
+                    <Input />
                   </Form.Item>
                 )
               }

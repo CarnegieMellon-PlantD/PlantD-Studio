@@ -1,319 +1,198 @@
 import { expect, test } from '@jest/globals';
 
+import { DataSetDTO } from '@/types/resourceManager/dataSet';
 import { getDataSetDTO, getDataSetVO } from './convertDataSet';
 
-test('DTO->VO (detect compression)', () => {
-  // No compression when `compressedFileFormat` and `compressPerSchema` are omitted and `schemas` is empty
-  expect(
-    getDataSetVO({
-      metadata: {
-        namespace: 'namespace',
-        name: 'name',
-      },
-      spec: {
-        path: '/test',
-        fileFormat: 'csv',
-        numFiles: 5,
-        parallelJobs: 1,
-        schemas: [],
-      },
-      status: {},
-    })
-  ).toStrictEqual({
+test('DTO->VO, Default', () => {
+  const dtoIn: DataSetDTO = {
+    metadata: {
+      namespace: 'namespace',
+      name: 'name',
+    },
+    spec: {},
+    status: {},
+  };
+  const vo = getDataSetVO(dtoIn);
+
+  expect(vo).toStrictEqual({
+    originalObject: dtoIn.spec,
     namespace: 'namespace',
     name: 'name',
-    fileFormat: 'csv',
+    fileFormat: '',
     useCompression: false,
     compressedFileFormat: '',
     compressPerSchema: false,
-    numFiles: 5,
+    numFiles: 0,
     schemas: [],
   });
+});
 
-  // No compression when `compressedFileFormat` is empty and `compressPerSchema` is `false` and all `numFilesPerCompressedFile` are omitted
-  expect(
-    getDataSetVO({
-      metadata: {
-        namespace: 'namespace',
-        name: 'name',
-      },
-      spec: {
-        path: '/test',
-        fileFormat: 'csv',
-        compressedFileFormat: '',
-        compressPerSchema: false,
-        numFiles: 5,
-        parallelJobs: 1,
-        schemas: [
-          {
-            name: 'schema-name',
-            numRecords: { min: 100, max: 200 },
+test('DTO->VO->DTO, No Compression', () => {
+  const dtoIn: DataSetDTO = {
+    metadata: {
+      namespace: 'namespace',
+      name: 'name',
+    },
+    spec: {
+      image: 'image',
+      parallelism: 10,
+      storageSize: 'storage-size',
+      fileFormat: 'file-format',
+      compressedFileFormat: '',
+      numFiles: 100,
+      schemas: [
+        {
+          name: 'schema-name',
+          numRecords: {
+            min: 1,
+            max: 2,
           },
-        ],
-      },
-      status: {},
-    })
-  ).toStrictEqual({
+          numFilesPerCompressedFile: {
+            min: 3,
+            max: 4,
+          },
+        },
+      ],
+    },
+    status: {},
+  };
+  const vo = getDataSetVO(dtoIn);
+  const dtoOut = getDataSetDTO(vo);
+
+  expect(vo).toStrictEqual({
+    originalObject: dtoIn.spec,
     namespace: 'namespace',
     name: 'name',
-    fileFormat: 'csv',
+    fileFormat: 'file-format',
     useCompression: false,
     compressedFileFormat: '',
     compressPerSchema: false,
-    numFiles: 5,
+    numFiles: 100,
     schemas: [
       {
         id: expect.any(String),
         name: 'schema-name',
-        numRecords: { min: 100, max: 200 },
-        numFilesPerCompressedFile: { min: 0, max: 0 },
-      },
-    ],
-  });
-
-  // Compression when `compressedFileFormat` is not empty
-  expect(
-    getDataSetVO({
-      metadata: {
-        namespace: 'namespace',
-        name: 'name',
-      },
-      spec: {
-        path: '/test',
-        fileFormat: 'csv',
-        compressedFileFormat: 'zip',
-        compressPerSchema: false,
-        numFiles: 5,
-        parallelJobs: 1,
-        schemas: [],
-      },
-      status: {},
-    })
-  ).toStrictEqual({
-    namespace: 'namespace',
-    name: 'name',
-    fileFormat: 'csv',
-    useCompression: true,
-    compressedFileFormat: 'zip',
-    compressPerSchema: false,
-    numFiles: 5,
-    schemas: [],
-  });
-
-  // Compression when `compressPerSchema` is true
-  expect(
-    getDataSetVO({
-      metadata: {
-        namespace: 'namespace',
-        name: 'name',
-      },
-      spec: {
-        path: '/test',
-        fileFormat: 'csv',
-        compressedFileFormat: '',
-        compressPerSchema: true,
-        numFiles: 5,
-        parallelJobs: 1,
-        schemas: [],
-      },
-      status: {},
-    })
-  ).toStrictEqual({
-    namespace: 'namespace',
-    name: 'name',
-    fileFormat: 'csv',
-    useCompression: true,
-    compressedFileFormat: '',
-    compressPerSchema: true,
-    numFiles: 5,
-    schemas: [],
-  });
-
-  // Compression when not all `numFilesPerCompressedFile` are omitted
-  expect(
-    getDataSetVO({
-      metadata: {
-        namespace: 'namespace',
-        name: 'name',
-      },
-      spec: {
-        path: '/test',
-        fileFormat: 'csv',
-        compressedFileFormat: '',
-        compressPerSchema: false,
-        numFiles: 5,
-        parallelJobs: 1,
-        schemas: [
-          {
-            name: 'schema-name-0',
-            numRecords: { min: 100, max: 200 },
-            numFilesPerCompressedFile: { min: 0, max: 0 },
-          },
-          {
-            name: 'schema-name-1',
-            numRecords: { min: 100, max: 200 },
-          },
-        ],
-      },
-      status: {},
-    })
-  ).toStrictEqual({
-    namespace: 'namespace',
-    name: 'name',
-    fileFormat: 'csv',
-    useCompression: true,
-    compressedFileFormat: '',
-    compressPerSchema: false,
-    numFiles: 5,
-    schemas: [
-      {
-        id: expect.any(String),
-        name: 'schema-name-0',
-        numRecords: { min: 100, max: 200 },
-        numFilesPerCompressedFile: { min: 0, max: 0 },
-      },
-      {
-        id: expect.any(String),
-        name: 'schema-name-1',
-        numRecords: { min: 100, max: 200 },
-        numFilesPerCompressedFile: { min: 0, max: 0 },
-      },
-    ],
-  });
-});
-
-test('DTO->VO (fallback values)', () => {
-  // All empty
-  expect(
-    getDataSetVO({
-      metadata: {
-        namespace: 'namespace',
-        name: 'name',
-      },
-      spec: {},
-      status: {},
-    })
-  ).toStrictEqual({
-    namespace: 'namespace',
-    name: 'name',
-    fileFormat: '',
-    useCompression: false,
-    compressedFileFormat: '',
-    compressPerSchema: false,
-    numFiles: 0,
-    schemas: [],
-  });
-
-  // One empty Schema
-  expect(
-    getDataSetVO({
-      metadata: {
-        namespace: 'namespace',
-        name: 'name',
-      },
-      spec: {
-        schemas: [{}],
-      },
-      status: {},
-    })
-  ).toStrictEqual({
-    namespace: 'namespace',
-    name: 'name',
-    fileFormat: '',
-    useCompression: false,
-    compressedFileFormat: '',
-    compressPerSchema: false,
-    numFiles: 0,
-    schemas: [
-      {
-        id: expect.any(String),
-        name: '',
-        numRecords: { min: 0, max: 0 },
-        numFilesPerCompressedFile: { min: 0, max: 0 },
-      },
-    ],
-  });
-});
-
-test('VO->DTO', () => {
-  expect(
-    getDataSetDTO({
-      namespace: 'namespace',
-      name: 'name',
-      fileFormat: 'csv',
-      useCompression: true,
-      compressedFileFormat: 'zip',
-      compressPerSchema: true,
-      numFiles: 5,
-      schemas: [
-        {
-          id: 'schema-id',
-          name: 'schema-name',
-          numRecords: { min: 100, max: 200 },
-          numFilesPerCompressedFile: { min: 10, max: 20 },
+        numRecords: {
+          min: 1,
+          max: 2,
         },
-      ],
-    })
-  ).toStrictEqual({
+        numFilesPerCompressedFile: {
+          min: 3,
+          max: 4,
+        },
+      },
+    ],
+  });
+
+  expect(dtoOut).toStrictEqual({
     metadata: {
       namespace: 'namespace',
       name: 'name',
     },
     spec: {
-      path: '/test',
-      fileFormat: 'csv',
-      compressedFileFormat: 'zip',
-      compressPerSchema: true,
-      numFiles: 5,
-      parallelJobs: 1,
-      schemas: [
-        {
-          name: 'schema-name',
-          numRecords: { min: 100, max: 200 },
-          numFilesPerCompressedFile: { min: 10, max: 20 },
-        },
-      ],
-    },
-  });
-});
-
-test('VO->DTO (no compression)', () => {
-  // When `useCompression` is `false`, `compressedFileFormat`, `compressPerSchema` and `numFilesPerCompressedFile` are omitted
-  expect(
-    getDataSetDTO({
-      namespace: 'namespace',
-      name: 'name',
-      fileFormat: 'csv',
-      useCompression: false,
-      compressedFileFormat: 'zip',
-      compressPerSchema: true,
-      numFiles: 5,
-      schemas: [
-        {
-          id: 'schema-id',
-          name: 'schema-name',
-          numRecords: { min: 100, max: 200 },
-          numFilesPerCompressedFile: { min: 10, max: 20 },
-        },
-      ],
-    })
-  ).toStrictEqual({
-    metadata: {
-      namespace: 'namespace',
-      name: 'name',
-    },
-    spec: {
-      path: '/test',
-      fileFormat: 'csv',
+      image: 'image',
+      parallelism: 10,
+      storageSize: 'storage-size',
+      fileFormat: 'file-format',
       compressedFileFormat: undefined,
       compressPerSchema: undefined,
-      numFiles: 5,
-      parallelJobs: 1,
+      numFiles: 100,
       schemas: [
         {
           name: 'schema-name',
-          numRecords: { min: 100, max: 200 },
+          numRecords: {
+            min: 1,
+            max: 2,
+          },
           numFilesPerCompressedFile: undefined,
+        },
+      ],
+    },
+  });
+});
+
+test('DTO->VO->DTO, Compression', () => {
+  const dtoIn: DataSetDTO = {
+    metadata: {
+      namespace: 'namespace',
+      name: 'name',
+    },
+    spec: {
+      image: 'image',
+      parallelism: 10,
+      storageSize: 'storage-size',
+      fileFormat: 'file-format',
+      compressedFileFormat: 'compressed-file-format',
+      compressPerSchema: true,
+      numFiles: 100,
+      schemas: [
+        {
+          name: 'schema-name',
+          numRecords: {
+            min: 1,
+            max: 2,
+          },
+          numFilesPerCompressedFile: {
+            min: 3,
+            max: 4,
+          },
+        },
+      ],
+    },
+    status: {},
+  };
+  const vo = getDataSetVO(dtoIn);
+  const dtoOut = getDataSetDTO(vo);
+
+  expect(vo).toStrictEqual({
+    originalObject: dtoIn.spec,
+    namespace: 'namespace',
+    name: 'name',
+    fileFormat: 'file-format',
+    useCompression: true,
+    compressedFileFormat: 'compressed-file-format',
+    compressPerSchema: true,
+    numFiles: 100,
+    schemas: [
+      {
+        id: expect.any(String),
+        name: 'schema-name',
+        numRecords: {
+          min: 1,
+          max: 2,
+        },
+        numFilesPerCompressedFile: {
+          min: 3,
+          max: 4,
+        },
+      },
+    ],
+  });
+
+  expect(dtoOut).toStrictEqual({
+    metadata: {
+      namespace: 'namespace',
+      name: 'name',
+    },
+    spec: {
+      image: 'image',
+      parallelism: 10,
+      storageSize: 'storage-size',
+      fileFormat: 'file-format',
+      compressedFileFormat: 'compressed-file-format',
+      compressPerSchema: true,
+      numFiles: 100,
+      schemas: [
+        {
+          name: 'schema-name',
+          numRecords: {
+            min: 1,
+            max: 2,
+          },
+          numFilesPerCompressedFile: {
+            min: 3,
+            max: 4,
+          },
         },
       ],
     },

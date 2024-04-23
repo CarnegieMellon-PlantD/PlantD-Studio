@@ -22,7 +22,7 @@ import {
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const getTagColorFromCategory = (category: string) => {
-  return category === DataSetErrorType.Controller ? 'yellow' : category === DataSetErrorType.Job ? 'red' : '';
+  return category === DataSetErrorType.Controller ? 'orange' : category === DataSetErrorType.Job ? 'purple' : '';
 };
 
 const ErrorDetail: React.FC<{ record: DataSetDTO }> = ({ record }) => {
