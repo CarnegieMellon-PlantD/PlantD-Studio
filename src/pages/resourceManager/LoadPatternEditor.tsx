@@ -2,15 +2,13 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { nanoid } from '@reduxjs/toolkit';
-import { Button, Card, Form, Input, InputNumber, Select, Spin, Tooltip } from 'antd';
+import { Button, Card, Form, Input, InputNumber, Spin, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
 import SortableTable from '@/components/resourceManager/SortableTable';
-import { getDefaultLoadPatternForm } from '@/constants/resourceManager/defaultForm/loadPattern';
 import { formStyle } from '@/constants/resourceManager/formStyles';
-import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
+import { durationRegExp, rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
 import {
   useCreateLoadPatternMutation,
@@ -20,6 +18,7 @@ import {
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
 import { LoadPatternVO } from '@/types/resourceManager/loadPattern';
 import { getLoadPatternDTO, getLoadPatternVO } from '@/utils/resourceManager/convertLoadPattern';
+import { getDefaultLoadPattern, getDefaultLoadPatternStage } from '@/utils/resourceManager/defaultLoadPattern';
 
 const LoadPatternEditor: React.FC = () => {
   const params = useParams();
@@ -28,7 +27,7 @@ const LoadPatternEditor: React.FC = () => {
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
     resourceKind: t('LoadPattern'),
-    getDefaultForm: getDefaultLoadPatternForm,
+    getDefaultForm: getDefaultLoadPattern,
     lazyGetHook: useLazyGetLoadPatternQuery,
     createHook: useCreateLoadPatternMutation,
     updateHook: useUpdateLoadPatternMutation,
@@ -56,30 +55,17 @@ const LoadPatternEditor: React.FC = () => {
       render: (text, record, index) =>
         // Hide for the first stage
         index !== 0 && (
-          <div className="flex gap-1">
-            <Form.Item
-              className="mb-0 w-full"
-              name={[index, 'duration']}
-              normalize={(value) => (value === null ? 0 : value)}
-              rules={[{ type: 'number', min: 0, message: t('Time must be >= 0') }]}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
-            <Form.Item
-              className="mb-0 w-32 flex-none"
-              name={[index, 'durationUnit']}
-              rules={[{ required: true, message: t('Unit is required') }]}
-            >
-              <Select
-                showSearch
-                options={[
-                  { label: t('Second(s)'), value: 's' },
-                  { label: t('Minute(s)'), value: 'm' },
-                  { label: t('Hour(s)'), value: 'h' },
-                ]}
-              />
-            </Form.Item>
-          </div>
+          <Form.Item
+            className="mb-0 w-full"
+            name={[index, 'duration']}
+            normalize={(value) => (value === null ? 0 : value)}
+            rules={[
+              { required: true, message: t('Duration is required') },
+              { pattern: durationRegExp, message: t('Duration must be in the format of "1h2m3s"') },
+            ]}
+          >
+            <Input className="w-full" />
+          </Form.Item>
         ),
     },
   ];
@@ -92,7 +78,7 @@ const LoadPatternEditor: React.FC = () => {
           <Form
             {...formStyle}
             form={form}
-            initialValues={getDefaultLoadPatternForm('')}
+            initialValues={getDefaultLoadPattern('')}
             onFinish={() => {
               createOrUpdateResource();
             }}
@@ -115,6 +101,7 @@ const LoadPatternEditor: React.FC = () => {
               name={['name']}
               rules={[
                 { required: true, message: t('Name is required') },
+                { max: 63, message: t('Name cannot exceed 63 characters') },
                 {
                   pattern: rfc1123RegExp,
                   message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
@@ -170,14 +157,7 @@ const LoadPatternEditor: React.FC = () => {
                           move(activeIndex, overIndex);
                         }}
                         onCreateRow={() => {
-                          // Do manual type checking here
-                          const newRow: LoadPatternVO['stages'][number] = {
-                            id: nanoid(),
-                            target: 0,
-                            duration: 0,
-                            durationUnit: 's',
-                          };
-                          add(newRow);
+                          add(getDefaultLoadPatternStage());
                         }}
                         onDeleteRow={(rowKey) => {
                           const index = (form.getFieldValue(['stages']) as LoadPatternVO['stages']).findIndex(

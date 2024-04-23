@@ -5,57 +5,62 @@ import { getSchemaColumnArgs } from '@/utils/resourceManager/getSchemaColumnArgs
 import { getSchemaColumnParams } from '@/utils/resourceManager/getSchemaColumnParams';
 
 /**
- * Convert the data transfer object of a schema to the view object
- * @param schemaDTO The data transfer object of a schema
- * @returns The view object of a schema
+ * Convert the data transfer object of a Schema to the view object
+ * @param dto The data transfer object of a Schema
+ * @returns The view object of a Schema
  */
-export const getSchemaVO = (schemaDTO: SchemaDTO): SchemaVO => {
-  return {
-    namespace: schemaDTO.metadata.namespace,
-    name: schemaDTO.metadata.name,
-    columns:
-      schemaDTO.spec.columns === undefined
-        ? []
-        : schemaDTO.spec.columns.map((column) => ({
-            id: nanoid(),
-            name: column.name,
-            type: column.type ?? '',
-            params: getSchemaColumnParams(column.type ?? '', column.params),
-            formula: column.formula?.name ?? '',
-            args: getSchemaColumnArgs(column.formula?.name ?? '', column.formula?.args),
-          })),
+export const getSchemaVO = (dto: SchemaDTO): SchemaVO => {
+  const vo: SchemaVO = {
+    originalObject: dto.spec,
+    namespace: dto.metadata.namespace,
+    name: dto.metadata.name,
+    columns: [],
   };
+
+  if (dto.spec.columns !== undefined) {
+    vo.columns = dto.spec.columns.map((column) => ({
+      id: nanoid(),
+      name: column.name ?? '',
+      type: column.type ?? '',
+      params: getSchemaColumnParams(column.type ?? '', column.params),
+      formula: column.formula?.name ?? '',
+      args: getSchemaColumnArgs(column.formula?.name ?? '', column.formula?.args),
+    }));
+  }
+
+  return vo;
 };
 
 /**
- * Convert the view object of a schema to the data transfer object
- * @param schemaVO The view object of a schema
- * @returns The data transfer object of a schema
+ * Convert the view object of a Schema to the data transfer object
+ * @param vo The view object of a Schema
+ * @returns The data transfer object of a Schema
  */
-export const getSchemaDTO = (schemaVO: SchemaVO): Pick<SchemaDTO, 'metadata' | 'spec'> => {
+export const getSchemaDTO = (vo: SchemaVO): Pick<SchemaDTO, 'metadata' | 'spec'> => {
   return {
     metadata: {
-      namespace: schemaVO.namespace,
-      name: schemaVO.name,
+      namespace: vo.namespace,
+      name: vo.name,
     },
     spec: {
-      columns: schemaVO.columns.map((column) => {
+      ...vo.originalObject,
+      columns: vo.columns.map((column) => {
         const filteredParams = column.params.filter(({ value }) => value !== '');
 
         return {
           name: column.name,
-          type: column.type === '' ? undefined : column.type,
+          type: column.type !== '' ? column.type : undefined,
           params:
-            column.type === '' || filteredParams.length === 0
-              ? undefined
-              : Object.fromEntries(filteredParams.map(({ info, value }) => [info.field, value])),
+            column.type !== '' && filteredParams.length > 0
+              ? Object.fromEntries(filteredParams.map(({ info, value }) => [info.field, value]))
+              : undefined,
           formula:
-            column.formula === ''
-              ? undefined
-              : {
+            column.formula !== ''
+              ? {
                   name: column.formula,
-                  args: column.args.value.length === 0 ? undefined : column.args.value,
-                },
+                  args: column.args.value.length > 0 ? column.args.value : undefined,
+                }
+              : undefined,
         };
       }),
     },

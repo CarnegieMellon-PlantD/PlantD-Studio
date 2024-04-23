@@ -1,93 +1,35 @@
 import { expect, test } from '@jest/globals';
 
+import { LoadPatternDTO } from '@/types/resourceManager/loadPattern';
 import { getLoadPatternDTO, getLoadPatternVO } from './convertLoadPattern';
 
-test('DTO->VO', () => {
-  expect(
-    getLoadPatternVO({
-      metadata: {
-        namespace: 'namespace',
-        name: 'name',
-      },
-      spec: {
-        stages: [
-          {
-            target: 100,
-            duration: '120s',
-          },
-        ],
-        preAllocatedVUs: 30,
-        startRate: 0,
-        maxVUs: 100,
-        timeUnit: '1s',
-      },
-      status: {},
-    })
-  ).toStrictEqual({
-    namespace: 'namespace',
-    name: 'name',
-    stages: [
-      {
-        id: expect.any(String),
-        target: 0,
-        duration: 0,
-        durationUnit: '',
-      },
-      {
-        id: expect.any(String),
-        target: 100,
-        duration: 120,
-        durationUnit: 's',
-      },
-    ],
-  });
-});
-
-test('DTO->VO (fallback values)', () => {
-  expect(
-    getLoadPatternVO({
-      metadata: {
-        namespace: 'namespace',
-        name: 'name',
-      },
-      spec: {},
-      status: {},
-    })
-  ).toStrictEqual({
-    namespace: 'namespace',
-    name: 'name',
-    stages: [
-      {
-        id: expect.any(String),
-        target: 0,
-        duration: 0,
-        durationUnit: '',
-      },
-    ],
-  });
-});
-
-test('VO -> DTO', () => {
-  expect(
-    getLoadPatternDTO({
+test('DTO->VO, Default', () => {
+  const dtoIn: LoadPatternDTO = {
+    metadata: {
       namespace: 'namespace',
       name: 'name',
-      stages: [
-        {
-          id: 'stage-id-0',
-          target: 0,
-          duration: 0,
-          durationUnit: '',
-        },
-        {
-          id: 'stage-id-1',
-          target: 100,
-          duration: 120,
-          durationUnit: 's',
-        },
-      ],
-    })
-  ).toStrictEqual({
+    },
+    spec: {},
+    status: {},
+  };
+  const vo = getLoadPatternVO(dtoIn);
+
+  expect(vo).toStrictEqual({
+    originalObject: dtoIn.spec,
+    namespace: 'namespace',
+    name: 'name',
+    stages: [
+      {
+        id: expect.any(String),
+        target: 0,
+        duration: '',
+      },
+    ],
+  });
+});
+
+test('DTO->VO->DTO', () => {
+  const dtoIn: LoadPatternDTO = {
     metadata: {
       namespace: 'namespace',
       name: 'name',
@@ -96,13 +38,66 @@ test('VO -> DTO', () => {
       stages: [
         {
           target: 100,
-          duration: '120s',
+          duration: '10s',
+        },
+        {
+          target: 200,
+          duration: '20s',
         },
       ],
       preAllocatedVUs: 30,
       startRate: 0,
-      maxVUs: 100,
       timeUnit: '1s',
+      maxVUs: 100,
+    },
+    status: {},
+  };
+  const vo = getLoadPatternVO(dtoIn);
+  const dtoOut = getLoadPatternDTO(vo);
+
+  expect(vo).toStrictEqual({
+    originalObject: dtoIn.spec,
+    namespace: 'namespace',
+    name: 'name',
+    stages: [
+      {
+        id: expect.any(String),
+        target: 0,
+        duration: '',
+      },
+      {
+        id: expect.any(String),
+        target: 100,
+        duration: '10s',
+      },
+      {
+        id: expect.any(String),
+        target: 200,
+        duration: '20s',
+      },
+    ],
+  });
+
+  expect(dtoOut).toStrictEqual({
+    metadata: {
+      namespace: 'namespace',
+      name: 'name',
+    },
+    spec: {
+      stages: [
+        {
+          target: 100,
+          duration: '10s',
+        },
+        {
+          target: 200,
+          duration: '20s',
+        },
+      ],
+      preAllocatedVUs: 30,
+      startRate: 0,
+      timeUnit: '1s',
+      maxVUs: 200,
     },
   });
 });

@@ -7,7 +7,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useUpdateEffect } from 'usehooks-ts';
 
 import Dashboard from '@/components/dashboard/Dashboard';
-import { defaultExperimentDuration, defaultRefreshInterval } from '@/constants/dashboard';
+import { defaultRefreshInterval, defaultViewWindow } from '@/constants/dashboard';
 import { useGetExperimentQuery } from '@/services/resourceManager/experimentApi';
 import { DashboardProps } from '@/types/dashboard/dashboardProps';
 import { ExperimentJobStatus } from '@/types/resourceManager/experiment';
@@ -49,7 +49,7 @@ const LoadGeneratorDashboard: React.FC = () => {
 
   const [timeRange, setTimeRange] = useState<[Dayjs, Dayjs]>(() => {
     const now = dayjs();
-    return [now.add(-defaultExperimentDuration, 'minute'), now];
+    return [now.add(-defaultViewWindow, 'minute'), now];
   });
   const [refreshInterval, setRefreshInterval] = useState(defaultRefreshInterval);
 
@@ -69,14 +69,16 @@ const LoadGeneratorDashboard: React.FC = () => {
     if (data !== undefined) {
       if (
         data?.status?.startTime === undefined ||
+        data?.status?.completionTime === undefined ||
         (data?.status?.jobStatus !== ExperimentJobStatus.Completed &&
           data?.status?.jobStatus !== ExperimentJobStatus.Failed)
       ) {
         return;
       }
       const startTime = dayjs(data.status.startTime);
+      const completionTime = dayjs(data.status.completionTime);
       // Since no end time is available, assume the duration of the Experiment to be the default value
-      setTimeRange([startTime, startTime.add(defaultExperimentDuration, 'minute')]);
+      setTimeRange([startTime, completionTime]);
       setRefreshInterval(0);
     }
   }, [data, params.namespace, params.name]);

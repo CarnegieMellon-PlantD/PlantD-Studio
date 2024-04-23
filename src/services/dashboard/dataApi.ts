@@ -1,36 +1,23 @@
 import { dataBasePath } from '@/constants';
 import { baseApi } from '@/services/baseApi';
 import { BiChannelDataRequest, TriChannelDataRequest } from '@/types/dashboard/dataRequests';
-import { BiChannelData, RedisRawData, TriChannelData } from '@/types/dashboard/dataResponses';
+import { BiChannelData, TriChannelData } from '@/types/dashboard/dataResponses';
 
 const dataSetApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getRedisRawData: build.query<TriChannelData, TriChannelDataRequest>({
-      query: ({ __source, ...data }) => ({
-        url: `${dataBasePath}/raw/${__source}`,
+    getRedisRawData: build.query<string, string>({
+      query: (key: string) => ({
+        url: `${dataBasePath}/raw/redis`,
         method: 'POST',
         headers: {
           'X-HTTP-Method-Override': 'GET',
         },
-        data,
+        data: {
+          key,
+        },
       }),
-      transformResponse: async (response: { result: string }): Promise<RedisRawData> => {
-        try {
-          const parsedResult = JSON.parse(response.result);
-          const data = parsedResult.index.map((row: unknown[], rowIndex: number) => {
-            const obj: Record<string, unknown> = {};
-            parsedResult.columns.forEach((column: string, columnIndex: number) => {
-              obj[column] = parsedResult.data[rowIndex][columnIndex];
-            });
-            return obj;
-          });
-
-          return data;
-        } catch (error) {
-          console.error('Error parsing JSON:', error);
-          throw error;
-        }
-      },
+      // Unwrap the response object
+      transformResponse: ({ result }) => result,
     }),
     getBiChannelData: build.query<BiChannelData, BiChannelDataRequest>({
       query: ({ __source, ...data }) => ({

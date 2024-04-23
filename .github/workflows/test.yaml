@@ -1,0 +1,37 @@
+name: Test
+
+on: [pull_request]
+
+jobs:
+  test-yarn:
+    name: Test Yarn
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run ESLint
+        run: yarn run eslint:fix && git diff --exit-code
+
+      - name: Run Stylelint
+        run: yarn run stylelint:fix && git diff --exit-code
+
+      - name: Run Prettier
+        run: yarn run prettier:fix && git diff --exit-code
+
+      - name: Run TSC
+        run: yarn run tsc
+
+      - name: Run unit tests
+        run: yarn run test
+
+      - name: Run i18n scanner
+        run: yarn run scan-i18n && git diff --exit-code

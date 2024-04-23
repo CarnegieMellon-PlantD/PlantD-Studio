@@ -6,18 +6,22 @@ export type TrafficModelMetadata = {
 
 /** Type definition for the spec of a TrafficModel */
 export type TrafficModelSpec = {
-  config: string;
+  config?: string;
 };
+
+/** Type definition for the status of a TrafficModel */
+export type TrafficModelStatus = Record<string, never>;
 
 /** Type definition for the data transfer object of a TrafficModel */
 export type TrafficModelDTO = {
   metadata: TrafficModelMetadata;
   spec: TrafficModelSpec;
-  status: Record<string, never>;
+  status: TrafficModelStatus | undefined;
 };
 
 /** Type definition for the view object of a TrafficModel */
 export type TrafficModelVO = {
+  originalObject: TrafficModelSpec;
   namespace: string;
   name: string;
   config: string;

@@ -18,6 +18,5 @@ export type NamespaceDTO = {
 
 /** Type definition for the view object of a Namespace */
 export type NamespaceVO = {
-  /** Name */
   name: string;
 };

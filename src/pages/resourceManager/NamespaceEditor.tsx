@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, Form, Input, Spin } from 'antd';
 
-import { getDefaultNamespaceForm } from '@/constants/resourceManager/defaultForm/namespace';
 import { formStyle } from '@/constants/resourceManager/formStyles';
 import { namespaceNoReservedKeywordRegExp, rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
 import { useCreateNamespaceMutation } from '@/services/resourceManager/namespaceApi';
 import { getNamespaceDTO, getNamespaceVO } from '@/utils/resourceManager/convertNamespace';
+import { getDefaultNamespace } from '@/utils/resourceManager/defaultNamespace';
 
 const NamespaceEditor: React.FC = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const NamespaceEditor: React.FC = () => {
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
     resourceKind: t('Namespace'),
-    getDefaultForm: getDefaultNamespaceForm,
+    getDefaultForm: getDefaultNamespace,
     lazyGetHook: null,
     createHook: useCreateNamespaceMutation,
     updateHook: null,
@@ -32,7 +32,7 @@ const NamespaceEditor: React.FC = () => {
           <Form
             {...formStyle}
             form={form}
-            initialValues={getDefaultNamespaceForm()}
+            initialValues={getDefaultNamespace()}
             onFinish={() => {
               createOrUpdateResource();
             }}
@@ -42,6 +42,7 @@ const NamespaceEditor: React.FC = () => {
               name={['name']}
               rules={[
                 { required: true, message: t('Name is required') },
+                { max: 63, message: t('Name cannot exceed 63 characters') },
                 {
                   pattern: rfc1123RegExp,
                   message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),

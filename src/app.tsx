@@ -12,7 +12,6 @@ import AppError from '@/components/AppError';
 import AppHelmet from '@/components/AppHelmet';
 import AppLayout from '@/components/AppLayout';
 import { store } from '@/store';
-import NetworkAndStorageList from './pages/resourceManager/NetworkAndStorageList';
 
 import 'dayjs/locale/en';
 import '@/i18n';
@@ -31,17 +30,21 @@ const PipelineList = lazy(() => import('@/pages/resourceManager/PipelineList'));
 const PipelineEditor = lazy(() => import('@/pages/resourceManager/PipelineEditor'));
 const ExperimentList = lazy(() => import('@/pages/resourceManager/ExperimentList'));
 const ExperimentEditor = lazy(() => import('@/pages/resourceManager/ExperimentEditor'));
-const ExperimentDetailDashboard = lazy(() => import('@/pages/dashboard/ExperimentDetailDashboard'));
-const LoadGeneratorDashboard = lazy(() => import('@/pages/dashboard/LoadGeneratorDashboard'));
-const TrafficModelList = lazy(() => import('@/pages/resourceManager/TrafficModelList'));
-const TrafficModelEditor = lazy(() => import('@/pages/resourceManager/TrafficModelEditor'));
+const CostExporterList = lazy(() => import('@/pages/resourceManager/CostExporterList'));
+const CostExporterEditor = lazy(() => import('@/pages/resourceManager/CostExporterEditor'));
 const DigitalTwinList = lazy(() => import('@/pages/resourceManager/DigitalTwinList'));
 const DigitalTwinEditor = lazy(() => import('@/pages/resourceManager/DigitalTwinEditor'));
-const SimulationList = lazy(() => import('@/pages/resourceManager/SimulationList'));
-const SimulationEditor = lazy(() => import('@/pages/resourceManager/SimulationEditor'));
-const SimulationReportDashboard = lazy(() => import('@/pages/dashboard/SimulationReportDashboard'));
+const TrafficModelList = lazy(() => import('@/pages/resourceManager/TrafficModelList'));
+const TrafficModelEditor = lazy(() => import('@/pages/resourceManager/TrafficModelEditor'));
+const NetCostList = lazy(() => import('@/pages/resourceManager/NetCostList'));
+const NetCostEditor = lazy(() => import('@/pages/resourceManager/NetCostEditor'));
 const ScenarioList = lazy(() => import('@/pages/resourceManager/ScenarioList'));
 const ScenarioEditor = lazy(() => import('@/pages/resourceManager/ScenarioEditor'));
+const SimulationList = lazy(() => import('@/pages/resourceManager/SimulationList'));
+const SimulationEditor = lazy(() => import('@/pages/resourceManager/SimulationEditor'));
+const ExperimentDetailDashboard = lazy(() => import('@/pages/dashboard/ExperimentDetailDashboard'));
+const LoadGeneratorDashboard = lazy(() => import('@/pages/dashboard/LoadGeneratorDashboard'));
+const SimulationReport = lazy(() => import('@/pages/dashboard/SimulationReport'));
 const ImportExport = lazy(() => import('@/pages/ImportExport'));
 const About = lazy(() => import('@/pages/About'));
 
@@ -134,24 +137,28 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'scenario',
+        path: 'costExporter',
         children: [
           {
             index: true,
-            element: <ScenarioList />,
+            element: <CostExporterList />,
           },
           {
             path: ':action/:namespace?/:name?',
-            element: <ScenarioEditor />,
+            element: <CostExporterEditor />,
           },
         ],
       },
       {
-        path: 'networkAndStorage',
+        path: 'digitalTwin',
         children: [
           {
             index: true,
-            element: <NetworkAndStorageList />,
+            element: <DigitalTwinList />,
+          },
+          {
+            path: ':action/:namespace?/:name?',
+            element: <DigitalTwinEditor />,
           },
         ],
       },
@@ -169,15 +176,28 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'digitalTwin',
+        path: 'netCost',
         children: [
           {
             index: true,
-            element: <DigitalTwinList />,
+            element: <NetCostList />,
           },
           {
             path: ':action/:namespace?/:name?',
-            element: <DigitalTwinEditor />,
+            element: <NetCostEditor />,
+          },
+        ],
+      },
+      {
+        path: 'scenario',
+        children: [
+          {
+            index: true,
+            element: <ScenarioList />,
+          },
+          {
+            path: ':action/:namespace?/:name?',
+            element: <ScenarioEditor />,
           },
         ],
       },
@@ -205,9 +225,14 @@ const router = createBrowserRouter([
             path: 'loadGenerator/:namespace/:name',
             element: <LoadGeneratorDashboard />,
           },
+        ],
+      },
+      {
+        path: 'report',
+        children: [
           {
             path: 'simulationReport/:namespace/:name',
-            element: <SimulationReportDashboard />,
+            element: <SimulationReport />,
           },
         ],
       },

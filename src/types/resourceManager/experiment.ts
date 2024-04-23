@@ -6,31 +6,36 @@ export type ExperimentMetadata = {
 
 /** Type definition for the spec of an Experiment */
 export type ExperimentSpec = {
-  pipelineRef: {
-    namespace?: string;
+  k6RunnerImage?: string;
+  k6StarterImage?: string;
+  k6InitializerImage?: string;
+  endDetectionImage?: string;
+  pipelineRef?: {
     name?: string;
   };
-  endpointSpecs: Array<{
-    endpointName: string;
-    dataSpec: {
+  endpointSpecs?: Array<{
+    endpointName?: string;
+    dataSpec?: {
       plainText?: string;
       dataSetRef?: {
-        namespace?: string;
         name?: string;
       };
     };
-    loadPatternRef: {
+    loadPatternRef?: {
       namespace?: string;
       name?: string;
     };
+    storageSize?: string;
   }>;
   scheduledTime?: string;
+  drainingTime?: string;
+  useEndDetection?: boolean;
 };
 
 /** Type definition for the status of an Experiment */
 export type ExperimentStatus = {
   durations?: Record<string, string>;
-  jobStatus?: ExperimentJobStatus | string;
+  jobStatus?: string;
   startTime?: string;
   completionTime?: string;
   error?: string;
@@ -45,10 +50,10 @@ export type ExperimentDTO = {
 
 /** Type definition for the view object of an Experiment */
 export type ExperimentVO = {
+  originalObject: ExperimentSpec;
   namespace: string;
   name: string;
   pipelineRef: {
-    namespace: string;
     name: string;
   };
   endpointSpecs: Array<{
@@ -57,7 +62,6 @@ export type ExperimentVO = {
       option: 'plainText' | 'dataSet';
       plainText: string;
       dataSetRef: {
-        namespace: string;
         name: string;
       };
     };
@@ -65,9 +69,12 @@ export type ExperimentVO = {
       namespace: string;
       name: string;
     };
+    storageSize: string;
   }>;
   hasScheduledTime: boolean;
   scheduledTime: string;
+  drainingMode: 'none' | 'time' | 'endDetection';
+  drainingTime: string;
 };
 
 /** Enums of `status.jobStatus` */
@@ -77,17 +84,19 @@ export enum ExperimentJobStatus {
   WaitingPipeline = 'Waiting for Pipeline',
   Initializing = 'Initializing',
   Running = 'Running',
+  Draining = 'Draining',
   Completed = 'Completed',
   Failed = 'Failed',
 }
 
-/** All `status.experimentState` for enumerating and sorting */
+/** All `status.jobStatus` for enumerating and sorting */
 export const allExperimentJobStatuses: ExperimentJobStatus[] = [
   ExperimentJobStatus.Scheduled,
   ExperimentJobStatus.WaitingDataSet,
   ExperimentJobStatus.WaitingPipeline,
   ExperimentJobStatus.Initializing,
   ExperimentJobStatus.Running,
+  ExperimentJobStatus.Draining,
   ExperimentJobStatus.Completed,
   ExperimentJobStatus.Failed,
 ];

@@ -7,7 +7,7 @@ import BaseResourceList from '@/components/resourceManager/BaseResourceList';
 import { autoRefreshInterval } from '@/constants/resourceManager';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useDeletePipelineMutation, useListPipelinesQuery } from '@/services/resourceManager/pipelineApi';
-import { allPipelineAvailabilities, PipelineDTO, PipelineAvailability } from '@/types/resourceManager/pipeline';
+import { allPipelineAvailabilities, PipelineAvailability, PipelineDTO } from '@/types/resourceManager/pipeline';
 import { sortNamespace } from '@/utils/resourceManager/sortNamespace';
 
 const PipelineList: React.FC = () => {

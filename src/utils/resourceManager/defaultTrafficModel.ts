@@ -1,6 +1,7 @@
 import { TrafficModelVO } from '@/types/resourceManager/trafficModel';
 
-export const getDefaultTrafficModelForm = (namespace: string): TrafficModelVO => ({
+export const getDefaultTrafficModel = (namespace: string): TrafficModelVO => ({
+  originalObject: {},
   namespace: namespace,
   name: '',
   config: '',

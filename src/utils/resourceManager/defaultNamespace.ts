@@ -1,5 +1,5 @@
 import { NamespaceVO } from '@/types/resourceManager/namespace';
 
-export const getDefaultNamespaceForm = (): NamespaceVO => ({
+export const getDefaultNamespace = (): NamespaceVO => ({
   name: '',
 });

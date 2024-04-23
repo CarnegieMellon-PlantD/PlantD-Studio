@@ -6,20 +6,18 @@ export type CostExporterMetadata = {
 
 /** Type definition for the spec of a CostExporter */
 export type CostExporterSpec = {
-  s3Bucket?: string;
+  image?: string;
   cloudServiceProvider?: string;
-  secretRef?: {
-    namespace?: string;
+  config?: {
     name?: string;
+    key?: string;
   };
 };
 
 /** Type definition for the status of a CostExporter */
 export type CostExporterStatus = {
-  jobCompletionTime?: string;
-  podName?: string;
-  jobStatus?: string;
-  tags?: string;
+  lastSuccess?: string;
+  lastFailure?: string;
 };
 
 /** Type definition for the data transfer object of a CostExporter */
@@ -31,5 +29,12 @@ export type CostExporterDTO = {
 
 /** Type definition for the view object of a CostExporter */
 export type CostExporterVO = {
-  // TODO: implement it
+  originalObject: CostExporterSpec;
+  namespace: string;
+  name: string;
+  cloudServiceProvider: string;
+  config: {
+    name: string;
+    key: string;
+  };
 };

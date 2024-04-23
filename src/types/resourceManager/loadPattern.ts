@@ -6,12 +6,12 @@ export type LoadPatternMetadata = {
 
 /** Type definition for the spec of a LoadPattern */
 export type LoadPatternSpec = {
-  stages: Array<{
-    target: number;
-    duration: string;
+  stages?: Array<{
+    target?: number;
+    duration?: string;
   }>;
   preAllocatedVUs?: number;
-  startRate: number;
+  startRate?: number;
   timeUnit?: string;
   maxVUs?: number;
 };
@@ -28,19 +28,12 @@ export type LoadPatternDTO = {
 
 /** Type definition for the view object of a LoadPattern */
 export type LoadPatternVO = {
-  /** Namespace */
+  originalObject: LoadPatternSpec;
   namespace: string;
-  /** Name */
   name: string;
-  /** Stages */
   stages: Array<{
-    /** ID of the stage */
     id: string | number;
-    /** Target of the stage */
     target: number;
-    /** Duration of the stage */
-    duration: number;
-    /** Duration unit of the stage */
-    durationUnit: string;
+    duration: string;
   }>;
 };

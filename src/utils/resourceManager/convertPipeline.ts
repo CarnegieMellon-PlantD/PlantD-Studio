@@ -2,54 +2,76 @@ import { PipelineDTO, PipelineVO } from '@/types/resourceManager/pipeline';
 
 /**
  * Convert the data transfer object of a Pipeline to the view object
- * @param pipelineDTO The data transfer object of a Pipeline
+ * @param dto The data transfer object of a Pipeline
  * @returns The view object of a Pipeline
  */
-export const getPipelineVO = (pipelineDTO: PipelineDTO): PipelineVO => {
-  return {
-    namespace: pipelineDTO.metadata.namespace,
-    name: pipelineDTO.metadata.name,
-    inCluster: pipelineDTO.spec.inCluster ?? false,
-    pipelineEndpoints: pipelineDTO.spec.pipelineEndpoints.map((endpoint) => ({
-      name: endpoint.name,
-      protocol: 'http',
-      http: {
-        url: endpoint.http?.url ?? '',
-        method: endpoint.http?.method ?? '',
-        headers: Object.entries(endpoint.http?.headers ?? []).map(([key, value]) => ({ key, value })),
-      },
-    })),
+export const getPipelineVO = (dto: PipelineDTO): PipelineVO => {
+  const vo: PipelineVO = {
+    originalObject: dto.spec,
+    namespace: dto.metadata.namespace,
+    name: dto.metadata.name,
+    inCluster: dto.spec.inCluster ?? false,
+    pipelineEndpoints: [],
     metricsEndpoint: {
       http: {
-        url: pipelineDTO.spec.metricsEndpoint.http?.url ?? '',
+        url: dto.spec.metricsEndpoint?.http?.url ?? '',
       },
       serviceRef: {
-        name: pipelineDTO.spec.metricsEndpoint.serviceRef?.name ?? '',
+        name: dto.spec.metricsEndpoint?.serviceRef?.name ?? '',
       },
-      port: pipelineDTO.spec.metricsEndpoint.port ?? '',
-      path: pipelineDTO.spec.metricsEndpoint.path ?? '',
+      port: dto.spec.metricsEndpoint?.port ?? '',
+      path: dto.spec.metricsEndpoint?.path ?? '',
     },
-    healthCheckURLs: pipelineDTO.spec.healthCheckURLs ?? [],
-    cloudProvider: pipelineDTO.spec.cloudProvider ?? '',
-    tags: Object.entries(pipelineDTO.spec.tags ?? []).map(([key, value]) => ({ key, value })),
-    enableCostCalculation: pipelineDTO.spec.enableCostCalculation ?? false,
+    healthCheckURLs: dto.spec.healthCheckURLs ?? [],
+    enableCostCalculation: dto.spec.enableCostCalculation ?? false,
+    cloudProvider: dto.spec.cloudProvider ?? '',
+    tags: [],
   };
+
+  if (dto.spec.pipelineEndpoints !== undefined) {
+    vo.pipelineEndpoints = dto.spec.pipelineEndpoints.map((endpointIn) => {
+      const protocol: PipelineVO['pipelineEndpoints'][number]['protocol'] = 'http';
+
+      const endpointOut: PipelineVO['pipelineEndpoints'][number] = {
+        name: endpointIn.name ?? '',
+        protocol,
+        http: {
+          url: endpointIn.http?.url ?? '',
+          method: endpointIn.http?.method ?? '',
+          headers: [],
+        },
+      };
+
+      if (endpointIn.http?.headers !== undefined) {
+        endpointOut.http.headers = Object.entries(endpointIn.http?.headers).map(([key, value]) => ({ key, value }));
+      }
+
+      return endpointOut;
+    });
+  }
+
+  if (dto.spec.tags !== undefined) {
+    vo.tags = Object.entries(dto.spec.tags).map(([key, value]) => ({ key, value }));
+  }
+
+  return vo;
 };
 
 /**
  * Convert the view object of a Pipeline to the data transfer object
- * @param pipelineVO The view object of a Pipeline
+ * @param vo The view object of a Pipeline
  * @returns The data transfer object of a Pipeline
  */
-export const getPipelineDTO = (pipelineVO: PipelineVO): Pick<PipelineDTO, 'metadata' | 'spec'> => {
+export const getPipelineDTO = (vo: PipelineVO): Pick<PipelineDTO, 'metadata' | 'spec'> => {
   return {
     metadata: {
-      namespace: pipelineVO.namespace,
-      name: pipelineVO.name,
+      namespace: vo.namespace,
+      name: vo.name,
     },
     spec: {
-      inCluster: pipelineVO.inCluster,
-      pipelineEndpoints: pipelineVO.pipelineEndpoints.map((endpoint) => ({
+      ...vo.originalObject,
+      inCluster: vo.inCluster,
+      pipelineEndpoints: vo.pipelineEndpoints.map((endpoint) => ({
         name: endpoint.name,
         http:
           endpoint.protocol === 'http'
@@ -61,23 +83,23 @@ export const getPipelineDTO = (pipelineVO: PipelineVO): Pick<PipelineDTO, 'metad
             : undefined,
       })),
       metricsEndpoint: {
-        http: !pipelineVO.inCluster
+        http: !vo.inCluster
           ? {
-              url: pipelineVO.metricsEndpoint.http.url,
+              url: vo.metricsEndpoint.http.url,
             }
           : undefined,
-        serviceRef: pipelineVO.inCluster
+        serviceRef: vo.inCluster
           ? {
-              name: pipelineVO.metricsEndpoint.serviceRef.name,
+              name: vo.metricsEndpoint.serviceRef.name,
             }
           : undefined,
-        port: pipelineVO.metricsEndpoint.port,
-        path: pipelineVO.metricsEndpoint.path,
+        port: vo.inCluster ? vo.metricsEndpoint.port : undefined,
+        path: vo.inCluster ? vo.metricsEndpoint.path : undefined,
       },
-      healthCheckURLs: pipelineVO.healthCheckURLs,
-      cloudProvider: pipelineVO.cloudProvider,
-      tags: Object.fromEntries(pipelineVO.tags.map(({ key, value }) => [key, value])),
-      enableCostCalculation: pipelineVO.enableCostCalculation,
+      healthCheckURLs: vo.healthCheckURLs,
+      enableCostCalculation: vo.enableCostCalculation,
+      cloudProvider: vo.enableCostCalculation ? vo.cloudProvider : undefined,
+      tags: vo.enableCostCalculation ? Object.fromEntries(vo.tags.map(({ key, value }) => [key, value])) : undefined,
     },
   };
 };

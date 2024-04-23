@@ -2,28 +2,32 @@ import { TrafficModelDTO, TrafficModelVO } from '@/types/resourceManager/traffic
 
 /**
  * Convert the data transfer object of a TrafficModel to the view object
- * @param trafficModelDTO The data transfer object of a TrafficModel
+ * @param dto The data transfer object of a TrafficModel
  * @returns The view object of a TrafficModel
  */
-export const getTrafficModelVO = (trafficModelDTO: TrafficModelDTO): TrafficModelVO => {
+export const getTrafficModelVO = (dto: TrafficModelDTO): TrafficModelVO => {
   return {
-    namespace: trafficModelDTO.metadata.namespace,
-    name: trafficModelDTO.metadata.name,
-    config: trafficModelDTO.spec.config,
+    originalObject: dto.spec,
+    namespace: dto.metadata.namespace,
+    name: dto.metadata.name,
+    config: dto.spec.config ?? '',
   };
 };
 
 /**
  * Convert the view object of a TrafficModel to the data transfer object
- * @param trafficModelVO The view object of a TrafficModel
+ * @param vo The view object of a TrafficModel
  * @returns The data transfer object of a TrafficModel
  */
-export const getTrafficModelDTO = (trafficModelVO: TrafficModelVO): Pick<TrafficModelDTO, 'metadata' | 'spec'> => {
+export const getTrafficModelDTO = (vo: TrafficModelVO): Pick<TrafficModelDTO, 'metadata' | 'spec'> => {
   return {
     metadata: {
-      namespace: trafficModelVO.namespace,
-      name: trafficModelVO.name,
+      namespace: vo.namespace,
+      name: vo.name,
     },
-    spec: { config: trafficModelVO.config },
+    spec: {
+      ...vo.originalObject,
+      config: vo.config,
+    },
   };
 };

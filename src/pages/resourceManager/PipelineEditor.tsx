@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { faAdd, faBolt, faCheck, faPlus, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,23 +7,20 @@ import { App, Button, Card, Checkbox, Form, Input, Radio, Select, Spin } from 'a
 import { useUpdateEffect } from 'usehooks-ts';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
-import { defaultNamespace } from '@/constants/resourceManager';
-import { getDefaultEndpoint, getDefaultPipelineForm } from '@/constants/resourceManager/defaultForm/pipeline';
 import { formStyle } from '@/constants/resourceManager/formStyles';
 import { rfc1123RegExp } from '@/constants/resourceManager/regExps';
 import { useResourceEditor } from '@/hooks/resourceManager/useResourceEditor';
-import { useListDataSetsQuery } from '@/services/resourceManager/dataSetApi';
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
 import {
   useCreatePipelineMutation,
   useLazyGetPipelineQuery,
   useUpdatePipelineMutation,
 } from '@/services/resourceManager/pipelineApi';
-import { useCheckHTTPHealthMutation } from '@/services/resourceManager/utilApi';
-import { RootState } from '@/store';
+import { useCheckHTTPHealthMutation, useListServicesQuery } from '@/services/resourceManager/utilApi';
 import { PipelineVO } from '@/types/resourceManager/pipeline';
 import { getErrMsg } from '@/utils/getErrMsg';
 import { getPipelineDTO, getPipelineVO } from '@/utils/resourceManager/convertPipeline';
+import { getDefaultPipeline, getDefaultPipelineEndpoint } from '@/utils/resourceManager/defaultPipeline';
 
 const KeyValuePair: React.FC<{ name: Array<string | number> }> = ({ name }) => {
   const { t } = useTranslation();
@@ -84,30 +80,29 @@ const PipelineEndpointCard: React.FC<{
 }> = ({ relFormPath, absFormPath }) => {
   const { t } = useTranslation();
   const form = Form.useFormInstance();
-  const protocol = form.getFieldValue([...absFormPath, 'protocol']) as PipelineVO['pipelineEndpoints'][0]['protocol'];
+  const protocol = Form.useWatch(
+    [...absFormPath, 'protocol'],
+    form
+  ) as PipelineVO['pipelineEndpoints'][number]['protocol'];
 
   return (
     <Card>
-      {
-        <Form.Item
-          name={[...relFormPath, 'name']}
-          label={t('Name')}
-          rules={[{ required: true, message: t('Name is required') }]}
-        >
-          <Input />
-        </Form.Item>
-      }
-      {
-        <Form.Item
-          name={[...relFormPath, 'protocol']}
-          label={t('Protocol')}
-          rules={[{ required: true, message: t('Protocol is required') }]}
-        >
-          <Radio.Group>
-            <Radio value="http">{t('HTTP')}</Radio>
-          </Radio.Group>
-        </Form.Item>
-      }
+      <Form.Item
+        name={[...relFormPath, 'name']}
+        label={t('Name')}
+        rules={[{ required: true, message: t('Name is required') }]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name={[...relFormPath, 'protocol']}
+        label={t('Protocol')}
+        rules={[{ required: true, message: t('Protocol is required') }]}
+      >
+        <Radio.Group>
+          <Radio value="http">{t('HTTP')}</Radio>
+        </Radio.Group>
+      </Form.Item>
       {protocol === 'http' && (
         <>
           <Form.Item
@@ -120,7 +115,6 @@ const PipelineEndpointCard: React.FC<{
           >
             <Input />
           </Form.Item>
-
           <Form.Item
             name={[...relFormPath, 'http', 'method']}
             label={t('Method')}
@@ -143,18 +137,17 @@ const PipelineEndpointCard: React.FC<{
 };
 
 const MetricsEndpointCard: React.FC<{
-  relFormPath: Array<string | number>;
-  absFormPath: Array<string | number>;
-}> = ({ relFormPath, absFormPath }) => {
+  formPath: Array<string | number>;
+}> = ({ formPath }) => {
   const { t } = useTranslation();
   const form = Form.useFormInstance();
-  const inCluster = form.getFieldValue(['inCluster']) as PipelineVO['inCluster'];
+  const inCluster = Form.useWatch(['inCluster'], form) as PipelineVO['inCluster'];
 
   return (
     <Card>
       {!inCluster && (
         <Form.Item
-          name={[...relFormPath, 'http', 'url']}
+          name={[...formPath, 'http', 'url']}
           label={t('URL')}
           rules={[
             { required: true, message: t('URL is required') },
@@ -165,43 +158,44 @@ const MetricsEndpointCard: React.FC<{
         </Form.Item>
       )}
       {inCluster && (
-        <Form.Item className="mb-0" label={t('Service')} required>
-          <Form.Item
-            name={[...relFormPath, 'serviceRef', 'name']}
-            rules={[{ required: true, message: t('Name is required') }]}
-          >
-            <Input placeholder={t('Service Name')} />
+        <>
+          <Form.Item noStyle shouldUpdate={(prev: PipelineVO, next: PipelineVO) => prev.namespace !== next.namespace}>
+            {() => (
+              <Form.Item
+                label={t('Service')}
+                name={[...formPath, 'serviceRef', 'name']}
+                rules={[{ required: true, message: t('Name is required') }]}
+              >
+                <BaseResourceSelect
+                  resourceKind={t('Service')}
+                  listHook={useListServicesQuery}
+                  filter={(service) =>
+                    service.metadata.namespace === (form.getFieldValue(['namespace']) as PipelineVO['namespace'])
+                  }
+                />
+              </Form.Item>
+            )}
           </Form.Item>
-        </Form.Item>
+          <Form.Item label={t('Port')} name={[...formPath, 'port']}>
+            <Input placeholder="metrics" />
+          </Form.Item>
+          <Form.Item label={t('Path')} name={[...formPath, 'path']}>
+            <Input placeholder="/metrics" />
+          </Form.Item>
+        </>
       )}
-      {inCluster && (
-        <Form.Item
-          label={t('Port')}
-          name={[...relFormPath, 'port']}
-          rules={[{ required: true, message: t('Port is required') }]}
-        >
-          <Input />
-        </Form.Item>
-      )}
-      <Form.Item
-        label={t('Path')}
-        name={[...relFormPath, 'path']}
-        rules={[{ required: true, message: t('Path is required') }]}
-      >
-        <Input />
-      </Form.Item>
     </Card>
   );
 };
 
-const HealthCheckEndpointCard: React.FC<{
+const HealthCheckURLCard: React.FC<{
   relFormPath: Array<string | number>;
   absFormPath: Array<string | number>;
 }> = ({ relFormPath, absFormPath }) => {
   const { t } = useTranslation();
   const { message } = App.useApp();
   const form = Form.useFormInstance();
-  const url = Form.useWatch(absFormPath, form);
+  const url = Form.useWatch(absFormPath, form) as PipelineVO['healthCheckURLs'][number];
 
   const [checkHTTPHealth, { isLoading, isSuccess, isError, error, reset }] = useCheckHTTPHealthMutation();
 
@@ -257,11 +251,10 @@ const PipelineEditor: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const currentNamespace = useSelector((state: RootState) => state.appState.currentNamespace);
 
   const { breadcrumb, form, createOrUpdateResource, isLoading, isCreatingOrUpdating } = useResourceEditor({
     resourceKind: t('Pipeline'),
-    getDefaultForm: getDefaultPipelineForm,
+    getDefaultForm: getDefaultPipeline,
     lazyGetHook: useLazyGetPipelineQuery,
     createHook: useCreatePipelineMutation,
     updateHook: useUpdatePipelineMutation,
@@ -277,10 +270,12 @@ const PipelineEditor: React.FC = () => {
           <Form
             {...formStyle}
             form={form}
-            initialValues={getDefaultPipelineForm('')}
+            initialValues={getDefaultPipeline('')}
             onFinish={() => {
               createOrUpdateResource();
             }}
+            // Disable entire form if `params.action` is `edit`
+            disabled={params.action === 'edit'}
           >
             <Form.Item
               label={t('Namespace')}
@@ -288,28 +283,21 @@ const PipelineEditor: React.FC = () => {
               normalize={(value) => (value !== undefined ? value : '')}
               rules={[{ required: true, message: t('Namespace is required') }]}
             >
-              <BaseResourceSelect
-                resourceKind={t('Namespace')}
-                listHook={useListNamespacesQuery}
-                // Disable metadata fields if `params.action` is `edit`
-                disabled={params.action === 'edit'}
-              />
+              <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
             </Form.Item>
             <Form.Item
               label={t('Name')}
               name={['name']}
               rules={[
                 { required: true, message: t('Name is required') },
+                { max: 55, message: t('Name cannot exceed 55 characters') },
                 {
                   pattern: rfc1123RegExp,
                   message: t('Name must be alphanumeric, and may contain "-" and "." in the middle'),
                 },
               ]}
             >
-              <Input
-                // Disable metadata fields if `params.action` is `edit`
-                disabled={params.action === 'edit'}
-              />
+              <Input />
             </Form.Item>
             <Form.Item label={t('In-Cluster Pipeline')} name={['inCluster']} valuePropName="checked">
               <Checkbox />
@@ -359,7 +347,7 @@ const PipelineEditor: React.FC = () => {
                     <Button
                       icon={<FontAwesomeIcon icon={faPlus} />}
                       onClick={() => {
-                        add(getDefaultEndpoint(currentNamespace ?? defaultNamespace));
+                        add(getDefaultPipelineEndpoint());
                       }}
                     >
                       {t('Add')}
@@ -375,18 +363,18 @@ const PipelineEditor: React.FC = () => {
                   prev.inCluster !== next.inCluster || prev.metricsEndpoint !== next.metricsEndpoint
                 }
               >
-                {() => <MetricsEndpointCard relFormPath={['metricsEndpoint']} absFormPath={['metricsEndpoint']} />}
+                {() => <MetricsEndpointCard formPath={['metricsEndpoint']} />}
               </Form.Item>
             </Form.Item>
-            <Form.Item label={t('Health Check Endpoints')}>
-              <Form.List name={['healthCheckEndpoints']}>
+            <Form.Item label={t('Health Check URLs')}>
+              <Form.List name={['healthCheckURLs']}>
                 {(fields, { add, remove }, { errors }) => (
                   <>
                     {fields.map(({ name: endpointIndex }) => (
                       <div key={endpointIndex} className="flex gap-1">
-                        <HealthCheckEndpointCard
+                        <HealthCheckURLCard
                           relFormPath={[endpointIndex]}
-                          absFormPath={['healthCheckEndpoints', endpointIndex]}
+                          absFormPath={['healthCheckURLs', endpointIndex]}
                         />
                         <Form.Item className="mb-2">
                           <Button
@@ -408,14 +396,31 @@ const PipelineEditor: React.FC = () => {
                 )}
               </Form.List>
             </Form.Item>
-            <Form.Item label={t('Tags')}>
-              <KeyValuePair name={['extraMetrics', 'system', 'tags']} />
-            </Form.Item>
-            <Form.Item name={['cloudVendor']} label={t('Cloud Vendor')}>
-              <Input />
-            </Form.Item>
             <Form.Item name={['enableCostCalculation']} label={t('Enable Cost Calculation')} valuePropName="checked">
               <Checkbox />
+            </Form.Item>
+            <Form.Item
+              noStyle
+              shouldUpdate={(prev: PipelineVO, next: PipelineVO) =>
+                prev.enableCostCalculation !== next.enableCostCalculation
+              }
+            >
+              {() =>
+                (form.getFieldValue(['enableCostCalculation']) as PipelineVO['enableCostCalculation']) && (
+                  <>
+                    <Form.Item name={['cloudProvider']} label={t('Cloud Service Provider')}>
+                      <Select>
+                        <Select.Option value="aws">AWS</Select.Option>
+                        <Select.Option value="azure">Azure</Select.Option>
+                        <Select.Option value="gcp">GCP</Select.Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item label={t('Tags')}>
+                      <KeyValuePair name={['tags']} />
+                    </Form.Item>
+                  </>
+                )
+              }
             </Form.Item>
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">
