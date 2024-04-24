@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.5.0...v1.6.0) (2024-04-24)
+
+### Features
+
+- add ahm pages ([7a081b9](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/7a081b9ecddc0f4ad31b9a8e43e5ba8034230963))
+- add sortable table in scenario editor ([aacc6f7](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/aacc6f76c87429368aee1cc6c10183cdadc34155))
+- new BA resources, empty ([0fcf348](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/0fcf34801ccc41703c8d8388897644b21ef6a1ea))
+- update to new crd api ([26d9658](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/26d965809ae61ce27ecdf2aa9d7e86f6cac598f1))
+
+### Bug Fixes
+
+- cleanup and update to new api ([110485c](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/110485c02765e3443dc2bd7496e8c39e43277720))
+- **digitaltwin-editor:** missing pipeline capacity field ([2243f9b](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/2243f9bab3a61c314669a5b0950c5bee256d99c0))
+- update i18n ([25c4c14](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/commit/25c4c14c7bf663f7d8921b888d5319dc41f21794))
+
 ## [1.5.0](https://github.com/CarnegieMellon-PlantD/PlantD-Studio/compare/v1.4.0...v1.5.0) (2024-03-12)
 
 ### Features
