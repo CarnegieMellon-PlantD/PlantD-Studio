@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { faAdd, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Form, Input, Select, Spin } from 'antd';
+import { Button, Card, Form, Input, InputNumber, Select, Spin } from 'antd';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
 import { formStyle } from '@/constants/resourceManager/formStyles';
@@ -229,6 +229,16 @@ const DigitalTwinEditor: React.FC = () => {
                           item.metadata.namespace === (form.getFieldValue(['namespace']) as DigitalTwinVO['namespace'])
                         }
                       />
+                    </Form.Item>
+                    <Form.Item
+                      name={['pipelineCapacity']}
+                      label={t('Pipeline Capacity')}
+                      rules={[
+                        { required: true, message: t('Pipeline capacity is required') },
+                        { type: 'number', min: 1, message: t('Pipeline capacity must be >= 1') },
+                      ]}
+                    >
+                      <InputNumber />
                     </Form.Item>
                   </>
                 )
