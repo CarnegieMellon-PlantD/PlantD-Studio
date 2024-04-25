@@ -17,6 +17,7 @@ import {
 } from '@/services/resourceManager/digitalTwinApi';
 import { useListExperimentsQuery } from '@/services/resourceManager/experimentApi';
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
+import { useListPipelinesQuery } from '@/services/resourceManager/pipelineApi';
 import { DigitalTwinVO } from '@/types/resourceManager/digitalTwin';
 import { getDigitalTwinDTO, getDigitalTwinVO } from '@/utils/resourceManager/convertDigitalTwin';
 import { getDefaultDigitalTwin, getDefaultDigitalTwinExperiment } from '@/utils/resourceManager/defaultDigitalTwin';
@@ -224,7 +225,7 @@ const DigitalTwinEditor: React.FC = () => {
                     >
                       <BaseResourceSelect
                         resourceKind={t('Pipeline')}
-                        listHook={useListDataSetsQuery}
+                        listHook={useListPipelinesQuery}
                         filter={(item) =>
                           item.metadata.namespace === (form.getFieldValue(['namespace']) as DigitalTwinVO['namespace'])
                         }
