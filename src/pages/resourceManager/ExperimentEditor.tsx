@@ -322,6 +322,7 @@ const ExperimentEditor: React.FC = () => {
                     // Go back
                     navigate(-1);
                   }}
+                  disabled={false}
                 >
                   {t('Cancel')}
                 </Button>

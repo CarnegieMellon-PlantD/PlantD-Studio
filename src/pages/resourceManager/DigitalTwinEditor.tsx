@@ -49,6 +49,8 @@ const DigitalTwinEditor: React.FC = () => {
             onFinish={() => {
               createOrUpdateResource();
             }}
+            // Disable entire form if `params.action` is `edit`
+            disabled={params.action === 'edit'}
           >
             <Form.Item
               label={t('Namespace')}
@@ -56,11 +58,7 @@ const DigitalTwinEditor: React.FC = () => {
               normalize={(value) => (value !== undefined ? value : '')}
               rules={[{ required: true, message: t('Namespace is required') }]}
             >
-              <BaseResourceSelect
-                resourceKind={t('Namespace')}
-                listHook={useListNamespacesQuery}
-                disabled={params.action === 'edit'}
-              />
+              <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
             </Form.Item>
             <Form.Item
               label={t('Name')}
@@ -73,7 +71,7 @@ const DigitalTwinEditor: React.FC = () => {
                 },
               ]}
             >
-              <Input disabled={params.action === 'edit'} />
+              <Input />
             </Form.Item>
             <Form.Item
               label={t('Model Type')}
@@ -94,7 +92,7 @@ const DigitalTwinEditor: React.FC = () => {
               name={['digitalTwinType']}
               rules={[{ required: true, message: t('Digital twin type is required') }]}
             >
-              <Select disabled={params.action === 'edit'}>
+              <Select>
                 <Select.Option value="regular">{t('Regular')}</Select.Option>
                 <Select.Option value="schemaaware">{t('Schema-Aware')}</Select.Option>
               </Select>
@@ -255,6 +253,8 @@ const DigitalTwinEditor: React.FC = () => {
                   onClick={() => {
                     navigate(-1);
                   }}
+                  // Override and always enable cancel button
+                  disabled={false}
                 >
                   {t('Cancel')}
                 </Button>

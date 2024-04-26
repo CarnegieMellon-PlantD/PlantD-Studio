@@ -432,6 +432,7 @@ const PipelineEditor: React.FC = () => {
                   onClick={() => {
                     navigate(-1);
                   }}
+                  disabled={false}
                 >
                   {t('Cancel')}
                 </Button>

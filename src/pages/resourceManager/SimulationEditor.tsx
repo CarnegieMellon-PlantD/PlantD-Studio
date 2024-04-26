@@ -193,11 +193,7 @@ const SimulationEditor: React.FC = () => {
             {isDigitalTwinSchemaAware && (
               <Form.Item className="mb-0" label={t('NetCost')}>
                 <div className="flex gap-1">
-                  <Form.Item
-                    className="w-64 flex-auto"
-                    name={['netCostRef', 'namespace']}
-                    rules={[{ required: true, message: t('Namespace is required') }]}
-                  >
+                  <Form.Item className="w-64 flex-auto" name={['netCostRef', 'namespace']}>
                     <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
                   </Form.Item>
                   <Form.Item
@@ -207,11 +203,7 @@ const SimulationEditor: React.FC = () => {
                     }
                   >
                     {() => (
-                      <Form.Item
-                        className="w-64 flex-auto"
-                        name={['netCostRef', 'name']}
-                        rules={[{ required: true, message: t('Name is required') }]}
-                      >
+                      <Form.Item className="w-64 flex-auto" name={['netCostRef', 'name']}>
                         <BaseResourceSelect
                           resourceKind={t('NetCost')}
                           listHook={useListNetCostsQuery}
@@ -275,6 +267,8 @@ const SimulationEditor: React.FC = () => {
                   onClick={() => {
                     navigate(-1);
                   }}
+                  // Override and always enable disable button
+                  disabled={false}
                 >
                   {t('Cancel')}
                 </Button>
