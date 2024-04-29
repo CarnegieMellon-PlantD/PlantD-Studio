@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { Line, LineConfig } from '@ant-design/plots';
+import { Area, AreaConfig } from '@ant-design/plots';
 import { Breadcrumb, Card } from 'antd';
 import csvtojson from 'csvtojson';
 import { useDarkMode } from 'usehooks-ts';
@@ -19,7 +19,7 @@ const SimulationReportLineChart: React.FC<{
 }> = ({ title, data, xField, yField }) => {
   const { isDarkMode } = useDarkMode();
 
-  const config = useMemo<LineConfig>(
+  const config = useMemo<AreaConfig>(
     () => ({
       theme: isDarkMode ? 'dark' : 'light',
       data: data,
@@ -52,7 +52,7 @@ const SimulationReportLineChart: React.FC<{
 
   return (
     <Card title={title} size="small" bordered={false} bodyStyle={{ padding: '5px' }} className={getWidgetClsName(3, 1)}>
-      {data !== undefined ? <Line {...config} /> : <NoData />}
+      {data !== undefined ? <Area {...config} /> : <NoData />}
     </Card>
   );
 };
@@ -61,7 +61,7 @@ const SimulationReport: React.FC = () => {
   const params = useParams();
   const { t } = useTranslation();
 
-  const { data, isSuccess } = useGetRedisRawDataQuery(`plantd:simulation_traffic:${params.namespace}.${params.name}`);
+  const { data, isSuccess } = useGetRedisRawDataQuery(`plantd:simulation_monthly:${params.namespace}.${params.name}`);
 
   const [parsedData, setParsedData] = useState<Record<string, unknown>[]>([]);
   const [processedData, setProcessedData] = useState<Record<string, unknown>[]>([]);
@@ -79,14 +79,15 @@ const SimulationReport: React.FC = () => {
       }))
     );
   }, [parsedData]);
-  console.log(processedData);
 
   return (
     <div className="p-6">
       <Breadcrumb
         items={[
           { title: t('PlantD Studio') },
-          { title: t('Report') },
+          { title: t('Resources') },
+          { title: t('Simulation') },
+          { title: t('Dashboard') },
           { title: `Simulation Report: ${params.namespace}/${params.name}` },
         ]}
         className="mb-6"
@@ -115,6 +116,18 @@ const SimulationReport: React.FC = () => {
           data={processedData}
           xField="Month"
           yField="task_product_rph"
+        />
+        <SimulationReportLineChart
+          title="Total count of records processed per month for supplier schema"
+          data={processedData}
+          xField="Month"
+          yField="task_supplier_rph"
+        />
+        <SimulationReportLineChart
+          title="Total count of records processed per month for warehouse schema"
+          data={processedData}
+          xField="Month"
+          yField="task_warehouse_rph"
         />
         <SimulationReportLineChart title="Total MB processed" data={processedData} xField="Month" yField="bandwidth" />
         <SimulationReportLineChart

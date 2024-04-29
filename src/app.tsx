@@ -45,6 +45,7 @@ const SimulationEditor = lazy(() => import('@/pages/resourceManager/SimulationEd
 const ExperimentDetailDashboard = lazy(() => import('@/pages/dashboard/ExperimentDetailDashboard'));
 const LoadGeneratorDashboard = lazy(() => import('@/pages/dashboard/LoadGeneratorDashboard'));
 const SimulationReport = lazy(() => import('@/pages/dashboard/SimulationReport'));
+const SystemSettings = lazy(() => import('@/pages/SystemSettings'));
 const ImportExport = lazy(() => import('@/pages/ImportExport'));
 const About = lazy(() => import('@/pages/About'));
 
@@ -235,6 +236,10 @@ const router = createBrowserRouter([
             element: <SimulationReport />,
           },
         ],
+      },
+      {
+        path: 'systemSettings',
+        element: <SystemSettings />,
       },
       {
         path: 'importExport',

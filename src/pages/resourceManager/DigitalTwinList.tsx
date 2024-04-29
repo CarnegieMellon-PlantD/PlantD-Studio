@@ -74,7 +74,7 @@ const DigitalTwinList: React.FC = () => {
       allowClone
       allowEdit
       resourceKind={t('DigitalTwin')}
-      resourceKindUrl="DigitalTwin"
+      resourceKindUrl="digitalTwin"
       data={data}
       isLoading={isLoading}
       isFetching={isFetching}

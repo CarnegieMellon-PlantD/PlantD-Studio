@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { App, Button, Card, Form, Input, Spin } from 'antd';
+import { App, Button, Card, Checkbox, Form, Input, Spin } from 'antd';
 import { useUpdateEffect } from 'usehooks-ts';
 
 import BaseResourceSelect from '@/components/resourceManager/BaseResourceSelect';
@@ -50,6 +50,7 @@ const SimulationEditor: React.FC = () => {
     getDigitalTwin,
     {
       data: digitalTwin,
+      isFetching: isGetDigitalTwinFetching,
       isSuccess: isGetDigitalTwinSuccess,
       isError: isGetDigitalTwinError,
       error: getDigitalTwinError,
@@ -84,7 +85,7 @@ const SimulationEditor: React.FC = () => {
     <div className="p-6">
       {React.cloneElement(breadcrumb, { className: 'mb-6' })}
       <Card bordered={false}>
-        <Spin spinning={isLoading}>
+        <Spin spinning={isLoading || isGetDigitalTwinFetching}>
           <Form
             {...formStyle}
             form={form}
@@ -116,42 +117,54 @@ const SimulationEditor: React.FC = () => {
             >
               <Input />
             </Form.Item>
-            <Form.Item className="mb-0" label={t('DigitalTwin')} required>
-              <div className="flex gap-1">
-                <Form.Item
-                  className="w-64 flex-auto"
-                  name={['digitalTwinRef', 'namespace']}
-                  rules={[{ required: true, message: t('Namespace is required') }]}
-                >
-                  <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
-                </Form.Item>
-                <Form.Item
-                  noStyle
-                  shouldUpdate={(prev: SimulationVO, next: SimulationVO) =>
-                    prev?.digitalTwinRef?.namespace !== next?.digitalTwinRef?.namespace
-                  }
-                >
-                  {() => (
-                    <Form.Item
-                      className="w-64 flex-auto"
-                      name={['digitalTwinRef', 'name']}
-                      rules={[{ required: true, message: t('Name is required') }]}
-                    >
-                      <BaseResourceSelect
-                        resourceKind={t('DigitalTwin')}
-                        listHook={useListDigitalTwinsQuery}
-                        filter={(item) =>
-                          item.metadata.namespace ===
-                          (form.getFieldValue([
-                            'digitalTwinRef',
-                            'namespace',
-                          ]) as SimulationVO['digitalTwinRef']['namespace'])
+            <Form.Item label={t('Include DigitalTwin')} name={['hasDigitalTwin']} valuePropName="checked">
+              <Checkbox />
+            </Form.Item>
+            <Form.Item
+              noStyle
+              shouldUpdate={(prev: SimulationVO, next: SimulationVO) => prev.hasDigitalTwin !== next.hasDigitalTwin}
+            >
+              {() =>
+                (form.getFieldValue('hasDigitalTwin') as SimulationVO['hasDigitalTwin']) && (
+                  <Form.Item className="mb-0" label={t('DigitalTwin')} required>
+                    <div className="flex gap-1">
+                      <Form.Item
+                        className="w-64 flex-auto"
+                        name={['digitalTwinRef', 'namespace']}
+                        rules={[{ required: true, message: t('Namespace is required') }]}
+                      >
+                        <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
+                      </Form.Item>
+                      <Form.Item
+                        noStyle
+                        shouldUpdate={(prev: SimulationVO, next: SimulationVO) =>
+                          prev?.digitalTwinRef?.namespace !== next?.digitalTwinRef?.namespace
                         }
-                      />
-                    </Form.Item>
-                  )}
-                </Form.Item>
-              </div>
+                      >
+                        {() => (
+                          <Form.Item
+                            className="w-64 flex-auto"
+                            name={['digitalTwinRef', 'name']}
+                            rules={[{ required: true, message: t('Name is required') }]}
+                          >
+                            <BaseResourceSelect
+                              resourceKind={t('DigitalTwin')}
+                              listHook={useListDigitalTwinsQuery}
+                              filter={(item) =>
+                                item.metadata.namespace ===
+                                (form.getFieldValue([
+                                  'digitalTwinRef',
+                                  'namespace',
+                                ]) as SimulationVO['digitalTwinRef']['namespace'])
+                              }
+                            />
+                          </Form.Item>
+                        )}
+                      </Form.Item>
+                    </div>
+                  </Form.Item>
+                )
+              }
             </Form.Item>
             <Form.Item className="mb-0" label={t('TrafficModel')} required>
               <div className="flex gap-1">
@@ -190,73 +203,99 @@ const SimulationEditor: React.FC = () => {
                 </Form.Item>
               </div>
             </Form.Item>
-            {isDigitalTwinSchemaAware && (
-              <Form.Item className="mb-0" label={t('NetCost')}>
-                <div className="flex gap-1">
-                  <Form.Item className="w-64 flex-auto" name={['netCostRef', 'namespace']}>
-                    <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
-                  </Form.Item>
-                  <Form.Item
-                    noStyle
-                    shouldUpdate={(prev: SimulationVO, next: SimulationVO) =>
-                      prev?.netCostRef?.namespace !== next?.netCostRef?.namespace
-                    }
-                  >
-                    {() => (
-                      <Form.Item className="w-64 flex-auto" name={['netCostRef', 'name']}>
-                        <BaseResourceSelect
-                          resourceKind={t('NetCost')}
-                          listHook={useListNetCostsQuery}
-                          filter={(item) =>
-                            item.metadata.namespace ===
-                            (form.getFieldValue(['netCostRef', 'namespace']) as SimulationVO['netCostRef']['namespace'])
-                          }
-                        />
+            <Form.Item
+              noStyle
+              shouldUpdate={(prev: SimulationVO, next: SimulationVO) =>
+                prev.hasDigitalTwin !== next.hasDigitalTwin || prev.hasNetCost !== next.hasNetCost
+              }
+            >
+              {() =>
+                ((!form.getFieldValue(['hasDigitalTwin']) as SimulationVO['hasDigitalTwin']) ||
+                  isDigitalTwinSchemaAware) && (
+                  <>
+                    <Form.Item label={t('Include NetCost')} name={['hasNetCost']} valuePropName="checked">
+                      <Checkbox />
+                    </Form.Item>
+                    {(form.getFieldValue(['hasNetCost']) as SimulationVO['hasNetCost']) && (
+                      <Form.Item className="mb-0" label={t('NetCost')} required>
+                        <div className="flex gap-1">
+                          <Form.Item
+                            className="w-64 flex-auto"
+                            name={['netCostRef', 'namespace']}
+                            rules={[{ required: true, message: t('Namespace is required') }]}
+                          >
+                            <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
+                          </Form.Item>
+                          <Form.Item
+                            noStyle
+                            shouldUpdate={(prev: SimulationVO, next: SimulationVO) =>
+                              prev?.netCostRef?.namespace !== next?.netCostRef?.namespace
+                            }
+                          >
+                            {() => (
+                              <Form.Item
+                                className="w-64 flex-auto"
+                                name={['netCostRef', 'name']}
+                                rules={[{ required: true, message: t('Name is required') }]}
+                              >
+                                <BaseResourceSelect
+                                  resourceKind={t('NetCost')}
+                                  listHook={useListNetCostsQuery}
+                                  filter={(item) =>
+                                    item.metadata.namespace ===
+                                    (form.getFieldValue([
+                                      'netCostRef',
+                                      'namespace',
+                                    ]) as SimulationVO['netCostRef']['namespace'])
+                                  }
+                                />
+                              </Form.Item>
+                            )}
+                          </Form.Item>
+                        </div>
                       </Form.Item>
                     )}
-                  </Form.Item>
-                </div>
-              </Form.Item>
-            )}
-            {isDigitalTwinSchemaAware && (
-              <Form.Item className="mb-0" label={t('Scenario')} required>
-                <div className="flex gap-1">
-                  <Form.Item
-                    className="w-64 flex-auto"
-                    name={['scenarioRef', 'namespace']}
-                    rules={[{ required: true, message: t('Namespace is required') }]}
-                  >
-                    <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
-                  </Form.Item>
-                  <Form.Item
-                    noStyle
-                    shouldUpdate={(prev: SimulationVO, next: SimulationVO) =>
-                      prev?.scenarioRef?.namespace !== next?.scenarioRef?.namespace
-                    }
-                  >
-                    {() => (
-                      <Form.Item
-                        className="w-64 flex-auto"
-                        name={['scenarioRef', 'name']}
-                        rules={[{ required: true, message: t('Name is required') }]}
-                      >
-                        <BaseResourceSelect
-                          resourceKind={t('Scenario')}
-                          listHook={useListScenariosQuery}
-                          filter={(item) =>
-                            item.metadata.namespace ===
-                            (form.getFieldValue([
-                              'scenarioRef',
-                              'namespace',
-                            ]) as SimulationVO['scenarioRef']['namespace'])
+                    <Form.Item className="mb-0" label={t('Scenario')} required>
+                      <div className="flex gap-1">
+                        <Form.Item
+                          className="w-64 flex-auto"
+                          name={['scenarioRef', 'namespace']}
+                          rules={[{ required: true, message: t('Namespace is required') }]}
+                        >
+                          <BaseResourceSelect resourceKind={t('Namespace')} listHook={useListNamespacesQuery} />
+                        </Form.Item>
+                        <Form.Item
+                          noStyle
+                          shouldUpdate={(prev: SimulationVO, next: SimulationVO) =>
+                            prev?.scenarioRef?.namespace !== next?.scenarioRef?.namespace
                           }
-                        />
-                      </Form.Item>
-                    )}
-                  </Form.Item>
-                </div>
-              </Form.Item>
-            )}
+                        >
+                          {() => (
+                            <Form.Item
+                              className="w-64 flex-auto"
+                              name={['scenarioRef', 'name']}
+                              rules={[{ required: true, message: t('Name is required') }]}
+                            >
+                              <BaseResourceSelect
+                                resourceKind={t('Scenario')}
+                                listHook={useListScenariosQuery}
+                                filter={(item) =>
+                                  item.metadata.namespace ===
+                                  (form.getFieldValue([
+                                    'scenarioRef',
+                                    'namespace',
+                                  ]) as SimulationVO['scenarioRef']['namespace'])
+                                }
+                              />
+                            </Form.Item>
+                          )}
+                        </Form.Item>
+                      </div>
+                    </Form.Item>
+                  </>
+                )
+              }
+            </Form.Item>
             <Form.Item wrapperCol={{ span: 24 }} className="mb-0">
               <div className="flex justify-end gap-2">
                 <Button type="primary" htmlType="submit" loading={isCreatingOrUpdating}>

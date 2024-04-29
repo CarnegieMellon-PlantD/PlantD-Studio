@@ -85,7 +85,12 @@ const LoadGeneratorDashboard: React.FC = () => {
 
   const dashboardProps = useMemo<DashboardProps>(
     () => ({
-      breadcrumbs: [t('Dashboard'), t('Load Generator: {target}', { target: `${params.namespace}/${params.name}` })],
+      breadcrumbs: [
+        t('Resources'),
+        t('Experiment'),
+        t('Dashboard'),
+        t('Load Generator: {target}', { target: `${params.namespace}/${params.name}` }),
+      ],
       timeRange,
       setTimeRange,
       refreshInterval,

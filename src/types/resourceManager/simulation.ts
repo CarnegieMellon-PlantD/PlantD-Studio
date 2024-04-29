@@ -43,6 +43,7 @@ export type SimulationVO = {
   originalObject: SimulationSpec;
   namespace: string;
   name: string;
+  hasDigitalTwin: boolean;
   digitalTwinRef: {
     name: string;
     namespace: string;
@@ -51,6 +52,7 @@ export type SimulationVO = {
     name: string;
     namespace: string;
   };
+  hasNetCost: boolean;
   netCostRef: {
     name: string;
     namespace: string;

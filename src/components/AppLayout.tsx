@@ -17,6 +17,7 @@ import {
   faDiagramProject,
   faFileExport,
   faFlask,
+  faGear,
   faGlobe,
   faHome,
   faLanguage,
@@ -161,6 +162,11 @@ const AppLayout: React.FC = () => {
         label: t('Tools'),
         children: [
           {
+            key: 'systemSettings',
+            icon: <FontAwesomeIcon icon={faGear} />,
+            label: t('System Settings'),
+          },
+          {
             key: 'importExport',
             icon: <FontAwesomeIcon icon={faFileExport} />,
             label: t('Import/Export'),
@@ -242,6 +248,11 @@ const AppLayout: React.FC = () => {
         key: 'simulation',
         match: /^\/(simulation|report)(\/.*)?$/,
         target: '/simulation',
+      },
+      {
+        key: 'systemSettings',
+        match: /^\/systemSettings(\/.*)?$/,
+        target: `/systemSettings`,
       },
       {
         key: 'importExport',

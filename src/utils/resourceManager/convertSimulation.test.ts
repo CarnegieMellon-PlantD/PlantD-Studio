@@ -18,6 +18,7 @@ test('DTO->VO, Default', () => {
     originalObject: dtoIn.spec,
     namespace: 'namespace',
     name: 'name',
+    hasDigitalTwin: false,
     digitalTwinRef: {
       namespace: '',
       name: '',
@@ -26,6 +27,7 @@ test('DTO->VO, Default', () => {
       namespace: '',
       name: '',
     },
+    hasNetCost: false,
     netCostRef: {
       namespace: '',
       name: '',
@@ -70,6 +72,7 @@ test('DTO->VO->DTO', () => {
     originalObject: dtoIn.spec,
     namespace: 'namespace',
     name: 'name',
+    hasDigitalTwin: true,
     digitalTwinRef: {
       namespace: 'digitalTwinRef-namespace',
       name: 'digitalTwinRef-name',
@@ -78,6 +81,7 @@ test('DTO->VO->DTO', () => {
       namespace: 'trafficModelRef-namespace',
       name: 'trafficModelRef-name',
     },
+    hasNetCost: true,
     netCostRef: {
       namespace: 'netCostRef-namespace',
       name: 'netCostRef-name',

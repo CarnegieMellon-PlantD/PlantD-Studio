@@ -4,18 +4,43 @@ import { useTranslation } from 'react-i18next';
 import { faCheckCircle, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { App, Badge, Breadcrumb, Card, Statistic, Table } from 'antd';
+import dayjs from 'dayjs';
 import { useUpdateEffect } from 'usehooks-ts';
 
-import { plantDCoreName, plantDCoreNamespace } from '@/constants/resourceManager';
+import { autoRefreshInterval, plantDCoreName, plantDCoreNamespace } from '@/constants/resourceManager';
 import { useGetI18nKind } from '@/hooks/resourceManager/useGetI18nKind';
 import { useResourceList } from '@/hooks/resourceManager/useResourceList';
 import { useListCostExportersQuery } from '@/services/resourceManager/costExporterApi';
 import { useListNamespacesQuery } from '@/services/resourceManager/namespaceApi';
 import { useGetPlantDCoreQuery } from '@/services/resourceManager/plantDCoreApi';
 import { useListKindsQuery, useListResourcesQuery } from '@/services/resourceManager/utilApi';
+import { ComponentStatus } from '@/types/resourceManager/plantDCore';
 import { concatInPath } from '@/utils/concatInPath';
 import { getClsName } from '@/utils/getClsName';
 import { getErrMsg } from '@/utils/getErrMsg';
+
+const getBadgeStatus = (
+  numReady: number | undefined,
+  numDesired: number | undefined
+): 'success' | 'warning' | 'error' => {
+  if (numReady === undefined || numDesired === undefined || numReady === 0 || numDesired === 0) {
+    return 'warning';
+  }
+
+  if (numReady !== numDesired) {
+    return 'error';
+  }
+
+  return 'success';
+};
+
+const getBadgeText = (status: ComponentStatus | undefined): string | undefined => {
+  if (status === undefined) {
+    return undefined;
+  }
+
+  return `${status.text} ( ${status.numReady ?? '-'} / ${status.numDesired ?? '-'} )`;
+};
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
@@ -27,12 +52,15 @@ const Home: React.FC = () => {
     isSuccess: isGetPlantDCoreSuccess,
     isError: isGetPlantDCoreError,
     error: getPlantDCoreError,
-  } = useGetPlantDCoreQuery({
-    metadata: {
-      namespace: plantDCoreNamespace,
-      name: plantDCoreName,
+  } = useGetPlantDCoreQuery(
+    {
+      metadata: {
+        namespace: plantDCoreNamespace,
+        name: plantDCoreName,
+      },
     },
-  });
+    { pollingInterval: autoRefreshInterval }
+  );
   const { data: namespaces, isSuccess: isListNamespacesSuccess } = useResourceList({
     resourceKind: t('Namespace'),
     listHook: useListNamespacesQuery,
@@ -85,7 +113,7 @@ const Home: React.FC = () => {
       <Breadcrumb items={[{ title: t('PlantD Studio') }, { title: t('System Overview') }]} className="mb-6" />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-        <Card bordered={false} className="col-span-2 lg:col-span-2 xl:col-span-4" loading={!isGetPlantDCoreSuccess}>
+        <Card bordered={false} className="col-span-2 lg:col-span-4 xl:col-span-2" loading={!isGetPlantDCoreSuccess}>
           <div className="flex items-center gap-6">
             <FontAwesomeIcon
               icon={isAllRunning ? faCheckCircle : faCircleExclamation}
@@ -96,81 +124,71 @@ const Home: React.FC = () => {
             </span>
           </div>
         </Card>
-        <Card bordered={false} className="col-span-2" loading={!isGetPlantDCoreSuccess}>
-          <div className="grid grid-cols-2 gap-1">
+        <Card bordered={false} className="col-span-2 lg:col-span-4 xl:col-span-4" loading={!isGetPlantDCoreSuccess}>
+          <div className="grid grid-cols-4 gap-1">
             <span className="text-gray-500">{t('PlantD Proxy:')}</span>
             <Badge
-              status={
-                plantDCore?.status?.proxyStatus?.numReady === plantDCore?.status?.proxyStatus?.numDesired
-                  ? 'success'
-                  : 'warning'
-              }
-              text={plantDCore?.status?.proxyStatus?.text ?? t('Unknown')}
+              status={getBadgeStatus(
+                plantDCore?.status?.proxyStatus?.numReady,
+                plantDCore?.status?.proxyStatus?.numDesired
+              )}
+              text={getBadgeText(plantDCore?.status?.proxyStatus) ?? t('Unknown')}
             />
             <span className="text-gray-500">{t('PlantD Studio:')}</span>
             <Badge
-              status={
-                plantDCore?.status?.studioStatus?.numReady === plantDCore?.status?.studioStatus?.numDesired
-                  ? 'success'
-                  : 'warning'
-              }
-              text={plantDCore?.status?.studioStatus?.text ?? t('Unknown')}
+              status={getBadgeStatus(
+                plantDCore?.status?.studioStatus?.numReady,
+                plantDCore?.status?.studioStatus?.numDesired
+              )}
+              text={getBadgeText(plantDCore?.status?.studioStatus) ?? t('Unknown')}
             />
             <span className="text-gray-500">{t('Prometheus:')}</span>
             <Badge
-              status={
-                plantDCore?.status?.prometheusStatus?.numReady === plantDCore?.status?.prometheusStatus?.numDesired
-                  ? 'success'
-                  : 'warning'
-              }
-              text={plantDCore?.status?.prometheusStatus?.text ?? t('Unknown')}
+              status={getBadgeStatus(
+                plantDCore?.status?.prometheusStatus?.numReady,
+                plantDCore?.status?.prometheusStatus?.numDesired
+              )}
+              text={getBadgeText(plantDCore?.status?.prometheusStatus) ?? t('Unknown')}
             />
             <span className="text-gray-500">{t('Thanos Store:')}</span>
             <Badge
-              status={
-                plantDCore?.status?.thanosStoreStatus?.numReady === plantDCore?.status?.thanosStoreStatus?.numDesired
-                  ? 'success'
-                  : 'warning'
-              }
-              text={plantDCore?.status?.thanosStoreStatus?.text ?? t('Unknown')}
+              status={getBadgeStatus(
+                plantDCore?.status?.thanosStoreStatus?.numReady,
+                plantDCore?.status?.thanosStoreStatus?.numDesired
+              )}
+              text={getBadgeText(plantDCore?.status?.thanosStoreStatus) ?? t('Unknown')}
             />
             <span className="text-gray-500">{t('Thanos Compactor:')}</span>
             <Badge
-              status={
-                plantDCore?.status?.thanosCompactorStatus?.numReady ===
+              status={getBadgeStatus(
+                plantDCore?.status?.thanosCompactorStatus?.numReady,
                 plantDCore?.status?.thanosCompactorStatus?.numDesired
-                  ? 'success'
-                  : 'warning'
-              }
-              text={plantDCore?.status?.thanosCompactorStatus?.text ?? t('Unknown')}
+              )}
+              text={getBadgeText(plantDCore?.status?.thanosCompactorStatus) ?? t('Unknown')}
             />
             <span className="text-gray-500">{t('Thanos Querier:')}</span>
             <Badge
-              status={
-                plantDCore?.status?.thanosQuerierStatus?.numReady ===
+              status={getBadgeStatus(
+                plantDCore?.status?.thanosQuerierStatus?.numReady,
                 plantDCore?.status?.thanosQuerierStatus?.numDesired
-                  ? 'success'
-                  : 'warning'
-              }
-              text={plantDCore?.status?.thanosQuerierStatus?.text ?? t('Unknown')}
+              )}
+              text={getBadgeText(plantDCore?.status?.thanosQuerierStatus) ?? t('Unknown')}
             />
             <span className="text-gray-500">{t('Redis:')}</span>
             <Badge
-              status={
-                plantDCore?.status?.redisStatus?.numReady === plantDCore?.status?.redisStatus?.numDesired
-                  ? 'success'
-                  : 'warning'
-              }
-              text={plantDCore?.status?.redisStatus?.text ?? t('Unknown')}
+              status={getBadgeStatus(
+                plantDCore?.status?.redisStatus?.numReady,
+                plantDCore?.status?.redisStatus?.numDesired
+              )}
+              text={getBadgeText(plantDCore?.status?.redisStatus) ?? t('Unknown')}
             />
             <span className="text-gray-500">{t('OpenCost:')}</span>
             <Badge
-              status={
-                plantDCore?.status?.opencostStatus?.numReady === plantDCore?.status?.opencostStatus?.numDesired
-                  ? 'success'
-                  : 'warning'
-              }
-              text={plantDCore?.status?.opencostStatus?.text ?? t('Unknown')}
+              status={getBadgeStatus(
+                plantDCore?.status?.opencostStatus?.numReady,
+                plantDCore?.status?.opencostStatus?.numDesired
+              )}
+              text={getBadgeText(plantDCore?.status?.opencostStatus) ?? t('Unknown')}
             />
           </div>
         </Card>
@@ -193,19 +211,26 @@ const Home: React.FC = () => {
             rowKey={(record) => concatInPath(record.metadata.namespace, record.metadata.name)}
             columns={[
               {
-                key: 'name',
                 title: t('Name'),
                 render: (_, record) => record.metadata.name ?? '-',
               },
               {
-                key: 'namespace',
                 title: t('Namespace'),
                 render: (_, record) => record.metadata.namespace ?? '-',
               },
               {
-                key: 'lastSuccess',
                 title: t('Last Successful Run'),
-                render: (_, record) => record.status?.lastSuccess ?? '-',
+                render: (_, record) =>
+                  record.status?.lastSuccess !== undefined
+                    ? dayjs(record.status?.lastSuccess).format('YYYY-MM-DD HH:mm:ss')
+                    : '-',
+              },
+              {
+                title: t('Last Failed Run'),
+                render: (_, record) =>
+                  record.status?.lastFailure !== undefined
+                    ? dayjs(record.status?.lastFailure).format('YYYY-MM-DD HH:mm:ss')
+                    : '-',
               },
             ]}
           />

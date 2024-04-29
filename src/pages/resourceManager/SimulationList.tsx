@@ -84,6 +84,7 @@ const SimulationsList: React.FC = () => {
             onClick={() => {
               navigate(`/report/simulationReport/${record.metadata.namespace}/${record.metadata.name}`);
             }}
+            disabled={record.status?.jobStatus !== SimulationJobStatus.Completed}
           >
             {t('Sim. Report')}
           </Button>

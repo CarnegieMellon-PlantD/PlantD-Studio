@@ -93,6 +93,8 @@ const ExperimentDetailDashboard: React.FC = () => {
   const dashboardProps = useMemo<DashboardProps>(
     () => ({
       breadcrumbs: [
+        t('Resources'),
+        t('Experiment'),
         t('Dashboard'),
         t('Experiment Details: {target}', { target: `${params.namespace}/${params.name}` }),
       ],
